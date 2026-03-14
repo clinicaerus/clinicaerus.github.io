@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="UNIMED · Multiversidad AIDIA — Ecosistema vivo de conocimiento en ciencias médicas y ciencias de la complejidad. Barcelona."/>
+<title>UNIMED · Multiversidad AIDIA</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0f1f3d;--navy-mid:#1b3a6b;--blue:#2e6da4;--blue-light:#d6e8f5;
+  --teal:#0d7377;--teal-light:#d0efef;--gold:#b5922a;--gold-light:#f5e9c8;
+  --cream:#f9f7f2;--warm-gray:#e8e4dc;--text-dark:#1a1a2e;--text-mid:#3d4560;
+  --text-soft:#6b7490;--white:#ffffff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;transition:all .3s;}
+nav.scrolled{background:rgba(15,31,61,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(181,146,42,.2);}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 2rem;height:70px;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-mark{width:38px;height:38px;border:2px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold);}
+.nav-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--white);letter-spacing:.04em;}
+.nav-sub{font-size:.6rem;color:rgba(255,255,255,.4);letter-spacing:.12em;text-transform:uppercase;}
+.nav-links{display:flex;align-items:center;gap:1.75rem;}
+.nav-links a{font-size:.75rem;font-weight:500;color:rgba(255,255,255,.6);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{padding:7px 18px;border:1.5px solid var(--gold);border-radius:30px;color:var(--gold)!important;transition:all .2s!important;}
+.nav-cta:hover{background:var(--gold)!important;color:var(--navy)!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:22px;height:2px;background:rgba(255,255,255,.7);border-radius:2px;transition:all .3s;}
+.mobile-menu{display:none;flex-direction:column;background:rgba(15,31,61,.98);position:fixed;top:70px;left:0;right:0;padding:1rem 2rem;border-bottom:1px solid rgba(181,146,42,.15);z-index:99;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:.85rem;color:rgba(255,255,255,.7);text-decoration:none;padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.06);}
+
+/* HERO */
+.hero{min-height:100vh;background:linear-gradient(160deg,var(--navy) 0%,#162d5a 45%,#1a3a5c 100%);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;padding:8rem 2rem 4rem;}
+.hero-orb1{position:absolute;top:-100px;right:-100px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(13,115,119,.18) 0%,transparent 70%);pointer-events:none;}
+.hero-orb2{position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(181,146,42,.12) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:1300px;margin:0 auto;width:100%;position:relative;z-index:1;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(181,146,42,.12);border:1px solid rgba(181,146,42,.25);color:var(--gold);font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:6px 16px;border-radius:40px;margin-bottom:2rem;animation:fadeUp .7s ease both;}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,6rem);font-weight:300;color:var(--white);line-height:1.05;margin-bottom:1.5rem;animation:fadeUp .7s .1s ease both;}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-title strong{font-weight:600;}
+.hero-desc{font-size:clamp(.95rem,1.5vw,1.05rem);font-weight:300;color:rgba(255,255,255,.65);max-width:680px;line-height:1.9;margin-bottom:3rem;animation:fadeUp .7s .2s ease both;}
+.hero-desc span{color:rgba(255,255,255,.9);font-weight:400;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:4rem;animation:fadeUp .7s .3s ease both;}
+.btn-primary{padding:13px 28px;background:var(--gold);color:var(--navy);font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;border:none;border-radius:40px;cursor:pointer;text-decoration:none;transition:all .2s;}
+.btn-primary:hover{background:#d4aa3f;transform:translateY(-1px);}
+.btn-outline{padding:13px 28px;background:transparent;color:rgba(255,255,255,.8);font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;border:1.5px solid rgba(255,255,255,.25);border-radius:40px;cursor:pointer;text-decoration:none;transition:all .2s;}
+.btn-outline:hover{border-color:rgba(255,255,255,.6);color:var(--white);}
+.hero-stats{display:flex;gap:3rem;flex-wrap:wrap;animation:fadeUp .7s .4s ease both;}
+.stat-item{display:flex;flex-direction:column;gap:4px;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;color:var(--white);}
+.stat-lbl{font-size:.68rem;color:rgba(255,255,255,.4);letter-spacing:.1em;text-transform:uppercase;}
+.stat-div{width:1px;background:rgba(255,255,255,.1);align-self:stretch;}
+
+/* SECTIONS */
+.section-tag{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;color:var(--navy);line-height:1.2;margin-bottom:1rem;}
+.section-title em{font-style:italic;color:var(--teal);}
+.section-desc{font-size:.95rem;color:var(--text-soft);line-height:1.8;max-width:580px;margin-bottom:3rem;}
+
+/* PILLARS */
+.pillars{padding:5rem 2rem;background:var(--white);}
+.pillars-inner{max-width:1300px;margin:0 auto;}
+.pillars-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.25rem;}
+.pillar-card{padding:2rem 1.5rem;border-radius:16px;border:1px solid var(--warm-gray);transition:all .22s;}
+.pillar-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(15,31,61,.1);}
+.pillar-card.A{border-top:3px solid var(--blue);}
+.pillar-card.I{border-top:3px solid var(--teal);}
+.pillar-card.D{border-top:3px solid var(--gold);}
+.pillar-card.IA{border-top:3px solid #8b5cf6;}
+.pillar-card.Ab{border-top:3px solid #e11d48;}
+.pillar-letter{font-family:'Cormorant Garamond',serif;font-size:3.5rem;font-weight:700;line-height:1;margin-bottom:.75rem;}
+.pillar-card.A .pillar-letter{color:var(--blue);}
+.pillar-card.I .pillar-letter{color:var(--teal);}
+.pillar-card.D .pillar-letter{color:var(--gold);}
+.pillar-card.IA .pillar-letter{color:#8b5cf6;}
+.pillar-card.Ab .pillar-letter{color:#e11d48;}
+.pillar-name{font-size:.9rem;font-weight:500;color:var(--navy);margin-bottom:.5rem;}
+.pillar-desc{font-size:.78rem;color:var(--text-soft);line-height:1.6;}
+
+/* CURSOS */
+.cursos{padding:5rem 2rem;background:var(--white);}
+.cursos-inner{max-width:1300px;margin:0 auto;}
+.cursos-header{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem;}
+.ver-todos{font-size:.8rem;font-weight:500;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:5px;transition:gap .2s;}
+.ver-todos:hover{gap:9px;}
+.cursos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
+.curso-card{background:var(--white);border:1px solid var(--warm-gray);border-radius:16px;overflow:hidden;transition:all .22s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
+.curso-card:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(15,31,61,.1);border-color:transparent;}
+.curso-img{height:160px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;}
+.curso-img.blue{background:linear-gradient(135deg,#1b3a6b,#2e6da4);}
+.curso-img.teal{background:linear-gradient(135deg,#0a5a5e,#0d7377);}
+.curso-img.gold{background:linear-gradient(135deg,#92700a,#b5922a);}
+.curso-img.purple{background:linear-gradient(135deg,#4c1d95,#7c3aed);}
+.curso-img.rose{background:linear-gradient(135deg,#881337,#e11d48);}
+.curso-status{position:absolute;top:.75rem;right:.75rem;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;}
+.curso-status.active{background:rgba(255,255,255,.2);color:rgba(255,255,255,.9);}
+.curso-status.soon{background:rgba(255,255,255,.15);color:rgba(255,255,255,.6);}
+.curso-body{padding:1.25rem;}
+.curso-area{font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.4rem;}
+.curso-area.blue{color:var(--blue);}
+.curso-area.teal{color:var(--teal);}
+.curso-area.gold{color:var(--gold);}
+.curso-area.purple{color:#7c3aed;}
+.curso-area.rose{color:#e11d48;}
+.curso-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:.5rem;}
+.curso-desc{font-size:.78rem;color:var(--text-soft);line-height:1.6;}
+
+/* BRAZOS */
+.brazos{padding:5rem 2rem;background:var(--cream);}
+.brazos-inner{max-width:1300px;margin:0 auto;}
+.brazos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;margin-top:3rem;}
+.brazo-card{background:var(--white);border-radius:20px;overflow:hidden;border:1px solid var(--warm-gray);transition:all .25s;}
+.brazo-card:hover{transform:translateY(-4px);box-shadow:0 16px 50px rgba(15,31,61,.12);}
+.brazo-header{padding:2rem 2rem 1.5rem;}
+.brazo-header.multiversidad{background:linear-gradient(135deg,var(--navy),#1b3a6b);}
+.brazo-header.clinica{background:linear-gradient(135deg,var(--teal),#0a5a5e);}
+.brazo-header.consulting{background:linear-gradient(135deg,#7c3aed,#5b21b6);}
+.brazo-icon{font-size:2rem;margin-bottom:.75rem;}
+.brazo-name{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--white);margin-bottom:.4rem;}
+.brazo-tagline{font-size:.78rem;color:rgba(255,255,255,.55);line-height:1.5;}
+.brazo-body{padding:1.5rem 2rem 2rem;}
+.brazo-desc{font-size:.85rem;color:var(--text-mid);line-height:1.7;margin-bottom:1.25rem;}
+.brazo-tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem;}
+.btag{font-size:.65rem;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--blue-light);color:var(--navy-mid);}
+.btag.teal{background:var(--teal-light);color:var(--teal);}
+.btag.purple{background:#ede9fe;color:#5b21b6;}
+.brazo-link{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:500;color:var(--navy);text-decoration:none;transition:gap .2s;}
+.brazo-link:hover{gap:10px;}
+
+/* SEMANTICA */
+.semantica{padding:5rem 2rem;background:var(--navy);position:relative;overflow:hidden;}
+.sem-orb{position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(13,115,119,.15) 0%,transparent 70%);pointer-events:none;}
+.semantica-inner{max-width:1300px;margin:0 auto;position:relative;z-index:1;}
+.sem-grid{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;margin-top:3rem;}
+.sem-nodes{display:flex;flex-wrap:wrap;gap:.6rem;}
+.sem-node{padding:8px 16px;border-radius:30px;font-size:.78rem;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid;}
+.sem-node.blue{background:rgba(46,109,164,.15);border-color:rgba(46,109,164,.35);color:rgba(255,255,255,.75);}
+.sem-node.teal{background:rgba(13,115,119,.15);border-color:rgba(13,115,119,.35);color:rgba(255,255,255,.75);}
+.sem-node.gold{background:rgba(181,146,42,.15);border-color:rgba(181,146,42,.35);color:rgba(255,255,255,.75);}
+.sem-node.purple{background:rgba(124,58,237,.15);border-color:rgba(124,58,237,.35);color:rgba(255,255,255,.75);}
+.sem-node:hover{transform:scale(1.05);color:var(--white);}
+.sem-info{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:2rem;}
+.sem-info-title{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:600;color:var(--white);margin-bottom:.75rem;}
+.sem-info-desc{font-size:.85rem;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:1.25rem;}
+.sem-connections{display:flex;flex-direction:column;gap:.5rem;}
+.sem-conn{display:flex;align-items:center;gap:8px;font-size:.75rem;color:rgba(255,255,255,.45);}
+.sem-conn::before{content:'→';color:var(--gold);}
+
+/* EQUIPO */
+.equipo{padding:5rem 2rem;background:var(--cream);}
+.equipo-inner{max-width:1300px;margin:0 auto;}
+.equipo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1.25rem;margin-top:3rem;}
+.miembro-card{background:var(--white);border:1px solid var(--warm-gray);border-radius:16px;padding:1.75rem;transition:all .22s;}
+.miembro-card:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(15,31,61,.08);}
+.miembro-avatar{width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--gold);margin-bottom:1rem;}
+.miembro-name{font-size:.95rem;font-weight:500;color:var(--navy);margin-bottom:3px;}
+.miembro-role{font-size:.75rem;color:var(--text-soft);margin-bottom:1rem;line-height:1.5;}
+.miembro-tags{display:flex;flex-wrap:wrap;gap:.3rem;}
+.mtag{font-size:.62rem;padding:2px 8px;border-radius:20px;background:var(--blue-light);color:var(--navy-mid);font-weight:500;}
+.mtag.teal{background:var(--teal-light);color:var(--teal);}
+.mtag.gold{background:var(--gold-light);color:#7a5e0a;}
+
+/* NOTICIAS */
+.noticias{padding:5rem 2rem;background:var(--white);}
+.noticias-inner{max-width:1300px;margin:0 auto;}
+.noticias-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;margin-top:3rem;}
+.noticia-card{border:1px solid var(--warm-gray);border-radius:16px;overflow:hidden;transition:all .22s;cursor:pointer;}
+.noticia-card:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(15,31,61,.08);border-color:transparent;}
+.noticia-img{height:140px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;}
+.noticia-img.teal{background:var(--teal-light);}
+.noticia-img.gold{background:var(--gold-light);}
+.noticia-body{padding:1.25rem;background:var(--white);}
+.noticia-meta{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;}
+.noticia-date{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--text-soft);}
+.noticia-topic{font-size:.62rem;font-weight:600;padding:2px 8px;border-radius:20px;}
+.noticia-topic.teal{background:var(--teal-light);color:var(--teal);}
+.noticia-topic.gold{background:var(--gold-light);color:#7a5e0a;}
+.noticia-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--navy);line-height:1.3;}
+
+/* ACCESO */
+.acceso{padding:5rem 2rem;background:linear-gradient(135deg,var(--navy) 0%,#1b3a6b 100%);position:relative;overflow:hidden;}
+.acceso-inner{max-width:680px;margin:0 auto;text-align:center;position:relative;z-index:1;}
+.acceso-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:300;color:var(--white);margin-bottom:1rem;}
+.acceso-title em{font-style:italic;color:var(--gold);}
+.acceso-desc{font-size:.9rem;color:rgba(255,255,255,.55);line-height:1.8;margin-bottom:2.5rem;}
+.acceso-options{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2.5rem;}
+.acceso-opt{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:1.5rem;text-align:left;transition:all .2s;cursor:pointer;}
+.acceso-opt:hover{background:rgba(255,255,255,.08);border-color:rgba(181,146,42,.3);}
+.acceso-opt-icon{font-size:1.5rem;margin-bottom:.75rem;}
+.acceso-opt-title{font-size:.85rem;font-weight:500;color:var(--white);margin-bottom:.3rem;}
+.acceso-opt-desc{font-size:.72rem;color:rgba(255,255,255,.4);line-height:1.5;}
+.acceso-nota{font-size:.72rem;color:rgba(255,255,255,.3);line-height:1.6;}
+
+/* FOOTER */
+footer{background:#080f1e;padding:4rem 2rem 2rem;border-top:1px solid rgba(181,146,42,.15);}
+.footer-inner{max-width:1300px;margin:0 auto;}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;}
+.footer-brand p{font-size:.78rem;color:rgba(255,255,255,.35);line-height:1.7;max-width:280px;margin-top:1rem;}
+.footer-col h4{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1rem;}
+.footer-col a{display:block;font-size:.78rem;color:rgba(255,255,255,.4);text-decoration:none;margin-bottom:.5rem;transition:color .2s;}
+.footer-col a:hover{color:var(--gold);}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:2rem;border-top:1px solid rgba(255,255,255,.06);flex-wrap:wrap;gap:1rem;}
+.footer-legal{font-size:.68rem;color:rgba(255,255,255,.25);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* RESPONSIVE */
+@media(max-width:900px){.footer-top{grid-template-columns:1fr 1fr;}.sem-grid{grid-template-columns:1fr;}.acceso-options{grid-template-columns:1fr;}}
+@media(max-width:640px){.nav-links{display:none;}.hamburger{display:flex;}.hero{padding:6rem 1.25rem 3rem;}.hero-stats{gap:1.5rem;}section{padding:3rem 1.25rem!important;}.footer-top{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="/">
+      <div class="nav-mark">U</div>
+      <div>
+        <div class="nav-title">UNIMED · Multiversidad AIDIA</div>
+        <div class="nav-sub">Ciencias de la Complejidad · Barcelona</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#aidia">AIDIA</a>
+      <a href="#cursos">Cursos</a>
+      <a href="#conocimiento">Conocimiento</a>
+      <a href="#equipo">Equipo</a>
+      <a href="#noticias">Noticias</a>
+      <a href="soporte.html">Soporte</a>
+      <a href="#acceso" class="nav-cta">Acceder</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#aidia" onclick="toggleMenu()">AIDIA</a>
+  <a href="#cursos" onclick="toggleMenu()">Cursos</a>
+  <a href="#conocimiento" onclick="toggleMenu()">Conocimiento</a>
+  <a href="#equipo" onclick="toggleMenu()">Equipo</a>
+  <a href="#noticias" onclick="toggleMenu()">Noticias</a>
+  <a href="soporte.html" onclick="toggleMenu()">Soporte Académico</a>
+  <a href="#acceso" onclick="toggleMenu()">Acceder</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Asociación sin ánimo de lucro · Cataluña · 2019</div>
+    <h1 class="hero-title">
+      Más allá de la <em>universidad</em> —<br>
+      hacia la <strong>Multiversidad</strong>
+    </h1>
+    <p class="hero-desc">
+      <span>UNIMED · Multiversidad AIDIA</span> no es una institución. Es un ecosistema vivo de conocimiento: un espacio donde el aprendizaje, la investigación, el desarrollo y la innovación abierta crecen juntos, sin fronteras disciplinares, sin jerarquías artificiales.<br><br>
+      Aquí las ciencias médicas conversan con las ciencias de la complejidad. La teoría se convierte en práctica. El saber se comparte porque <span>el conocimiento es un bien común</span>.<br><br>
+      Una arquitectura viva. Un modo de estar en el mundo del saber.
+    </p>
+    <div class="hero-actions">
+      <a href="#cursos" class="btn-primary">Explorar cursos</a>
+      <a href="#aidia" class="btn-outline">¿Qué es AIDIA?</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item"><span class="stat-val">3</span><span class="stat-lbl">Brazos operativos</span></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><span class="stat-val">2019</span><span class="stat-lbl">Fundación</span></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><span class="stat-val">BCN</span><span class="stat-lbl">Barcelona · Sverige</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- AIDIA PILLARS -->
+<section class="pillars" id="aidia">
+  <div class="pillars-inner">
+    <div class="section-tag reveal">Los cinco pilares</div>
+    <h2 class="section-title reveal">¿Qué es <em>AIDIA</em>?</h2>
+    <p class="section-desc reveal">AIDIA no es un acrónimo decorativo — es el <strong>Sistema de Producción de Conocimiento Holónico</strong> (SPCH) de UNIMED. Un ciclo operativo que articula cinco dimensiones inseparables del saber y el hacer.</p>
+    <div class="pillars-grid">
+      <div class="pillar-card A reveal"><div class="pillar-letter">A</div><div class="pillar-name">Aprendizaje</div><div class="pillar-desc">Formación continua y transformadora desde la complejidad. Andragogía, itinerarios adaptativos y comunidad de aprendizaje.</div></div>
+      <div class="pillar-card I reveal"><div class="pillar-letter">I</div><div class="pillar-name">Investigación</div><div class="pillar-desc">Producción de conocimiento abierto en ciencias médicas, ciencias de la complejidad y ciencias del comportamiento.</div></div>
+      <div class="pillar-card D reveal"><div class="pillar-letter">D</div><div class="pillar-name">Desarrollo</div><div class="pillar-desc">Implementación clínica y social del conocimiento complejo. De la teoría a la praxis sociosanitaria holomédica.</div></div>
+      <div class="pillar-card IA reveal"><div class="pillar-letter">I</div><div class="pillar-name">Innovación</div><div class="pillar-desc">Creación de nuevos modelos y herramientas. HoloMed, CAPS Digital, IA clínica, Medicina de Precisión.</div></div>
+      <div class="pillar-card Ab reveal"><div class="pillar-letter">A</div><div class="pillar-name">Abierta</div><div class="pillar-desc">El conocimiento es bien común. Acceso libre, colaboración sin fronteras institucionales, inter y transdisciplinariedad.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FUNDAMENTOS -->
+<section style="padding:5rem 2rem;background:var(--navy);position:relative;overflow:hidden;" id="fundamentos">
+  <div style="position:absolute;top:-80px;left:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(181,146,42,.08) 0%,transparent 70%);pointer-events:none;"></div>
+  <div style="max-width:1300px;margin:0 auto;position:relative;z-index:1;">
+    <div class="section-tag reveal" style="color:var(--gold);">La arquitectura del paradigma UNIMED</div>
+    <h2 class="section-title reveal" style="color:var(--white);">Tres conceptos <em>fundacionales</em></h2>
+    <p class="section-desc reveal" style="color:rgba(255,255,255,.55);">No son términos importados — son creaciones originales que constituyen un cambio epistémico real. El MH-AIAP lo cambia todo: de él emerge una nueva medicina y una nueva ciencia de la salud.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:3rem;">
+
+      <div class="reveal" style="background:rgba(255,255,255,.04);border:1px solid rgba(46,109,164,.35);border-top:3px solid #7ab8e0;border-radius:16px;padding:2rem;position:relative;">
+        <div style="position:absolute;top:1.25rem;right:1.25rem;font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:rgba(46,109,164,.2);color:#7ab8e0;border:1px solid rgba(46,109,164,.4);">Avalado UNESCO</div>
+        <div style="font-size:2rem;margin-bottom:1rem;">🧭</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#7ab8e0;margin-bottom:.5rem;">MH-AIAP</div>
+        <div style="font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem;">Cambio epistemológico · París 2016</div>
+        <p style="font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.75;margin-bottom:1.25rem;"><strong style="color:rgba(255,255,255,.85);">Método Holónico · Auto Investigación Acción Participativa.</strong> El fundamento que cambia todo. Supera el dualismo sujeto-objeto de cinco siglos de ciencia occidental. El sujeto-persona no es neutral: co-produce el conocimiento desde su experiencia. Cada elemento es un holón — todo y parte simultáneamente. Presentado en el Congreso Mundial de Pensamiento Complejo (París, 2016) y reconocido como cambio epistémico por UNESCO.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+          <span style="font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(46,109,164,.15);color:#7ab8e0;border:1px solid rgba(46,109,164,.3);">Holón · Holoarquía</span>
+          <span style="font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(46,109,164,.15);color:#7ab8e0;border:1px solid rgba(46,109,164,.3);">No-separabilidad</span>
+          <span style="font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(46,109,164,.15);color:#7ab8e0;border:1px solid rgba(46,109,164,.3);">Carmona · Clusella 2016</span>
+        </div>
+      </div>
+
+      <div class="reveal" style="background:rgba(255,255,255,.04);border:1px solid rgba(13,115,119,.25);border-top:3px solid var(--teal);border-radius:16px;padding:2rem;">
+        <div style="font-size:2rem;margin-bottom:1rem;">🔬</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:#4ec9c9;margin-bottom:.5rem;">Holomedicina</div>
+        <div style="font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem;">Nueva medicina · Superación del reduccionismo</div>
+        <p style="font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.75;margin-bottom:1.25rem;">La medicina que emerge del MH-AIAP. No es "holística" — es cualitativamente distinta: modela la salud como una <strong style="color:rgba(255,255,255,.85);">holoarquía de holones clínicos vivos</strong>. La medicina reduccionista trata la enfermedad como objeto aislado; la Holomedicina trabaja con el sistema completo persona-entorno en co-evolución. Su marco operativo, el <strong style="color:rgba(255,255,255,.85);">HoloMed</strong>, articula 8 dimensiones en interacción dinámica no-lineal.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+          <span style="font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(13,115,119,.2);color:#4ec9c9;border:1px solid rgba(13,115,119,.35);">HoloMed</span>
+          <span style="font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(13,115,119,.2);color:#4ec9c9;border:1px solid rgba(13,115,119,.35);">Más allá del reduccionismo</span>
+          <span style="font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(13,115,119,.2);color:#4ec9c9;border:1px solid rgba(13,115,119,.35);">CAPS Digital</span>
+        </div>
+      </div>
+
+      <div class="reveal" style="background:rgba(255,255,255,.04);border:1px solid rgba(181,146,42,.2);border-top:3px solid var(--gold);border-radius:16px;padding:2rem;">
+        <div style="font-size:2rem;margin-bottom:1rem;">🌱</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:600;color:var(--gold);margin-bottom:.5rem;">Sanalogía</div>
+        <div style="font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:1rem;">Nueva praxis · Ciencia de lo sano</div>
+        <p style="font-size:.85rem;color:rgba(255,255,255,.65);line-height:1.75;margin-bottom:1.25rem;">La nueva praxis que emerge de la Holomedicina. Mientras la medicina reduccionista estudia la enfermedad, la Sanalogía estudia la <strong style="color:rgba(255,255,255,.85);">salud como fenómeno complejo propio</strong> — con sus propias leyes, gradientes y reservas vitales. El giro definitivo: de tratar enfermos a potenciar la vida. La salud no es ausencia de enfermedad; es una condición dinámica, adaptativa y profundamente singular.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.4rem;">
+          <span style="font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(181,146,42,.15);color:var(--gold);border:1px solid rgba(181,146,42,.3);">Valeología</span>
+          <span style="font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(181,146,42,.15);color:var(--gold);border:1px solid rgba(181,146,42,.3);">Ciencia de la vida</span>
+          <span style="font-size:.65rem;padding:3px 10px;border-radius:20px;background:rgba(181,146,42,.15);color:var(--gold);border:1px solid rgba(181,146,42,.3);">Maldonado · Carmona 2020</span>
+        </div>
+      </div>
+
+    </div>
+    <div class="reveal" style="margin-top:2rem;padding:1.5rem 2rem;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+      <span style="font-size:.75rem;color:rgba(255,255,255,.25);font-style:italic;">Medicina reduccionista · enfermedad</span>
+      <span style="color:rgba(255,255,255,.15);font-size:.9rem;">⟶</span>
+      <span style="font-size:.8rem;color:#7ab8e0;font-weight:600;">MH-AIAP</span>
+      <span style="font-size:.7rem;color:rgba(255,255,255,.3);">cambio epistémico</span>
+      <span style="color:rgba(255,255,255,.15);font-size:.9rem;">⟶</span>
+      <span style="font-size:.8rem;color:#4ec9c9;font-weight:600;">Holomedicina</span>
+      <span style="font-size:.7rem;color:rgba(255,255,255,.3);">nueva medicina</span>
+      <span style="color:rgba(255,255,255,.15);font-size:.9rem;">⟶</span>
+      <span style="font-size:.8rem;color:var(--gold);font-weight:600;">Sanalogía</span>
+      <span style="font-size:.7rem;color:rgba(255,255,255,.3);">nueva praxis</span>
+      <span style="color:rgba(255,255,255,.15);font-size:.9rem;">⟶</span>
+      <span style="font-size:.8rem;color:rgba(255,255,255,.55);font-weight:500;">AIDIA · Multiversidad · CAPS Digital</span>
+    </div>
+  </div>
+</section>
+
+<!-- CURSOS -->
+<section class="cursos" id="cursos">
+  <div class="cursos-inner">
+    <div class="cursos-header">
+      <div>
+        <div class="section-tag reveal">Multiversidad AIDIA</div>
+        <h2 class="section-title reveal">Cursos y <em>módulos</em></h2>
+      </div>
+      <a href="cursos.html" class="ver-todos reveal">Ver todos →</a>
+    </div>
+    <div class="cursos-grid">
+
+      <!-- CURSO 0 -->
+      <a class="curso-card reveal" href="curso0.html" style="border:1.5px solid rgba(181,146,42,.4);">
+        <div class="curso-img" style="background:linear-gradient(135deg,#0f1f3d,#2e6da4);position:relative;">
+          ⭐
+          <span class="curso-status active">Curso Estrella</span>
+        </div>
+        <div class="curso-body">
+          <div class="curso-area" style="color:var(--gold);">Curso 0 · Fundacional · MH-AIAP</div>
+          <div class="curso-title">El conocimiento del conocimiento</div>
+          <div class="curso-desc">La propuesta del Método Holónico comporta la construcción del conocimiento desde la auto investigación acción participativa del Ser, agente del saber, con carácter ontológico-primario, basado en la complejidad-epistemología.</div>
+        </div>
+      </a>
+
+      <!-- CURSO A -->
+      <div class="curso-card reveal">
+        <div class="curso-img blue">
+          🎓
+          <span class="curso-status soon">Próximamente</span>
+        </div>
+        <div class="curso-body">
+          <div class="curso-area blue">Curso A · Andragogía</div>
+          <div class="curso-title">Aprender a Aprender desde la Complejidad</div>
+          <div class="curso-desc">El aprendizaje, desde la andragogía y el paradigma de las ciencias de la complejidad, reconoce a la persona como un sujeto adulto, autónomo y responsable de su propio proceso formativo. Para docentes y formadores.</div>
+        </div>
+      </div>
+
+      <!-- CURSO I -->
+      <div class="curso-card reveal">
+        <div class="curso-img teal">
+          🔭
+          <span class="curso-status soon">Próximamente</span>
+        </div>
+        <div class="curso-body">
+          <div class="curso-area teal">Curso I · Investigación</div>
+          <div class="curso-title">Salud y Medicina Basada en la Complejidad</div>
+          <div class="curso-desc">Nuevas evidencias científicas. Para profesionales sociosanitarios. Metodologías de sistemas complejos, medicina personalizada de precisión, ciencias ómicas integradas con el contexto y situación de vida de las personas.</div>
+        </div>
+      </div>
+
+      <!-- CURSO D -->
+      <div class="curso-card reveal">
+        <div class="curso-img gold">
+          🏥
+          <span class="curso-status soon">Próximamente</span>
+        </div>
+        <div class="curso-body">
+          <div class="curso-area gold">Curso D · Desarrollo</div>
+          <div class="curso-title">De la Teoría a la Práctica Sociosanitaria</div>
+          <div class="curso-desc">Praxis clínica holomédica. Integra dimensiones biológicas, cognitivas, psicológicas y sociales para comprender la salud y la enfermedad como procesos dinámicos y sistémicos. Para clínicos.</div>
+        </div>
+      </div>
+
+      <!-- CURSO I-A -->
+      <div class="curso-card reveal">
+        <div class="curso-img rose">
+          🚀
+          <span class="curso-status soon">Próximamente</span>
+        </div>
+        <div class="curso-body">
+          <div class="curso-area rose">Curso I-A · Innovación Abierta</div>
+          <div class="curso-title">HoloMed, CAPS Digital y Nuevos Paradigmas</div>
+          <div class="curso-desc">IA y la clínica. Explora la innovación en salud desde el enfoque HoloMed, integrando ciencias de la complejidad con CAPS Digital e inteligencia artificial en la práctica clínica. Para innovadores y tecnólogos.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TRES BRAZOS -->
+<section class="brazos" id="brazos">
+  <div class="brazos-inner">
+    <div class="section-tag reveal">Estructura operativa</div>
+    <h2 class="section-title reveal">Los tres <em>brazos</em> de UNIMED</h2>
+    <p class="section-desc reveal">Una asociación, tres formas de actuar en el mundo. Cada brazo es autónomo pero profundamente interconectado.</p>
+    <div class="brazos-grid">
+      <div class="brazo-card reveal">
+        <div class="brazo-header multiversidad">
+          <div class="brazo-icon">🎓</div>
+          <div class="brazo-name">Multiversidad AIDIA</div>
+          <div class="brazo-tagline">Educación · Investigación · Conocimiento abierto</div>
+        </div>
+        <div class="brazo-body">
+          <p class="brazo-desc">Instancia de educación en salud y medicina basada en el pensamiento complejo. Integra ciencias naturales, sociales y del comportamiento humano más allá del modelo universitario tradicional.</p>
+          <div class="brazo-tags"><span class="btag">Cursos online</span><span class="btag">Módulos de formación</span><span class="btag">Glosario semántico</span><span class="btag">Investigación abierta</span></div>
+          <a href="#cursos" class="brazo-link">Explorar cursos →</a>
+        </div>
+      </div>
+      <div class="brazo-card reveal">
+        <div class="brazo-header clinica">
+          <div class="brazo-icon">🏥</div>
+          <div class="brazo-name">Clínica UNIMED</div>
+          <div class="brazo-tagline">Atención sociosanitaria · Persona · Comunidad</div>
+        </div>
+        <div class="brazo-body">
+          <p class="brazo-desc">Atención sociosanitaria basada en las personas y sus relaciones. Autogestión de salud individual y comunitaria desde el paradigma de la complejidad y la medicina de precisión.</p>
+          <div class="brazo-tags"><span class="btag teal">HoloMed</span><span class="btag teal">Medicina de Precisión</span><span class="btag teal">PGx · Nutrigenómica</span><span class="btag teal">CAPS Digital</span></div>
+          <a href="clinica.html" class="brazo-link">Ver clínica →</a>
+        </div>
+      </div>
+      <div class="brazo-card reveal">
+        <div class="brazo-header consulting">
+          <div class="brazo-icon">🔬</div>
+          <div class="brazo-name">UNIMED Consulting</div>
+          <div class="brazo-tagline">Consultoría · Asesoramiento · Instituciones</div>
+        </div>
+        <div class="brazo-body">
+          <p class="brazo-desc">Consultoría y asesoramiento a personas e instituciones en el ámbito sociosanitario basada en la complejidad. Formación de profesionales y organizaciones.</p>
+          <div class="brazo-tags"><span class="btag purple">Consultoría clínica</span><span class="btag purple">Formación profesional</span><span class="btag purple">Asesoramiento institucional</span></div>
+          <a href="consulting.html" class="brazo-link">Ver consulting →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONOCIMIENTO SEMÁNTICO -->
+<section class="semantica" id="conocimiento">
+  <div class="sem-orb"></div>
+  <div class="semantica-inner">
+    <div class="section-tag reveal" style="color:var(--gold);">Red de conocimiento vivo</div>
+    <h2 class="section-title reveal" style="color:var(--white);">Creación de <em>Conocimiento</em></h2>
+    <p class="section-desc reveal" style="color:rgba(255,255,255,.55);">Cada concepto es un nodo. Cada relación tiene significado. No es una biblioteca — es un ecosistema cognitivo en expansión permanente.</p>
+    <div class="sem-grid">
+      <div class="sem-nodes reveal">
+        <span class="sem-node blue" onclick="showNode('mhaiap')">MH-AIAP</span>
+        <span class="sem-node gold" onclick="showNode('sanalogia')">Sanalogía</span>
+        <span class="sem-node teal" onclick="showNode('holomed')">Holomedicina</span>
+        <span class="sem-node blue" onclick="showNode('complejidad')">Sistemas complejos</span>
+        <span class="sem-node teal" onclick="showNode('biologia')">Biología de sistemas</span>
+        <span class="sem-node gold" onclick="showNode('medunif')">Medicina Unificada</span>
+        <span class="sem-node purple" onclick="showNode('pgx')">Farmacogenómica</span>
+        <span class="sem-node teal" onclick="showNode('microbioma')">Microbioma</span>
+        <span class="sem-node gold" onclick="showNode('epigenomica')">Epigenómica</span>
+        <span class="sem-node blue" onclick="showNode('caps')">CAPS Digital</span>
+        <span class="sem-node purple" onclick="showNode('nutrigenomica')">Nutrigenómica</span>
+        <span class="sem-node teal" onclick="showNode('neurociencia')">Neurociencias médicas</span>
+        <span class="sem-node blue" onclick="showNode('cognitivas')">Ciencias cognitivas</span>
+      </div>
+      <div class="sem-info reveal" id="sem-info-box">
+        <div class="sem-info-title" id="sem-title">Haz clic en un nodo</div>
+        <div class="sem-info-desc" id="sem-desc">Cada término del glosario semántico está conectado con otros conceptos, módulos, personas y recursos del ecosistema UNIMED · AIDIA.</div>
+        <div class="sem-connections" id="sem-conns"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPO -->
+<section class="equipo" id="equipo">
+  <div class="equipo-inner">
+    <div class="section-tag reveal">Equipo UNIMED</div>
+    <h2 class="section-title reveal">Las personas de <em>UNIMED</em></h2>
+    <p class="section-desc reveal">Un equipo inter y transdisciplinario unido por el paradigma de la complejidad y el compromiso con el conocimiento como bien común.</p>
+    <div class="equipo-grid">
+
+      <div class="miembro-card reveal">
+        <div class="miembro-avatar" style="background:var(--navy);">SC</div>
+        <div class="miembro-name">Samuel Carmona Aguirre</div>
+        <div class="miembro-role">Director · Científico Biomédico · MSc Ciencias Cognitivas<br>Investigador Principal UNIMED · Parque Científico de Barcelona</div>
+        <div class="miembro-tags"><span class="mtag gold">Fundador · Presidente</span><span class="mtag teal">MH-AIAP · HoloMed</span><span class="mtag">PGx · Complejidad</span></div>
+      </div>
+
+      <div class="miembro-card reveal">
+        <div class="miembro-avatar" style="background:#1b3a6b;">CM</div>
+        <div class="miembro-name">Carlos Eduardo Maldonado</div>
+        <div class="miembro-role">Profesor Titular · Universidad El Bosque, Colombia<br>Ph.D. Filosofía, K.U.Leuven (Bélgica) · Postdoc Pittsburgh · Cambridge<br>Doctorados honoris causa: Rumania, Perú, México</div>
+        <div class="miembro-tags"><span class="mtag teal">Ciencias de la Complejidad</span><span class="mtag">Sanalogía · Epigenómica</span><span class="mtag gold">Colaborador científico</span></div>
+      </div>
+
+      <div class="miembro-card reveal">
+        <div class="miembro-avatar" style="background:var(--teal);">JM</div>
+        <div class="miembro-name">Jordi Morwani</div>
+        <div class="miembro-role">Associate Researcher · National University of Singapore<br>Doctoral Researcher · Leiden University Medical Center<br>Nutrición · Salud metabólica · Investigación traslacional</div>
+        <div class="miembro-tags"><span class="mtag teal">Investigación biomédica</span><span class="mtag">Nutrición · NUS</span><span class="mtag gold">Colaborador científico</span></div>
+      </div>
+
+      <div class="miembro-card reveal">
+        <div class="miembro-avatar" style="background:#0a5a5e;">EA</div>
+        <div class="miembro-name">Elena Aguirre Lorenzo</div>
+        <div class="miembro-role">Profesora · Dpto. Enfermería · Universidad de Las Palmas de Gran Canaria<br>Grado en Enfermería de Lanzarote<br>Cuidados · Práctica clínica basada en evidencia</div>
+        <div class="miembro-tags"><span class="mtag teal">Enfermería</span><span class="mtag">Docencia · ULPGC</span><span class="mtag gold">Colaboradora</span></div>
+      </div>
+
+      <div class="miembro-card reveal">
+        <div class="miembro-avatar" style="background:#243f72;">XJ</div>
+        <div class="miembro-name">Xabier Jaso Esain</div>
+        <div class="miembro-role">Antropología · UPNA<br>Conocimiento complejo · Cultura y salud</div>
+        <div class="miembro-tags"><span class="mtag gold">Fundador · Secretario</span><span class="mtag teal">Antropología</span></div>
+      </div>
+
+      <div class="miembro-card reveal">
+        <div class="miembro-avatar" style="background:var(--teal);">+</div>
+        <div class="miembro-name">Únete al equipo</div>
+        <div class="miembro-role">¿Trabajas en ciencias de la complejidad, medicina o investigación? La Multiversidad AIDIA es un proyecto abierto y en construcción permanente.</div>
+        <div class="miembro-tags"><span class="mtag">Socio de número</span><span class="mtag gold">Socio de honor</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- NOTICIAS -->
+<section class="noticias" id="noticias">
+  <div class="noticias-inner">
+    <div class="cursos-header">
+      <div>
+        <div class="section-tag reveal">Blog · Novedades</div>
+        <h2 class="section-title reveal">Últimas <em>noticias</em></h2>
+      </div>
+    </div>
+    <div class="noticias-grid">
+      <div class="noticia-card reveal">
+        <div class="noticia-img teal">🌐</div>
+        <div class="noticia-body">
+          <div class="noticia-meta"><span class="noticia-date">Mar 2026</span><span class="noticia-topic teal">Multiversidad</span></div>
+          <div class="noticia-title">Lanzamiento de la plataforma digital UNIMED · Multiversidad AIDIA</div>
+        </div>
+      </div>
+      <div class="noticia-card reveal">
+        <div class="noticia-img gold">🔬</div>
+        <div class="noticia-body">
+          <div class="noticia-meta"><span class="noticia-date">2026</span><span class="noticia-topic gold">Investigación</span></div>
+          <div class="noticia-title">CAPS Digital: arquitectura de agente clínico con ontología OWL y marco HoloMed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESO -->
+<section class="acceso" id="acceso">
+  <div class="acceso-inner">
+    <h2 class="acceso-title reveal">Entra al <em>ecosistema</em><br>UNIMED · AIDIA</h2>
+    <p class="acceso-desc reveal">Dos formas de acceder al portal académico. Próximamente registro abierto con email para toda la comunidad.</p>
+    <div class="acceso-options reveal">
+      <div class="acceso-opt" onclick="window.location.href='soporte.html'">
+        <div class="acceso-opt-icon">🔑</div>
+        <div class="acceso-opt-title">Acceso con código</div>
+        <div class="acceso-opt-desc">Miembros del equipo UNIMED. Código de 4 dígitos asignado por la Junta Directiva.</div>
+      </div>
+      <div class="acceso-opt">
+        <div class="acceso-opt-icon">📧</div>
+        <div class="acceso-opt-title">Registro con email</div>
+        <div class="acceso-opt-desc">Próximamente — regístrate para acceder a la comunidad AIDIA.</div>
+      </div>
+    </div>
+    <p class="acceso-nota reveal">La Asociación UNIMED-Centro de desarrollo e innovación médica es una entidad sin ánimo de lucro registrada en Cataluña bajo la Ley 4/2018. El conocimiento es bien común.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="nav-brand" href="/" style="display:inline-flex;">
+          <div class="nav-mark">U</div>
+          <div style="margin-left:12px;"><div class="nav-title">UNIMED · Multiversidad AIDIA</div><div class="nav-sub">Ciencias de la Complejidad</div></div>
+        </a>
+        <p>Asociación sin ánimo de lucro registrada en Cataluña. Aprendizaje, Investigación, Desarrollo e Innovación Abierta en ciencias médicas y ciencias de la complejidad.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Plataforma</h4>
+        <a href="#cursos">Cursos y módulos</a>
+        <a href="soporte.html">Soporte académico</a>
+        <a href="#conocimiento">Conocimiento</a>
+        <a href="#noticias">Noticias</a>
+      </div>
+      <div class="footer-col">
+        <h4>UNIMED</h4>
+        <a href="#brazos">Multiversidad AIDIA</a>
+        <a href="clinica.html">Clínica</a>
+        <a href="consulting.html">Consulting</a>
+        <a href="#equipo">Equipo</a>
+      </div>
+      <div class="footer-col">
+        <h4>Sedes</h4>
+        <a href="#">C/ Baldiri Reixac 4-8, Barcelona</a>
+        <a href="#">C/ Tuset 34, Barcelona</a>
+        <a href="#">C/ Sant Pelegrí 3, Mataró</a>
+        <a href="#">Sverige</a>
+        <a href="mailto:admin@unimed-aidia.org">Contacto</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-legal">© 2026 Asociación UNIMED-Centro de desarrollo e innovación médica · Ley 4/2018 Cataluña · Sin ánimo de lucro</span>
+      <span class="footer-legal">clinicaerus.github.io</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>30);
+});
+function toggleMenu(){
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+const nodes={
+  mhaiap:{title:'MH-AIAP · Método Holónico',desc:'Método Holónico - Auto Investigación Acción Participativa. El fundamento que cambia todo. Supera el dualismo sujeto-objeto de cinco siglos de ciencia occidental. Presentado en París 2016, reconocido por UNESCO como cambio epistémico.',conns:['→ Holón · Holoarquía · Autoorganización','→ No-separabilidad e interdefinibilidad','→ Complejidad restringida + general','→ AIDIA como ciclo operativo']},
+  sanalogia:{title:'Sanalogía',desc:'La ciencia de lo sano — no de la enfermedad. La nueva praxis que emerge de la Holomedicina. Estudia la salud como fenómeno complejo propio, con sus propias leyes, gradientes y reservas vitales.',conns:['→ Valeología (equivalente ruso-soviético)','→ Holomedicina','→ Ciencia de la vida','→ Maldonado · Carmona 2020']},
+  holomed:{title:'Holomedicina',desc:'La medicina que emerge del MH-AIAP. Modela la salud como holoarquía de holones clínicos vivos. Su marco operativo HoloMed articula 8 dimensiones en interacción dinámica no-lineal.',conns:['→ MH-AIAP (base metodológica)','→ CAPS Digital','→ Clínica UNIMED','→ Sanalogía (nueva praxis)']},
+  complejidad:{title:'Sistemas complejos',desc:'Sistemas con múltiples componentes que interactúan de forma no lineal generando propiedades emergentes. Base epistemológica de UNIMED-AIDIA.',conns:['→ Emergencia · Autoorganización','→ Biología de sistemas','→ Holomedicina','→ MH-AIAP']},
+  biologia:{title:'Biología de sistemas',desc:'Estudio cuantitativo e integrado de sistemas biológicos. Genómica, transcriptómica, proteómica, metabolómica e interactómica.',conns:['→ Farmacogenómica','→ Epigenómica','→ Microbioma','→ Redes moleculares']},
+  medunif:{title:'Medicina Unificada · Eubiatría',desc:'Integración del conocimiento médico convencional con sistemas de conocimiento tradicionales (MTC, Ayurveda) y emergentes bajo el paradigma de la complejidad y la Holomedicina.',conns:['→ Holomedicina','→ MTC · Ayurveda','→ Medicina de Precisión','→ HoloMed']},
+  pgx:{title:'Farmacogenómica',desc:'Variantes genéticas que determinan la respuesta individual a medicamentos. Personalización del tratamiento basada en el perfil genético del paciente.',conns:['→ Medicina de Precisión','→ CYP450 · variantes','→ Nutrigenómica','→ CAPS Digital']},
+  microbioma:{title:'Microbioma',desc:'Ecosistema microbiano del cuerpo humano. Eje intestino-cerebro-articulación como modulador sistémico de la inflamación y la inmunidad.',conns:['→ Inflamación crónica','→ Disbiosis','→ Nutrigenómica','→ Epigenómica']},
+  epigenomica:{title:'Epigenómica',desc:'Modificaciones heredables de la expresión génica sin cambio en la secuencia de ADN. Metilación, histonas, miARNs. Puente entre genes y entorno.',conns:['→ Biología de sistemas','→ Nutrigenómica','→ Envejecimiento biológico','→ Maldonado 2019-2020']},
+  caps:{title:'CAPS Digital',desc:'Agente clínico inteligente con ontología OWL y marco HoloMed. Integra LOINC, FHIR y WHO IRIS para soporte a la decisión clínica compleja.',conns:['→ Holomedicina','→ Ontología OWL · RDF','→ FHIR · LOINC','→ IA clínica · MH-AIAP']},
+  nutrigenomica:{title:'Nutrigenómica',desc:'Interacciones entre nutrientes y expresión génica. Personalización de la alimentación según el perfil genético y epigenético individual.',conns:['→ Farmacogenómica','→ Epigenómica','→ Microbioma','→ Medicina de Precisión']},
+  neurociencia:{title:'Neurociencias médicas',desc:'Estudio del sistema nervioso en su complejidad: neuroplasticidad, eje cerebro-intestino, neurogenómica y su aplicación en la práctica clínica.',conns:['→ Ciencias cognitivas','→ Farmacogenómica','→ Holomedicina','→ Salud mental compleja']},
+  cognitivas:{title:'Ciencias cognitivas',desc:'Campo interdisciplinario que estudia la mente y el conocimiento: lingüística, psicología, IA, neurociencia y filosofía en diálogo. Base del MH-AIAP.',conns:['→ MH-AIAP','→ Neurociencias médicas','→ Aprendizaje complejo','→ Samuel Carmona MSc']}
+};
+
+function showNode(key){
+  const n=nodes[key];if(!n)return;
+  document.getElementById('sem-title').textContent=n.title;
+  document.getElementById('sem-desc').textContent=n.desc;
+  const c=document.getElementById('sem-conns');
+  c.innerHTML=n.conns.map(x=>`<div class="sem-conn">${x}</div>`).join('');
+}
+</script>
+</body>
+</html>
