@@ -1167,12 +1167,23 @@ function ExAtencion({onFinish}){
   </>);
 }
 
-/* ── EXERCISE OVERLAY (fullscreen) ────────── */
 function ExerciseOverlay({type,patientName,onClose,onComplete}){
   const [stars,setStars]=useState(0);
   const [finished,setFinished]=useState(false);
   const [finStars,setFinStars]=useState(0);
+  const [soundReady,setSoundReady]=useState(false);
   const meta=EX_META[type];
+  const total={rimas:EX_RIMAS.length,silabas:EX_SILABAS.length,sonido:EX_SONIDO.length,atencion:EX_ATENCION.length}[type];
+
+  const activateSound=()=>{
+    // Must happen on direct user gesture for Chromium browsers
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance('Lista');
+    u.lang='es-ES';u.rate=0.82;u.pitch=1.1;u.volume=0.01;
+    window.speechSynthesis.speak(u);
+    setSoundReady(true);
+  };
+
   const finish=(s)=>{
     setFinStars(s);setFinished(true);
     const msg=s>=total*0.8?'¡Campeona! ¡Lo hiciste genial!':s>=total*0.6?'¡Muy bien! ¡Buen trabajo!':'¡Buen trabajo! ¡Sigue practicando!';
@@ -1184,7 +1195,6 @@ function ExerciseOverlay({type,patientName,onClose,onComplete}){
     sonido:<ExSonido onFinish={finish}/>,
     atencion:<ExAtencion onFinish={finish}/>,
   };
-  const total={rimas:EX_RIMAS.length,silabas:EX_SILABAS.length,sonido:EX_SONIDO.length,atencion:EX_ATENCION.length}[type];
   return(
     <div className="ex-overlay">
       <div className="ex-topbar">
@@ -1192,7 +1202,24 @@ function ExerciseOverlay({type,patientName,onClose,onComplete}){
         <div className="ex-title">{meta.icon} {meta.name} · {patientName}</div>
         <div className="ex-stars-count">⭐ {stars}</div>
       </div>
-      {finished?(
+      {!soundReady?(
+        <div className="ex-body">
+          <div className="ex-card" style={{textAlign:'center',maxWidth:400}}>
+            <div style={{fontSize:'4rem',marginBottom:'1rem'}}>🔊</div>
+            <div style={{fontFamily:'Nunito,sans-serif',fontWeight:900,fontSize:'1.5rem',color:'#1E1B4B',marginBottom:'.5rem'}}>
+              {meta.icon} {meta.name}
+            </div>
+            <div style={{fontFamily:'Nunito,sans-serif',fontSize:'.9rem',color:'#6B7280',marginBottom:'1.5rem',lineHeight:1.6}}>
+              Toca el botón para activar el sonido y comenzar el ejercicio.
+            </div>
+            <button
+              onClick={activateSound}
+              style={{background:'linear-gradient(135deg,#A855F7,#EC4899)',color:'#fff',border:'none',borderRadius:50,padding:'1rem 2.5rem',fontFamily:'Nunito,sans-serif',fontWeight:900,fontSize:'1.1rem',cursor:'pointer',width:'100%'}}>
+              🔊 ¡Activar sonido y empezar!
+            </button>
+          </div>
+        </div>
+      ):finished?(
         <div className="ex-finish">
           <div className="ex-fin-emoji">🏆</div>
           <div className="ex-fin-title">{finStars>=total*0.8?'¡Campeona!':finStars>=total*0.6?'¡Muy bien!':'¡Buen trabajo!'}</div>
