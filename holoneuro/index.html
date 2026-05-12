@@ -1042,16 +1042,27 @@ const EX_META={
   atencion:{icon:'👁️',name:'¡Atento!',desc:'¿Cuál es diferente?',col:'c4',count:EX_ATENCION.length},
 };
 
+/* ── SPEECH SYNTHESIS ────────────────────── */
+const speak=(text,rate=0.82,pitch=1.1)=>{
+  if(!window.speechSynthesis)return;
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='es-ES';u.rate=rate;u.pitch=pitch;
+  window.speechSynthesis.speak(u);
+};
+const speakDelay=(text,ms=300)=>setTimeout(()=>speak(text),ms);
+
 /* ── EXERCISE SUBCOMPONENTS ──────────────── */
-function ExCelebration({onNext,isLast}){
-  const msgs=[['¡GENIAL!','¡Lo hiciste muy bien! 🎉'],['¡BRAVO!','¡Eres una campeona! 🌟'],['¡PERFECTO!','¡Qué lista eres! ✨'],['¡INCREÍBLE!','¡Sigue así! 🦋']];
-  const [t,s]=msgs[Math.floor(Math.random()*msgs.length)];
+function ExCelebration({onNext,isLast,msg}){
+  const msgs=[['¡GENIAL!','¡Lo hiciste muy bien!'],['¡BRAVO!','¡Eres una campeona!'],['¡PERFECTO!','¡Qué lista eres!'],['¡INCREÍBLE!','¡Sigue así!']];
+  const [[t,s]]=useState(()=>[msgs[Math.floor(Math.random()*msgs.length)]]);
+  useEffect(()=>{ speak(s,0.8,1.2); },[]);
   return(
     <div className="ex-cel">
       <div className="ex-cel-card">
         <div className="ex-cel-emoji">⭐</div>
         <div className="ex-cel-title">{t}</div>
-        <div className="ex-cel-sub">{s}</div>
+        <div className="ex-cel-sub">{s} 🎉</div>
         <button className="ex-cel-btn" onClick={onNext}>{isLast?'¡Terminar! 🎊':'¡Siguiente! →'}</button>
       </div>
     </div>
@@ -1061,9 +1072,12 @@ function ExCelebration({onNext,isLast}){
 function ExRimas({onFinish}){
   const [idx,setIdx]=useState(0);const [sel,setSel]=useState([]);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
   const q=EX_RIMAS[idx];const isLast=idx===EX_RIMAS.length-1;
+  useEffect(()=>{ speakDelay(`¿Qué rima con ${q.tword}?`,400); },[idx]);
   const pick=(i)=>{
-    if(state!=='idle')return;const ns=[...sel,i];setSel(ns);
-    if(ns.length===q.correct.length){const ok=q.correct.every(c=>ns.includes(c));setState(ok?'correct':'wrong');if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}else setTimeout(()=>{setSel([]);setState('idle');},1200);}
+    if(state!=='idle')return;
+    speak(q.opts[i].w);
+    const ns=[...sel,i];setSel(ns);
+    if(ns.length===q.correct.length){const ok=q.correct.every(c=>ns.includes(c));setState(ok?'correct':'wrong');if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}else{speak('Inténtalo otra vez',0.8,1.0);setTimeout(()=>{setSel([]);setState('idle');},1200);}}
   };
   const next=()=>{setCel(false);setState('idle');setSel([]);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
   return(<>
@@ -1081,8 +1095,13 @@ function ExRimas({onFinish}){
 function ExSilabas({onFinish}){
   const [idx,setIdx]=useState(0);const [taps,setTaps]=useState(0);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
   const q=EX_SILABAS[idx];const isLast=idx===EX_SILABAS.length-1;
-  const tap=()=>{if(state!=='idle')return;setTaps(t=>t+1);};
-  const confirm=()=>{if(!taps)return;const ok=taps===q.s;setState(ok?'correct':'wrong');if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}else setTimeout(()=>{setTaps(0);setState('idle');},1200);};
+  useEffect(()=>{ speakDelay(q.w,400); },[idx]);
+  const tap=()=>{
+    if(state!=='idle')return;
+    const n=taps;setTaps(t=>t+1);
+    if(q.syl[n])speak(q.syl[n],0.75,1.1);
+  };
+  const confirm=()=>{if(!taps)return;const ok=taps===q.s;setState(ok?'correct':'wrong');if(ok){speak(q.syl.join('... '),0.7,1.1);setStars(s=>s+1);setTimeout(()=>setCel(true),600);}else{speak('Inténtalo otra vez',0.8,1.0);setTimeout(()=>{setTaps(0);setState('idle');},1200);}};
   const next=()=>{setCel(false);setState('idle');setTaps(0);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
   return(<>
     <div className="ex-prog">{EX_SILABAS.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
@@ -1106,7 +1125,14 @@ function ExSilabas({onFinish}){
 function ExSonido({onFinish}){
   const [idx,setIdx]=useState(0);const [sel,setSel]=useState(null);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
   const q=EX_SONIDO[idx];const isLast=idx===EX_SONIDO.length-1;
-  const pick=(i)=>{if(state!=='idle')return;setSel(i);const ok=i===q.correct;setState(ok?'correct':'wrong');if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}else setTimeout(()=>{setSel(null);setState('idle');},1200);};
+  useEffect(()=>{ speakDelay(`¿Cuál empieza con... ${q.sound}? ${q.sound}`,400); },[idx]);
+  const pick=(i)=>{
+    if(state!=='idle')return;
+    speak(q.opts[i].w);
+    setSel(i);const ok=i===q.correct;setState(ok?'correct':'wrong');
+    if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}
+    else{speak('Inténtalo otra vez',0.8,1.0);setTimeout(()=>{setSel(null);setState('idle');},1200);}
+  };
   const next=()=>{setCel(false);setState('idle');setSel(null);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
   return(<>
     <div className="ex-prog">{EX_SONIDO.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
@@ -1122,7 +1148,14 @@ function ExSonido({onFinish}){
 function ExAtencion({onFinish}){
   const [idx,setIdx]=useState(0);const [sel,setSel]=useState(null);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
   const q=EX_ATENCION[idx];const isLast=idx===EX_ATENCION.length-1;
-  const pick=(i)=>{if(state!=='idle')return;setSel(i);const ok=i===q.odd;setState(ok?'correct':'wrong');if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}else setTimeout(()=>{setSel(null);setState('idle');},1200);};
+  useEffect(()=>{ speakDelay(q.instr,400); },[idx]);
+  const pick=(i)=>{
+    if(state!=='idle')return;
+    if(q.items[i].l)speak(q.items[i].l);
+    setSel(i);const ok=i===q.odd;setState(ok?'correct':'wrong');
+    if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}
+    else{speak('Prueba otra vez',0.8,1.0);setTimeout(()=>{setSel(null);setState('idle');},1200);}
+  };
   const next=()=>{setCel(false);setState('idle');setSel(null);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
   return(<>
     <div className="ex-prog">{EX_ATENCION.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
@@ -1140,7 +1173,11 @@ function ExerciseOverlay({type,patientName,onClose,onComplete}){
   const [finished,setFinished]=useState(false);
   const [finStars,setFinStars]=useState(0);
   const meta=EX_META[type];
-  const finish=(s)=>{setFinStars(s);setFinished(true);};
+  const finish=(s)=>{
+    setFinStars(s);setFinished(true);
+    const msg=s>=total*0.8?'¡Campeona! ¡Lo hiciste genial!':s>=total*0.6?'¡Muy bien! ¡Buen trabajo!':'¡Buen trabajo! ¡Sigue practicando!';
+    speakDelay(msg,300);
+  };
   const exComponents={
     rimas:<ExRimas onFinish={finish}/>,
     silabas:<ExSilabas onFinish={finish}/>,
@@ -1151,7 +1188,7 @@ function ExerciseOverlay({type,patientName,onClose,onComplete}){
   return(
     <div className="ex-overlay">
       <div className="ex-topbar">
-        <button className="ex-back" onClick={onClose}>← Plataforma</button>
+        <button className="ex-back" onClick={()=>{window.speechSynthesis.cancel();onClose();}}>← Plataforma</button>
         <div className="ex-title">{meta.icon} {meta.name} · {patientName}</div>
         <div className="ex-stars-count">⭐ {stars}</div>
       </div>
@@ -1161,7 +1198,7 @@ function ExerciseOverlay({type,patientName,onClose,onComplete}){
           <div className="ex-fin-title">{finStars>=total*0.8?'¡Campeona!':finStars>=total*0.6?'¡Muy bien!':'¡Buen trabajo!'}</div>
           <div className="ex-fin-sub">{patientName} consiguió {finStars}/{total} estrellas en {meta.name}</div>
           <div style={{fontSize:'2rem',margin:'1rem 0'}}>{'⭐'.repeat(Math.min(finStars,8))}</div>
-          <button className="ex-fin-btn" onClick={()=>onComplete(finStars,type)}>Volver a la plataforma →</button>
+          <button className="ex-fin-btn" onClick={()=>{window.speechSynthesis.cancel();onComplete(finStars,type);}}>Volver a la plataforma →</button>
         </div>
       ):(
         <div className="ex-body">{exComponents[type]}</div>
