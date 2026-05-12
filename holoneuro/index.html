@@ -175,6 +175,83 @@ select.inp{cursor:pointer}
 .config-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem}
 .config-title{font-weight:700;font-size:.9rem;margin-bottom:.75rem}
 .code-pill{display:inline-flex;align-items:center;gap:6px;background:var(--navy10);border-radius:6px;padding:4px 10px;font-size:.78rem;font-weight:600;margin:.25rem;color:var(--navy)}
+/* ── ENTRENAMIENTO ───────────────────────── */
+.ent-header{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:var(--r);padding:1.25rem 1.5rem;color:#fff;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between}
+.ent-title{font-weight:800;font-size:1.05rem}
+.ent-sub{font-size:.8rem;opacity:.75;margin-top:2px}
+.ent-stars{background:rgba(255,255,255,.2);border-radius:50px;padding:.4rem 1rem;font-size:.9rem;font-weight:800}
+.ent-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.25rem}
+.ent-card{background:var(--surface);border:2px solid var(--border);border-radius:16px;padding:1.25rem;cursor:pointer;transition:all .2s;text-align:center}
+.ent-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.ent-card.c1{border-top:4px solid #FF6B9D}
+.ent-card.c2{border-top:4px solid #3B82F6}
+.ent-card.c3{border-top:4px solid #22C55E}
+.ent-card.c4{border-top:4px solid #FF6B35}
+.ent-icon{font-size:2.8rem;margin-bottom:.5rem;line-height:1}
+.ent-name{font-weight:800;font-size:.95rem;margin-bottom:3px}
+.ent-desc{font-size:.75rem;color:var(--text2)}
+.ent-count{font-size:.72rem;color:var(--text3);margin-top:4px}
+.ent-launch{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:50px;padding:.65rem 1.5rem;font-family:inherit;font-weight:700;font-size:.85rem;cursor:pointer;margin-top:.75rem;transition:opacity .2s;width:100%}
+.ent-launch:hover{opacity:.88}
+/* ── EXERCISE FULLSCREEN ─────────────────── */
+.ex-overlay{position:fixed;inset:0;z-index:500;background:#FFF8E7;display:flex;flex-direction:column;font-family:'Nunito',sans-serif}
+.ex-topbar{padding:.85rem 1.25rem;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ex-back{background:none;border:none;font-size:1.4rem;cursor:pointer;color:#6B7280}
+.ex-title{font-weight:800;font-size:1rem;color:#1E1B4B;font-family:'Nunito',sans-serif}
+.ex-stars-count{background:#FFD93D;border-radius:50px;padding:.3rem .9rem;font-weight:800;font-size:.85rem;color:#1E1B4B}
+.ex-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem}
+.ex-card{background:#fff;border-radius:24px;padding:1.75rem;width:100%;max-width:560px;box-shadow:0 8px 32px rgba(0,0,0,.1);text-align:center}
+.ex-instruction{font-weight:800;font-size:1.3rem;color:#1E1B4B;margin-bottom:1.25rem;font-family:'Nunito',sans-serif;line-height:1.3}
+.ex-target{font-size:5rem;line-height:1;margin:.5rem 0}
+.ex-word{font-weight:900;font-size:1.6rem;color:#A855F7;font-family:'Nunito',sans-serif;margin-top:.35rem}
+.ex-options{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1.25rem}
+.ex-opt{background:#F3F4F6;border:3px solid transparent;border-radius:18px;padding:.9rem .5rem;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:.35rem;font-family:'Nunito',sans-serif}
+.ex-opt:hover{background:#EDE9FE;border-color:#A855F7;transform:translateY(-2px)}
+.ex-opt.correct{background:#DCFCE7;border-color:#22C55E}
+.ex-opt.wrong{background:#FEE2E2;border-color:#EF4444;animation:ex-shake .4s}
+.ex-opt.disabled{cursor:not-allowed;opacity:.6}
+.ex-opt-emoji{font-size:2.6rem;line-height:1}
+.ex-opt-word{font-size:.8rem;font-weight:800;color:#1E1B4B}
+.ex-prog{display:flex;gap:6px;margin-bottom:1.25rem}
+.ex-dot{width:11px;height:11px;border-radius:50%;background:#E5E7EB;transition:all .3s}
+.ex-dot.done{background:#22C55E}
+.ex-dot.cur{background:#A855F7;transform:scale(1.3)}
+/* syllable */
+.ex-syl-target{font-size:5rem;cursor:pointer;user-select:none;transition:transform .1s;line-height:1}
+.ex-syl-target:active{transform:scale(.88)}
+.ex-syl-dots{display:flex;gap:.5rem;min-height:46px;align-items:center;justify-content:center;margin:.75rem 0}
+.ex-syl-dot{width:40px;height:40px;border-radius:50%;background:#A855F7;opacity:0;transform:scale(0);transition:all .2s;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.ex-syl-dot.v{opacity:1;transform:scale(1)}
+.ex-syl-btns{display:flex;gap:.65rem;justify-content:center;margin-top:.5rem}
+.ex-syl-btn{padding:.65rem 1.25rem;border-radius:50px;border:none;font-family:'Nunito',sans-serif;font-weight:800;font-size:.85rem;cursor:pointer}
+.ex-syl-ok{background:#22C55E;color:#fff}
+.ex-syl-reset{background:#E5E7EB;color:#374151}
+/* attention */
+.ex-att-grid{display:grid;gap:.65rem;margin-top:1rem}
+.ex-att-grid.g4{grid-template-columns:repeat(4,1fr)}
+.ex-att-grid.g3{grid-template-columns:repeat(3,1fr)}
+.ex-att-item{background:#F3F4F6;border:3px solid transparent;border-radius:16px;padding:.75rem;cursor:pointer;transition:all .2s;text-align:center;font-size:2.3rem;display:flex;flex-direction:column;align-items:center;gap:.25rem}
+.ex-att-item:hover{background:#EDE9FE;border-color:#A855F7}
+.ex-att-item.correct{background:#DCFCE7;border-color:#22C55E}
+.ex-att-item.wrong{background:#FEE2E2;border-color:#EF4444}
+.ex-att-label{font-size:.65rem;font-weight:800;color:#6B7280;font-family:'Nunito',sans-serif}
+/* celebration */
+.ex-cel{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;z-index:600}
+.ex-cel-card{background:#fff;border-radius:28px;padding:2rem 1.75rem;text-align:center;max-width:300px;width:90%}
+.ex-cel-emoji{font-size:4.5rem;margin-bottom:.65rem}
+.ex-cel-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:1.8rem;color:#A855F7;margin-bottom:.4rem}
+.ex-cel-sub{color:#6B7280;font-size:.85rem;margin-bottom:1rem;font-family:'Nunito',sans-serif;font-weight:600}
+.ex-cel-btn{background:linear-gradient(135deg,#A855F7,#EC4899);color:#fff;border:none;border-radius:50px;padding:.85rem 1.75rem;font-family:'Nunito',sans-serif;font-weight:800;font-size:.95rem;cursor:pointer}
+/* finish */
+.ex-finish{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#667eea,#764ba2);text-align:center;padding:2rem}
+.ex-fin-emoji{font-size:5rem;margin-bottom:.75rem}
+.ex-fin-title{font-family:'Nunito',sans-serif;font-weight:900;font-size:2rem;color:#fff;margin-bottom:.4rem}
+.ex-fin-sub{color:rgba(255,255,255,.75);margin-bottom:1.5rem;font-size:.9rem;font-family:'Nunito',sans-serif;font-weight:600}
+.ex-fin-btn{background:#fff;color:#A855F7;border:none;border-radius:50px;padding:.9rem 2rem;font-family:'Nunito',sans-serif;font-weight:800;font-size:1rem;cursor:pointer}
+@keyframes ex-shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes ex-pop{0%{transform:scale(1)}50%{transform:scale(1.12)}100%{transform:scale(1)}}
+@keyframes ex-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.ex-cel-emoji{animation:ex-bounce 1s infinite}
 </style>
 </head>
 <body>
@@ -429,7 +506,7 @@ function GatePage({onUnlock,settings}){
 
 /* ═══ SIDEBAR ══════════════════════════════════ */
 function Sidebar({view,setView,patients,activeId,setActiveId,onNewPatient,onLogout}){
-  const nav=[{id:'dash',i:'◈',l:'Dashboard'},{id:'patients',i:'◉',l:'Pacientes'},{id:'protocol',i:'◎',l:'Protocolo clínico'},{id:'sessions',i:'▤',l:'Sesiones'},{id:'hnae',i:'◐',l:'Evaluación HNAE'},{id:'informes',i:'◆',l:'Informes PDF'},{id:'tarifas',i:'◇',l:'Tarifas y presupuesto'},{id:'ai',i:'✦',l:'Asistente IA'},{id:'config',i:'⚙',l:'Configuración'}];
+  const nav=[{id:'dash',i:'◈',l:'Dashboard'},{id:'patients',i:'◉',l:'Pacientes'},{id:'protocol',i:'◎',l:'Protocolo clínico'},{id:'sessions',i:'▤',l:'Sesiones'},{id:'hnae',i:'◐',l:'Evaluación HNAE'},{id:'entrenamiento',i:'🎮',l:'Entrenamiento'},{id:'informes',i:'◆',l:'Informes PDF'},{id:'tarifas',i:'◇',l:'Tarifas y presupuesto'},{id:'ai',i:'✦',l:'Asistente IA'},{id:'config',i:'⚙',l:'Configuración'}];
   const active=patients.find(p=>p.id===activeId);
   return(
     <div className="sidebar">
@@ -916,6 +993,237 @@ function ConfigView({settings,setSettings}){
   );
 }
 
+/* ═══ EXERCISE DATA ════════════════════════════ */
+const EX_RIMAS=[
+  {target:'🌞',tword:'SOL',opts:[{e:'🥦',w:'COL',ok:true},{e:'🍞',w:'PAN',ok:false},{e:'⚽',w:'GOL',ok:true}],correct:[0,2]},
+  {target:'🦆',tword:'PATO',opts:[{e:'🐱',w:'GATO',ok:true},{e:'🍎',w:'MANZANA',ok:false},{e:'🍽️',w:'PLATO',ok:true}],correct:[0,2]},
+  {target:'🌙',tword:'LUNA',opts:[{e:'🪑',w:'MESA',ok:false},{e:'🧸',w:'CUNA',ok:true},{e:'🎠',w:'UNA',ok:true}],correct:[1,2]},
+  {target:'🌸',tword:'FLOR',opts:[{e:'💛',w:'COLOR',ok:true},{e:'🌊',w:'MAR',ok:false},{e:'❤️',w:'AMOR',ok:true}],correct:[0,2]},
+  {target:'🏠',tword:'CASA',opts:[{e:'🌅',w:'PLAYA',ok:false},{e:'🫖',w:'TAZA',ok:true},{e:'🎭',w:'MASA',ok:true}],correct:[1,2]},
+];
+const EX_SILABAS=[
+  {e:'🐱',w:'GATO',s:2,syl:['GA','TO']},
+  {e:'🌺',w:'FLOR',s:1,syl:['FLOR']},
+  {e:'🦋',w:'MARIPOSA',s:4,syl:['MA','RI','PO','SA']},
+  {e:'🍎',w:'MANZANA',s:3,syl:['MAN','ZA','NA']},
+  {e:'🐘',w:'ELEFANTE',s:4,syl:['E','LE','FAN','TE']},
+  {e:'🌙',w:'LUNA',s:2,syl:['LU','NA']},
+];
+const EX_SONIDO=[
+  {sound:'M',opts:[{e:'🌙',w:'LUNA',ok:false},{e:'🍈',w:'MELÓN',ok:true},{e:'🐟',w:'PEZ',ok:false}],correct:1},
+  {sound:'P',opts:[{e:'🍞',w:'PAN',ok:true},{e:'🌸',w:'FLOR',ok:false},{e:'🦋',w:'MARIPOSA',ok:false}],correct:0},
+  {sound:'S',opts:[{e:'🌞',w:'SOL',ok:true},{e:'🐱',w:'GATO',ok:false},{e:'🍎',w:'MANZANA',ok:false}],correct:0},
+  {sound:'C',opts:[{e:'🏠',w:'CASA',ok:true},{e:'🌙',w:'LUNA',ok:false},{e:'🍞',w:'PAN',ok:false}],correct:0},
+  {sound:'L',opts:[{e:'🌙',w:'LUNA',ok:true},{e:'🐱',w:'GATO',ok:false},{e:'🌞',w:'SOL',ok:false}],correct:0},
+];
+const EX_ATENCION=[
+  {instr:'¿Cuál no es un animal?',items:[{e:'🐱',l:'GATO'},{e:'🐶',l:'PERRO'},{e:'🍎',l:'MANZANA'},{e:'🐰',l:'CONEJO'}],odd:2},
+  {instr:'¿Cuál no es una fruta?',items:[{e:'🍎',l:'MANZANA'},{e:'🍓',l:'FRESA'},{e:'🚗',l:'COCHE'},{e:'🍊',l:'NARANJA'}],odd:2},
+  {instr:'¿Cuál no va en la cocina?',items:[{e:'🍽️',l:'PLATO'},{e:'🥄',l:'CUCHARA'},{e:'⚽',l:'PELOTA'},{e:'🍳',l:'SARTÉN'}],odd:2},
+  {instr:'¿Cuál no tiene ruedas?',items:[{e:'🚗',l:'COCHE'},{e:'🚲',l:'BICI'},{e:'🐘',l:'ELEFANTE'},{e:'🚌',l:'BUS'}],odd:2},
+  {instr:'¿Cuál no es ropa?',items:[{e:'👕',l:'CAMISETA'},{e:'👟',l:'ZAPATO'},{e:'🎈',l:'GLOBO'},{e:'🧢',l:'GORRA'}],odd:2},
+];
+
+const DIAG_EXERCISES={
+  'Trastorno del Lenguaje':['rimas','silabas','sonido','atencion'],
+  'TDAH':['atencion','silabas'],
+  'TEA Nivel 1':['atencion','rimas'],
+  'TEA Nivel 2':['atencion'],
+  'Dislexia':['rimas','silabas','sonido'],
+  'TPS':['atencion'],
+  'TPA':['sonido','silabas'],
+  'default':['atencion','rimas'],
+};
+
+const EX_META={
+  rimas:{icon:'🎵',name:'Rimas',desc:'¿Qué palabras suenan igual?',col:'c1',count:EX_RIMAS.length},
+  silabas:{icon:'👏',name:'Sílabas',desc:'Cuenta las partes de la palabra',col:'c2',count:EX_SILABAS.length},
+  sonido:{icon:'🔤',name:'Primer Sonido',desc:'¿Con qué letra empieza?',col:'c3',count:EX_SONIDO.length},
+  atencion:{icon:'👁️',name:'¡Atento!',desc:'¿Cuál es diferente?',col:'c4',count:EX_ATENCION.length},
+};
+
+/* ── EXERCISE SUBCOMPONENTS ──────────────── */
+function ExCelebration({onNext,isLast}){
+  const msgs=[['¡GENIAL!','¡Lo hiciste muy bien! 🎉'],['¡BRAVO!','¡Eres una campeona! 🌟'],['¡PERFECTO!','¡Qué lista eres! ✨'],['¡INCREÍBLE!','¡Sigue así! 🦋']];
+  const [t,s]=msgs[Math.floor(Math.random()*msgs.length)];
+  return(
+    <div className="ex-cel">
+      <div className="ex-cel-card">
+        <div className="ex-cel-emoji">⭐</div>
+        <div className="ex-cel-title">{t}</div>
+        <div className="ex-cel-sub">{s}</div>
+        <button className="ex-cel-btn" onClick={onNext}>{isLast?'¡Terminar! 🎊':'¡Siguiente! →'}</button>
+      </div>
+    </div>
+  );
+}
+
+function ExRimas({onFinish}){
+  const [idx,setIdx]=useState(0);const [sel,setSel]=useState([]);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
+  const q=EX_RIMAS[idx];const isLast=idx===EX_RIMAS.length-1;
+  const pick=(i)=>{
+    if(state!=='idle')return;const ns=[...sel,i];setSel(ns);
+    if(ns.length===q.correct.length){const ok=q.correct.every(c=>ns.includes(c));setState(ok?'correct':'wrong');if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}else setTimeout(()=>{setSel([]);setState('idle');},1200);}
+  };
+  const next=()=>{setCel(false);setState('idle');setSel([]);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
+  return(<>
+    <div className="ex-prog">{EX_RIMAS.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
+    <div className="ex-card">
+      <div className="ex-instruction">¿Qué palabras riman con…?</div>
+      <div className="ex-target">{q.target}</div><div className="ex-word">{q.tword}</div>
+      <div className="ex-options">{q.opts.map((o,i)=>{const isSel=sel.includes(i);const cls=isSel?(state==='correct'&&q.correct.includes(i)?'correct':state==='wrong'?'wrong':''):'';return(<button key={i} className={`ex-opt${cls?' '+cls:''}${state!=='idle'?' disabled':''}`} onClick={()=>pick(i)}><span className="ex-opt-emoji">{o.e}</span><span className="ex-opt-word">{o.w}</span></button>);})}</div>
+      <div style={{fontSize:'.75rem',color:'#6B7280',marginTop:'.75rem',fontFamily:'Nunito,sans-serif',fontWeight:600}}>Toca {q.correct.length} que rimen 👆</div>
+    </div>
+    {cel&&<ExCelebration onNext={next} isLast={isLast}/>}
+  </>);
+}
+
+function ExSilabas({onFinish}){
+  const [idx,setIdx]=useState(0);const [taps,setTaps]=useState(0);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
+  const q=EX_SILABAS[idx];const isLast=idx===EX_SILABAS.length-1;
+  const tap=()=>{if(state!=='idle')return;setTaps(t=>t+1);};
+  const confirm=()=>{if(!taps)return;const ok=taps===q.s;setState(ok?'correct':'wrong');if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}else setTimeout(()=>{setTaps(0);setState('idle');},1200);};
+  const next=()=>{setCel(false);setState('idle');setTaps(0);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
+  return(<>
+    <div className="ex-prog">{EX_SILABAS.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
+    <div className="ex-card">
+      <div className="ex-instruction">Toca al ritmo de las sílabas 👇</div>
+      <div className="ex-syl-target" onClick={tap}>{q.e}</div>
+      <div className="ex-word">{q.w}</div>
+      <div className="ex-syl-dots">{Array.from({length:Math.max(taps,q.s)},(_,i)=><div key={i} className={`ex-syl-dot${i<taps?' v':''}`}>{i+1}</div>)}</div>
+      <div style={{fontSize:'.78rem',color:'#6B7280',fontFamily:'Nunito,sans-serif',fontWeight:600}}>{taps} palmada{taps!==1?'s':''}</div>
+      <div className="ex-syl-btns">
+        <button className="ex-syl-btn ex-syl-ok" onClick={confirm} disabled={!taps||state!=='idle'}>¡Listo! ✓</button>
+        <button className="ex-syl-btn ex-syl-reset" onClick={()=>{setTaps(0);setState('idle');}}>↺ Borrar</button>
+      </div>
+      {state==='correct'&&<div style={{color:'#22C55E',fontWeight:800,marginTop:'.5rem',fontFamily:'Nunito,sans-serif'}}>✅ ¡Correcto! {q.syl.join(' · ')}</div>}
+      {state==='wrong'&&<div style={{color:'#EF4444',fontWeight:800,marginTop:'.5rem',fontFamily:'Nunito,sans-serif'}}>❌ Prueba otra vez</div>}
+    </div>
+    {cel&&<ExCelebration onNext={next} isLast={isLast}/>}
+  </>);
+}
+
+function ExSonido({onFinish}){
+  const [idx,setIdx]=useState(0);const [sel,setSel]=useState(null);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
+  const q=EX_SONIDO[idx];const isLast=idx===EX_SONIDO.length-1;
+  const pick=(i)=>{if(state!=='idle')return;setSel(i);const ok=i===q.correct;setState(ok?'correct':'wrong');if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}else setTimeout(()=>{setSel(null);setState('idle');},1200);};
+  const next=()=>{setCel(false);setState('idle');setSel(null);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
+  return(<>
+    <div className="ex-prog">{EX_SONIDO.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
+    <div className="ex-card">
+      <div className="ex-instruction">¿Cuál empieza con…?</div>
+      <div style={{fontSize:'4.5rem',fontWeight:900,color:'#A855F7',fontFamily:'Nunito,sans-serif',margin:'.5rem 0 1.25rem',lineHeight:1}}>{q.sound}</div>
+      <div className="ex-options">{q.opts.map((o,i)=>{const cls=sel===i?(state==='correct'?'correct':'wrong'):'';return(<button key={i} className={`ex-opt${cls?' '+cls:''}${state!=='idle'?' disabled':''}`} onClick={()=>pick(i)}><span className="ex-opt-emoji">{o.e}</span><span className="ex-opt-word">{o.w}</span></button>);})}</div>
+    </div>
+    {cel&&<ExCelebration onNext={next} isLast={isLast}/>}
+  </>);
+}
+
+function ExAtencion({onFinish}){
+  const [idx,setIdx]=useState(0);const [sel,setSel]=useState(null);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
+  const q=EX_ATENCION[idx];const isLast=idx===EX_ATENCION.length-1;
+  const pick=(i)=>{if(state!=='idle')return;setSel(i);const ok=i===q.odd;setState(ok?'correct':'wrong');if(ok){setStars(s=>s+1);setTimeout(()=>setCel(true),400);}else setTimeout(()=>{setSel(null);setState('idle');},1200);};
+  const next=()=>{setCel(false);setState('idle');setSel(null);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
+  return(<>
+    <div className="ex-prog">{EX_ATENCION.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
+    <div className="ex-card">
+      <div className="ex-instruction">{q.instr}</div>
+      <div className={`ex-att-grid${q.items.length===3?' g3':' g4'}`}>{q.items.map((it,i)=>{const cls=sel===i?(state==='correct'?'correct':'wrong'):'';return(<div key={i} className={`ex-att-item${cls?' '+cls:''}${state!=='idle'?' disabled':''}`} onClick={()=>pick(i)}><span>{it.e}</span>{it.l&&<span className="ex-att-label">{it.l}</span>}</div>);})}</div>
+    </div>
+    {cel&&<ExCelebration onNext={next} isLast={isLast}/>}
+  </>);
+}
+
+/* ── EXERCISE OVERLAY (fullscreen) ────────── */
+function ExerciseOverlay({type,patientName,onClose,onComplete}){
+  const [stars,setStars]=useState(0);
+  const [finished,setFinished]=useState(false);
+  const [finStars,setFinStars]=useState(0);
+  const meta=EX_META[type];
+  const finish=(s)=>{setFinStars(s);setFinished(true);};
+  const exComponents={
+    rimas:<ExRimas onFinish={finish}/>,
+    silabas:<ExSilabas onFinish={finish}/>,
+    sonido:<ExSonido onFinish={finish}/>,
+    atencion:<ExAtencion onFinish={finish}/>,
+  };
+  const total={rimas:EX_RIMAS.length,silabas:EX_SILABAS.length,sonido:EX_SONIDO.length,atencion:EX_ATENCION.length}[type];
+  return(
+    <div className="ex-overlay">
+      <div className="ex-topbar">
+        <button className="ex-back" onClick={onClose}>← Plataforma</button>
+        <div className="ex-title">{meta.icon} {meta.name} · {patientName}</div>
+        <div className="ex-stars-count">⭐ {stars}</div>
+      </div>
+      {finished?(
+        <div className="ex-finish">
+          <div className="ex-fin-emoji">🏆</div>
+          <div className="ex-fin-title">{finStars>=total*0.8?'¡Campeona!':finStars>=total*0.6?'¡Muy bien!':'¡Buen trabajo!'}</div>
+          <div className="ex-fin-sub">{patientName} consiguió {finStars}/{total} estrellas en {meta.name}</div>
+          <div style={{fontSize:'2rem',margin:'1rem 0'}}>{'⭐'.repeat(Math.min(finStars,8))}</div>
+          <button className="ex-fin-btn" onClick={()=>onComplete(finStars,type)}>Volver a la plataforma →</button>
+        </div>
+      ):(
+        <div className="ex-body">{exComponents[type]}</div>
+      )}
+    </div>
+  );
+}
+
+/* ── ENTRENAMIENTO VIEW ───────────────────── */
+function EntrenamientoView({patient,updatePatient}){
+  const [active,setActive]=useState(null);
+  const [sessionStars,setSessionStars]=useState(0);
+  if(!patient)return<div className="content"><div style={{textAlign:'center',padding:'3rem',color:'var(--text3)'}}><div style={{fontSize:'2rem',marginBottom:8}}>🎮</div><div style={{fontWeight:700,marginBottom:6}}>Sin paciente activo</div><div className="text-sm">Selecciona un paciente para ver los ejercicios adaptados.</div></div></div>;
+  const diags=patient.diagnosis||[];
+  let exIds=[];
+  diags.forEach(d=>{const list=DIAG_EXERCISES[d];if(list)list.forEach(e=>{if(!exIds.includes(e))exIds.push(e);});});
+  if(!exIds.length)exIds=DIAG_EXERCISES['default'];
+  const onComplete=(stars,type)=>{
+    setSessionStars(s=>s+stars);
+    setActive(null);
+    updatePatient(p=>({...p,sessions:{...p.sessions,A:p.sessions.A.map(s=>{const cur=p.sessions.A.find(x=>!x.done);return s.id===cur?.id?{...s,note:(s.note?s.note+'\n':'')+`Entrenamiento ${EX_META[type].name}: ${stars} estrellas`}:s;})}}));
+  };
+  return(
+    <>
+      {active&&<ExerciseOverlay type={active} patientName={patient.name} onClose={()=>setActive(null)} onComplete={onComplete}/>}
+      <div className="content">
+        <div className="ent-header">
+          <div>
+            <div className="ent-title">🎮 Entrenamiento Personalizado</div>
+            <div className="ent-sub">{patient.name} · {patient.diagnosis.join(', ')||'Sin diagnóstico'}</div>
+          </div>
+          <div className="ent-stars">⭐ {sessionStars} hoy</div>
+        </div>
+        <div style={{fontSize:'.82rem',color:'var(--text2)',marginBottom:'1rem',fontWeight:600}}>
+          Ejercicios adaptados al perfil de {patient.name.split(' ')[0]}. Haz clic en "Lanzar" para iniciar en pantalla completa durante la sesión.
+        </div>
+        <div className="ent-grid">
+          {exIds.map(id=>{const m=EX_META[id];return(
+            <div key={id} className={`ent-card ${m.col}`}>
+              <div className="ent-icon">{m.icon}</div>
+              <div className="ent-name">{m.name}</div>
+              <div className="ent-desc">{m.desc}</div>
+              <div className="ent-count">{m.count} ejercicios</div>
+              <button className="ent-launch" onClick={()=>setActive(id)}>▶ Lanzar en sesión</button>
+            </div>
+          );})}
+        </div>
+        <div className="card" style={{background:'var(--navy)',color:'#fff'}}>
+          <div style={{fontWeight:700,marginBottom:'.5rem',fontSize:'.9rem'}}>¿Cómo usar el entrenamiento?</div>
+          <div style={{fontSize:'.8rem',color:'rgba(255,255,255,.65)',lineHeight:1.7}}>
+            1. Selecciona el ejercicio adecuado para esta sesión.<br/>
+            2. Haz clic en "Lanzar en sesión" — la pantalla se cubre completamente con el ejercicio.<br/>
+            3. El paciente interactúa directamente en pantalla (tablet o monitor).<br/>
+            4. Al terminar, las estrellas se guardan automáticamente en las notas de la sesión activa.<br/>
+            5. Vuelves a la plataforma con un clic.
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 /* ═══ APP SHELL ═════════════════════════════════ */
 function App(){
   const [unlocked,setUnlocked]=useState(()=>localStorage.getItem('hn_unlocked')==='1');
@@ -929,13 +1237,14 @@ function App(){
   const patient=patients.find(p=>p.id===activeId)||null;
   const updatePatient=useCallback(fn=>setPatients(prev=>prev.map(p=>p.id===activeId?fn(p):p)),[activeId]);
   const onNewPatient=()=>{const p=newPatient('Nuevo paciente');setPatients(prev=>[...prev,p]);setActiveId(p.id);setView('patients');};
-  const titles={dash:'Dashboard',patients:'Gestión de pacientes',protocol:'Protocolo clínico',sessions:'Seguimiento de sesiones',hnae:'Evaluación HNAE',informes:'Informes PDF',tarifas:'Tarifas y presupuesto',ai:'Asistente Clínico IA',config:'Configuración'};
+  const titles={dash:'Dashboard',patients:'Gestión de pacientes',protocol:'Protocolo clínico',sessions:'Seguimiento de sesiones',hnae:'Evaluación HNAE',entrenamiento:'Entrenamiento Personalizado',informes:'Informes PDF',tarifas:'Tarifas y presupuesto',ai:'Asistente Clínico IA',config:'Configuración'};
   const views={
     dash:<Dashboard patient={patient} setView={setView}/>,
     patients:<PacientesView patients={patients} setPatients={setPatients} activeId={activeId} setActiveId={setActiveId}/>,
     protocol:<ProtocolView/>,
     sessions:<SessionsView patient={patient} updatePatient={updatePatient}/>,
     hnae:<HNAEView patient={patient}/>,
+    entrenamiento:<EntrenamientoView patient={patient} updatePatient={updatePatient}/>,
     informes:<InformesView patient={patient} updatePatient={updatePatient}/>,
     tarifas:<TarifasView/>,
     ai:<AIView patient={patient}/>,
