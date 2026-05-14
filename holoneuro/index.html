@@ -1063,9 +1063,19 @@ function ConfigView({settings,setSettings,patients,setPatients}){
 const EX_RIMAS=[
   {target:'🌞',tword:'SOL',opts:[{e:'🥦',w:'COL',ok:true},{e:'🍞',w:'PAN',ok:false},{e:'⚽',w:'GOL',ok:true}],correct:[0,2]},
   {target:'🦆',tword:'PATO',opts:[{e:'🐱',w:'GATO',ok:true},{e:'🍎',w:'MANZANA',ok:false},{e:'🍽️',w:'PLATO',ok:true}],correct:[0,2]},
-  {target:'🌙',tword:'LUNA',opts:[{e:'🪑',w:'MESA',ok:false},{e:'🧸',w:'CUNA',ok:true},{e:'🎠',w:'UNA',ok:true}],correct:[1,2]},
-  {target:'🌸',tword:'FLOR',opts:[{e:'💛',w:'COLOR',ok:true},{e:'🌊',w:'MAR',ok:false},{e:'❤️',w:'AMOR',ok:true}],correct:[0,2]},
-  {target:'🏠',tword:'CASA',opts:[{e:'🌅',w:'PLAYA',ok:false},{e:'🫖',w:'TAZA',ok:true},{e:'🎭',w:'MASA',ok:true}],correct:[1,2]},
+  {target:'🌙',tword:'LUNA',opts:[{e:'🪑',w:'MESA',ok:false},{e:'🧸',w:'CUNA',ok:true},{e:'🎸',w:'TUNA',ok:true}],correct:[1,2]},
+  {target:'🌸',tword:'FLOR',opts:[{e:'🎨',w:'COLOR',ok:true},{e:'🌊',w:'MAR',ok:false},{e:'❤️',w:'AMOR',ok:true}],correct:[0,2]},
+  {target:'🏠',tword:'CASA',opts:[{e:'🌅',w:'PLAYA',ok:false},{e:'☕',w:'TAZA',ok:true},{e:'🧁',w:'MASA',ok:true}],correct:[1,2]},
+  {target:'🍞',tword:'PAN',opts:[{e:'🚐',w:'VAN',ok:true},{e:'🐟',w:'PEZ',ok:false},{e:'🐕',w:'CAN',ok:true}],correct:[0,2]},
+  {target:'🪑',tword:'MESA',opts:[{e:'🛏️',w:'CAMA',ok:false},{e:'🍓',w:'FRESA',ok:true},{e:'⚖️',w:'PESA',ok:true}],correct:[1,2]},
+  {target:'👢',tword:'BOTA',opts:[{e:'👟',w:'ZAPATO',ok:false},{e:'⚽',w:'PELOTA',ok:true},{e:'🌸',w:'MOTA',ok:true}],correct:[1,2]},
+  {target:'🐭',tword:'RATÓN',opts:[{e:'🐱',w:'GATO',ok:false},{e:'🍋',w:'LIMÓN',ok:true},{e:'🚛',w:'CAMIÓN',ok:true}],correct:[1,2]},
+  {target:'✈️',tword:'VUELO',opts:[{e:'🤚',w:'MANO',ok:false},{e:'⛅',w:'CIELO',ok:true},{e:'💇',w:'PELO',ok:true}],correct:[1,2]},
+  {target:'🛏️',tword:'CAMA',opts:[{e:'🪑',w:'SILLA',ok:false},{e:'🦙',w:'LLAMA',ok:true},{e:'🌿',w:'RAMA',ok:true}],correct:[1,2]},
+  {target:'🐌',tword:'CARACOL',opts:[{e:'🌙',w:'LUNA',ok:false},{e:'🌞',w:'SOL',ok:true},{e:'⚽',w:'GOL',ok:true}],correct:[1,2]},
+  {target:'🦋',tword:'MARIPOSA',opts:[{e:'🐶',w:'PERRO',ok:false},{e:'🌹',w:'ROSA',ok:true},{e:'💡',w:'COSA',ok:true}],correct:[1,2]},
+  {target:'👃',tword:'NARIZ',opts:[{e:'👄',w:'BOCA',ok:false},{e:'😊',w:'FELIZ',ok:true},{e:'🌽',w:'MAÍZ',ok:true}],correct:[1,2]},
+  {target:'🎩',tword:'GORRO',opts:[{e:'🧤',w:'GUANTE',ok:false},{e:'🦊',w:'ZORRO',ok:true},{e:'🏃',w:'CORRO',ok:true}],correct:[1,2]},
 ];
 const EX_SILABAS=[
   {e:'🐱',w:'GATO',s:2,syl:['GA','TO']},
@@ -1074,6 +1084,15 @@ const EX_SILABAS=[
   {e:'🍎',w:'MANZANA',s:3,syl:['MAN','ZA','NA']},
   {e:'🐘',w:'ELEFANTE',s:4,syl:['E','LE','FAN','TE']},
   {e:'🌙',w:'LUNA',s:2,syl:['LU','NA']},
+  {e:'🚂',w:'TREN',s:1,syl:['TREN']},
+  {e:'🍓',w:'FRESA',s:2,syl:['FRE','SA']},
+  {e:'⚽',w:'PELOTA',s:3,syl:['PE','LO','TA']},
+  {e:'🌞',w:'SOL',s:1,syl:['SOL']},
+  {e:'🐥',w:'PATITO',s:3,syl:['PA','TI','TO']},
+  {e:'🐊',w:'COCODRILO',s:4,syl:['CO','CO','DRI','LO']},
+  {e:'🍊',w:'NARANJA',s:3,syl:['NA','RAN','JA']},
+  {e:'🍭',w:'PIRULETA',s:4,syl:['PI','RU','LE','TA']},
+  {e:'🐌',w:'CARACOL',s:3,syl:['CA','RA','COL']},
 ];
 const EX_SONIDO=[
   {sound:'M',opts:[{e:'🌙',w:'LUNA',ok:false},{e:'🍈',w:'MELÓN',ok:true},{e:'🐟',w:'PEZ',ok:false}],correct:1},
@@ -1081,6 +1100,13 @@ const EX_SONIDO=[
   {sound:'S',opts:[{e:'🌞',w:'SOL',ok:true},{e:'🐱',w:'GATO',ok:false},{e:'🍎',w:'MANZANA',ok:false}],correct:0},
   {sound:'C',opts:[{e:'🏠',w:'CASA',ok:true},{e:'🌙',w:'LUNA',ok:false},{e:'🍞',w:'PAN',ok:false}],correct:0},
   {sound:'L',opts:[{e:'🌙',w:'LUNA',ok:true},{e:'🐱',w:'GATO',ok:false},{e:'🌞',w:'SOL',ok:false}],correct:0},
+  {sound:'T',opts:[{e:'🌸',w:'FLOR',ok:false},{e:'🚂',w:'TREN',ok:true},{e:'🐱',w:'GATO',ok:false}],correct:1},
+  {sound:'F',opts:[{e:'🍎',w:'MANZANA',ok:false},{e:'🍓',w:'FRESA',ok:true},{e:'🌙',w:'LUNA',ok:false}],correct:1},
+  {sound:'G',opts:[{e:'🌙',w:'LUNA',ok:false},{e:'🍞',w:'PAN',ok:false},{e:'🐱',w:'GATO',ok:true}],correct:2},
+  {sound:'B',opts:[{e:'🐱',w:'GATO',ok:false},{e:'👢',w:'BOTA',ok:true},{e:'🌞',w:'SOL',ok:false}],correct:1},
+  {sound:'N',opts:[{e:'🐱',w:'GATO',ok:false},{e:'🌞',w:'SOL',ok:false},{e:'☁️',w:'NUBE',ok:true}],correct:2},
+  {sound:'R',opts:[{e:'🐭',w:'RATÓN',ok:true},{e:'🐱',w:'GATO',ok:false},{e:'🌞',w:'SOL',ok:false}],correct:0},
+  {sound:'E',opts:[{e:'🐘',w:'ELEFANTE',ok:true},{e:'🐱',w:'GATO',ok:false},{e:'🌞',w:'SOL',ok:false}],correct:0},
 ];
 const EX_ATENCION=[
   {instr:'¿Cuál no es un animal?',items:[{e:'🐱',l:'GATO'},{e:'🐶',l:'PERRO'},{e:'🍎',l:'MANZANA'},{e:'🐰',l:'CONEJO'}],odd:2},
@@ -1088,6 +1114,13 @@ const EX_ATENCION=[
   {instr:'¿Cuál no va en la cocina?',items:[{e:'🍽️',l:'PLATO'},{e:'🥄',l:'CUCHARA'},{e:'⚽',l:'PELOTA'},{e:'🍳',l:'SARTÉN'}],odd:2},
   {instr:'¿Cuál no tiene ruedas?',items:[{e:'🚗',l:'COCHE'},{e:'🚲',l:'BICI'},{e:'🐘',l:'ELEFANTE'},{e:'🚌',l:'BUS'}],odd:2},
   {instr:'¿Cuál no es ropa?',items:[{e:'👕',l:'CAMISETA'},{e:'👟',l:'ZAPATO'},{e:'🎈',l:'GLOBO'},{e:'🧢',l:'GORRA'}],odd:2},
+  {instr:'¿Cuál no vuela?',items:[{e:'🦋',l:'MARIPOSA'},{e:'🐦',l:'PÁJARO'},{e:'✈️',l:'AVIÓN'},{e:'🐟',l:'PEZ'}],odd:3},
+  {instr:'¿Cuál no está en el cielo?',items:[{e:'☁️',l:'NUBE'},{e:'🌙',l:'LUNA'},{e:'⭐',l:'ESTRELLA'},{e:'🌺',l:'FLOR'}],odd:3},
+  {instr:'¿Cuál no vive en el agua?',items:[{e:'🐟',l:'PEZ'},{e:'🦈',l:'TIBURÓN'},{e:'🐘',l:'ELEFANTE'},{e:'🐙',l:'PULPO'}],odd:2},
+  {instr:'¿Cuál no es de color amarillo?',items:[{e:'🌻',l:'GIRASOL'},{e:'🍋',l:'LIMÓN'},{e:'🍓',l:'FRESA'},{e:'⭐',l:'ESTRELLA'}],odd:2},
+  {instr:'¿Cuál no hace música?',items:[{e:'🥁',l:'TAMBOR'},{e:'🎺',l:'TROMPETA'},{e:'🌸',l:'FLOR'},{e:'🎵',l:'CANCIÓN'}],odd:2},
+  {instr:'¿Cuál no es un juguete?',items:[{e:'🎮',l:'VIDEOJUEGO'},{e:'🧸',l:'OSO'},{e:'🪆',l:'MUÑECA'},{e:'🍳',l:'SARTÉN'}],odd:3},
+  {instr:'¿Cuál no es redondo?',items:[{e:'🌕',l:'LUNA'},{e:'⚽',l:'PELOTA'},{e:'🍕',l:'PIZZA'},{e:'📐',l:'TRIÁNGULO'}],odd:3},
 ];
 
 const DIAG_EXERCISES={
@@ -1117,6 +1150,7 @@ const speak=(text,rate=0.82,pitch=1.1)=>{
   window.speechSynthesis.speak(u);
 };
 const speakDelay=(text,ms=300)=>setTimeout(()=>speak(text),ms);
+const shuffle=arr=>[...arr].sort(()=>Math.random()-.5);
 
 /* ── EXERCISE SUBCOMPONENTS ──────────────── */
 function ExCelebration({onNext,isLast,msg}){
@@ -1136,8 +1170,9 @@ function ExCelebration({onNext,isLast,msg}){
 }
 
 function ExRimas({onFinish}){
+  const [exercises]=useState(()=>shuffle(EX_RIMAS).slice(0,6));
   const [idx,setIdx]=useState(0);const [sel,setSel]=useState([]);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
-  const q=EX_RIMAS[idx];const isLast=idx===EX_RIMAS.length-1;
+  const q=exercises[idx];const isLast=idx===exercises.length-1;
   useEffect(()=>{ speakDelay(`¿Qué rima con ${q.tword}?`,400); },[idx]);
   const pick=(i)=>{
     if(state!=='idle')return;
@@ -1147,7 +1182,7 @@ function ExRimas({onFinish}){
   };
   const next=()=>{setCel(false);setState('idle');setSel([]);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
   return(<>
-    <div className="ex-prog">{EX_RIMAS.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
+    <div className="ex-prog">{exercises.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
     <div className="ex-card">
       <div className="ex-instruction">¿Qué palabras riman con…?</div>
       <div className="ex-target">{q.target}</div><div className="ex-word">{q.tword}</div>
@@ -1159,8 +1194,9 @@ function ExRimas({onFinish}){
 }
 
 function ExSilabas({onFinish}){
+  const [exercises]=useState(()=>shuffle(EX_SILABAS).slice(0,6));
   const [idx,setIdx]=useState(0);const [taps,setTaps]=useState(0);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
-  const q=EX_SILABAS[idx];const isLast=idx===EX_SILABAS.length-1;
+  const q=exercises[idx];const isLast=idx===exercises.length-1;
   useEffect(()=>{ speakDelay(q.w,400); },[idx]);
   const tap=()=>{
     if(state!=='idle')return;
@@ -1170,7 +1206,7 @@ function ExSilabas({onFinish}){
   const confirm=()=>{if(!taps)return;const ok=taps===q.s;setState(ok?'correct':'wrong');if(ok){speak(q.syl.join('... '),0.7,1.1);setStars(s=>s+1);setTimeout(()=>setCel(true),600);}else{speak('Inténtalo otra vez',0.8,1.0);setTimeout(()=>{setTaps(0);setState('idle');},1200);}};
   const next=()=>{setCel(false);setState('idle');setTaps(0);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
   return(<>
-    <div className="ex-prog">{EX_SILABAS.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
+    <div className="ex-prog">{exercises.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
     <div className="ex-card">
       <div className="ex-instruction">Toca al ritmo de las sílabas 👇</div>
       <div className="ex-syl-target" onClick={tap}>{q.e}</div>
@@ -1189,8 +1225,9 @@ function ExSilabas({onFinish}){
 }
 
 function ExSonido({onFinish}){
+  const [exercises]=useState(()=>shuffle(EX_SONIDO).slice(0,5));
   const [idx,setIdx]=useState(0);const [sel,setSel]=useState(null);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
-  const q=EX_SONIDO[idx];const isLast=idx===EX_SONIDO.length-1;
+  const q=exercises[idx];const isLast=idx===exercises.length-1;
   useEffect(()=>{ speakDelay(`¿Cuál empieza con... ${q.sound}? ${q.sound}`,400); },[idx]);
   const pick=(i)=>{
     if(state!=='idle')return;
@@ -1201,7 +1238,7 @@ function ExSonido({onFinish}){
   };
   const next=()=>{setCel(false);setState('idle');setSel(null);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
   return(<>
-    <div className="ex-prog">{EX_SONIDO.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
+    <div className="ex-prog">{exercises.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
     <div className="ex-card">
       <div className="ex-instruction">¿Cuál empieza con…?</div>
       <div style={{fontSize:'4.5rem',fontWeight:900,color:'#A855F7',fontFamily:'Nunito,sans-serif',margin:'.5rem 0 1.25rem',lineHeight:1}}>{q.sound}</div>
@@ -1212,8 +1249,9 @@ function ExSonido({onFinish}){
 }
 
 function ExAtencion({onFinish}){
+  const [exercises]=useState(()=>shuffle(EX_ATENCION).slice(0,5));
   const [idx,setIdx]=useState(0);const [sel,setSel]=useState(null);const [state,setState]=useState('idle');const [cel,setCel]=useState(false);const [stars,setStars]=useState(0);
-  const q=EX_ATENCION[idx];const isLast=idx===EX_ATENCION.length-1;
+  const q=exercises[idx];const isLast=idx===exercises.length-1;
   useEffect(()=>{ speakDelay(q.instr,400); },[idx]);
   const pick=(i)=>{
     if(state!=='idle')return;
@@ -1224,7 +1262,7 @@ function ExAtencion({onFinish}){
   };
   const next=()=>{setCel(false);setState('idle');setSel(null);if(isLast)onFinish(stars+1);else setIdx(i=>i+1);};
   return(<>
-    <div className="ex-prog">{EX_ATENCION.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
+    <div className="ex-prog">{exercises.map((_,i)=><div key={i} className={`ex-dot${i<idx?' done':i===idx?' cur':''}`}/>)}</div>
     <div className="ex-card">
       <div className="ex-instruction">{q.instr}</div>
       <div className={`ex-att-grid${q.items.length===3?' g3':' g4'}`}>{q.items.map((it,i)=>{const cls=sel===i?(state==='correct'?'correct':'wrong'):'';return(<div key={i} className={`ex-att-item${cls?' '+cls:''}${state!=='idle'?' disabled':''}`} onClick={()=>pick(i)}><span>{it.e}</span>{it.l&&<span className="ex-att-label">{it.l}</span>}</div>);})}</div>
