@@ -544,10 +544,9 @@ function PacientesView({patients,setPatients,activeId,setActiveId}){
   const open=(p=null)=>setForm(p?{...p}:newPatient(''));
   const save=()=>{
     if(!form.name.trim())return;
-    const isNew=!(form.id&&prev=>prev.find(p=>p.id===form.id));
     const savedId=form.id||uid();
     const savedForm={...form,id:savedId};
-    setPatients(prev=>prev.find(p=>p.id===form.id)?prev.map(p=>p.id===form.id?savedForm:p):[...prev,savedForm]);
+    setPatients(prev=>prev.find(p=>p.id===savedId)?prev.map(p=>p.id===savedId?savedForm:p):[...prev,savedForm]);
     if(!activeId)setActiveId(savedId);
     setForm(null);
   };
