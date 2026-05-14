@@ -459,12 +459,19 @@ function generatePresupuestoPDF(patient,items){
 /* ═══ GATE PAGE ════════════════════════════════ */
 function GatePage({onUnlock,settings}){
   const [code,setCode]=useState('');const [err,setErr]=useState('');const [loading,setLoading]=useState(false);
-  const codes=[...DEFAULT_CODES,...(settings.extraCodes||[])];
+  const proCodes=[...DEFAULT_CODES,...(settings.extraCodes||[])];
+  const familyCodes=settings.familyCodes||[];
   const tryCode=()=>{
     setLoading(true);setErr('');
     setTimeout(()=>{
-      if(codes.includes(code.trim().toUpperCase())||codes.includes(code.trim())){lsSet('hn_unlocked','1');onUnlock();}
-      else setErr('Código no válido. Revisa el código y vuelve a intentarlo.');
+      const c=code.trim();
+      const cUp=c.toUpperCase();
+      if(proCodes.includes(c)||proCodes.includes(cUp)){onUnlock('pro',null);}
+      else{
+        const fc=familyCodes.find(f=>f.code===c||f.code===cUp);
+        if(fc){onUnlock('familia',fc.patientId);}
+        else setErr('Código no válido. Revisa el código y vuelve a intentarlo.');
+      }
       setLoading(false);
     },800);
   };
@@ -537,8 +544,11 @@ function PacientesView({patients,setPatients,activeId,setActiveId}){
   const open=(p=null)=>setForm(p?{...p}:newPatient(''));
   const save=()=>{
     if(!form.name.trim())return;
-    setPatients(prev=>form.id&&prev.find(p=>p.id===form.id)?prev.map(p=>p.id===form.id?form:p):[...prev,form.id?form:{...form,id:uid()}]);
-    if(!activeId)setActiveId(form.id||uid());
+    const isNew=!(form.id&&prev=>prev.find(p=>p.id===form.id));
+    const savedId=form.id||uid();
+    const savedForm={...form,id:savedId};
+    setPatients(prev=>prev.find(p=>p.id===form.id)?prev.map(p=>p.id===form.id?savedForm:p):[...prev,savedForm]);
+    if(!activeId)setActiveId(savedId);
     setForm(null);
   };
   const del=(id)=>{if(window.confirm('¿Eliminar este paciente y todos sus datos?')){setPatients(prev=>prev.filter(p=>p.id!==id));if(activeId===id)setActiveId(patients.filter(p=>p.id!==id)[0]?.id||null);}};
@@ -945,49 +955,106 @@ function AIView({patient}){
 }
 
 /* ═══ CONFIG ════════════════════════════════════ */
-function ConfigView({settings,setSettings}){
+function ConfigView({settings,setSettings,patients,setPatients}){
   const [extraCode,setExtraCode]=useState('');
+  const [famCode,setFamCode]=useState('');
+  const [famPat,setFamPat]=useState('');
   const addCode=()=>{const c=extraCode.trim().toUpperCase();if(c&&!settings.extraCodes?.includes(c)){setSettings(s=>({...s,extraCodes:[...(s.extraCodes||[]),c]}));setExtraCode('');}};
   const removeCode=(c)=>setSettings(s=>({...s,extraCodes:(s.extraCodes||[]).filter(x=>x!==c)}));
+  const addFamCode=()=>{
+    const c=famCode.trim().toUpperCase();
+    if(!c||!famPat)return;
+    const p=patients.find(x=>x.id===famPat);
+    if(!p)return;
+    const fc={code:c,patientId:p.id,patientName:p.name};
+    setSettings(s=>({...s,familyCodes:[...(s.familyCodes||[]).filter(x=>x.code!==c),fc]}));
+    setFamCode('');setFamPat('');
+  };
+  const removeFamCode=(c)=>setSettings(s=>({...s,familyCodes:(s.familyCodes||[]).filter(x=>x.code!==c)}));
+  const exportData=()=>{
+    const data=JSON.stringify({patients,settings,exported:new Date().toISOString()});
+    const a=document.createElement('a');
+    a.href='data:application/json;charset=utf-8,'+encodeURIComponent(data);
+    a.download=`holoneuro-backup-${new Date().toLocaleDateString('es-ES').replace(/\//g,'-')}.json`;
+    a.click();
+  };
+  const importData=(e)=>{
+    const file=e.target.files[0];if(!file)return;
+    const r=new FileReader();
+    r.onload=(ev)=>{try{const d=JSON.parse(ev.target.result);if(d.patients)setPatients(d.patients);if(d.settings)setSettings(d.settings);alert('Datos restaurados correctamente.');}catch{alert('Error al leer el archivo.');}};
+    r.readAsText(file);
+  };
   return(
     <div className="content">
-      <div style={{marginBottom:'1.25rem'}}><div style={{fontSize:'1.05rem',fontWeight:700}}>Configuración</div><div className="text-sm" style={{marginTop:2}}>Gestiona pagos, códigos de acceso y ajustes de la plataforma.</div></div>
+      <div style={{marginBottom:'1.25rem'}}><div style={{fontSize:'1.05rem',fontWeight:700}}>Configuración</div><div className="text-sm" style={{marginTop:2}}>Gestiona accesos, pacientes y ajustes de la plataforma.</div></div>
+
+      <div className="config-section" style={{borderLeft:'4px solid var(--magenta)'}}>
+        <div className="config-title">👨‍👩‍👧 Códigos de acceso para familias</div>
+        <div className="text-sm" style={{marginBottom:'.75rem'}}>Crea un código para que los padres de un paciente accedan solo a sus ejercicios de entrenamiento. No verán datos clínicos.</div>
+        <div className="field-grid" style={{marginBottom:'.75rem'}}>
+          <div>
+            <label className="field-label">Código para la familia</label>
+            <input className="inp" style={{marginBottom:0}} placeholder="ej. VICTORIA-CASA" value={famCode} onChange={e=>setFamCode(e.target.value)}/>
+          </div>
+          <div>
+            <label className="field-label">Paciente vinculado</label>
+            <select className="inp" style={{marginBottom:0}} value={famPat} onChange={e=>setFamPat(e.target.value)}>
+              <option value="">Seleccionar paciente…</option>
+              {patients.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+          </div>
+        </div>
+        <button className="btn-sm btn-mg" onClick={addFamCode} disabled={!famCode||!famPat}>Crear código familiar</button>
+        {(settings.familyCodes||[]).length>0&&(
+          <div style={{marginTop:'.75rem'}}>
+            <div className="text-sm" style={{fontWeight:600,marginBottom:6}}>Códigos activos:</div>
+            {(settings.familyCodes||[]).map(fc=>(
+              <div key={fc.code} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'6px 10px',background:'var(--magenta10)',borderRadius:6,marginBottom:4,fontSize:'.82rem'}}>
+                <span><strong>{fc.code}</strong> → {fc.patientName}</span>
+                <button className="btn-sm btn-outline" style={{padding:'2px 8px',fontSize:'.7rem',color:'var(--magenta)'}} onClick={()=>removeFamCode(fc.code)}>✕</button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="config-section" style={{borderLeft:'4px solid var(--teal)'}}>
+        <div className="config-title">💾 Copia de seguridad de pacientes</div>
+        <div className="text-sm" style={{marginBottom:'.75rem'}}>Si el navegador pierde los datos, usa el backup para restaurarlos. Exporta regularmente.</div>
+        <div className="flex-row">
+          <button className="btn-sm btn-teal" onClick={exportData}>📥 Exportar backup (.json)</button>
+          <label className="btn-sm btn-outline" style={{cursor:'pointer'}}>
+            📂 Restaurar backup
+            <input type="file" accept=".json" style={{display:'none'}} onChange={importData}/>
+          </label>
+        </div>
+        <div className="text-sm" style={{marginTop:8}}>Pacientes guardados actualmente: <strong>{patients.length}</strong></div>
+      </div>
+
       <div className="config-section">
         <div className="config-title">🔗 Stripe — Enlace de pago</div>
-        <div className="text-sm" style={{marginBottom:'.75rem'}}>Crea un Payment Link en tu dashboard de Stripe (<strong>stripe.com</strong>) y pégalo aquí. Al hacer clic en "Comprar acceso" en la pantalla de entrada, los usuarios serán redirigidos a Stripe. Tras el pago, envías el código manualmente.</div>
         <label className="field-label">URL del Payment Link de Stripe</label>
         <input className="inp" placeholder="https://buy.stripe.com/xxxx..." value={settings.stripeUrl||''} onChange={e=>setSettings(s=>({...s,stripeUrl:e.target.value}))}/>
-        <div className="text-sm" style={{marginTop:4}}>💡 Configura el precio en 97€ y el nombre del producto como "HoloNeuro TND® — Acceso anual".</div>
+        <div className="text-sm" style={{marginTop:4}}>💡 Precio 97€ · Nombre: "HoloNeuro TND® — Acceso anual"</div>
       </div>
+
       <div className="config-section">
-        <div className="config-title">🔑 Códigos de acceso</div>
-        <div className="text-sm" style={{marginBottom:'.75rem'}}>Añade códigos para distribuir a profesionales que hayan pagado. Los códigos integrados (HNAV-2026, UNIMED-PROF-001, DEMO-2026) siempre están activos.</div>
+        <div className="config-title">🔑 Códigos de acceso profesional</div>
         <div style={{marginBottom:'.75rem'}}>
-          <div className="text-sm" style={{fontWeight:600,marginBottom:6}}>Códigos por defecto (no eliminables):</div>
           {DEFAULT_CODES.map(c=><span key={c} className="code-pill">{c}</span>)}
         </div>
-        {(settings.extraCodes||[]).length>0&&<div style={{marginBottom:'.75rem'}}><div className="text-sm" style={{fontWeight:600,marginBottom:6}}>Códigos añadidos:</div>{(settings.extraCodes||[]).map(c=><span key={c} className="code-pill" style={{cursor:'pointer'}} onClick={()=>removeCode(c)}>{c} ✕</span>)}</div>}
+        {(settings.extraCodes||[]).length>0&&<div style={{marginBottom:'.75rem'}}>{(settings.extraCodes||[]).map(c=><span key={c} className="code-pill" style={{cursor:'pointer'}} onClick={()=>removeCode(c)}>{c} ✕</span>)}</div>}
         <div className="flex-row">
-          <input className="inp" style={{marginBottom:0,flex:1}} placeholder="Nuevo código (ej. UNIMED-PROF-010)" value={extraCode} onChange={e=>setExtraCode(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addCode()}/>
+          <input className="inp" style={{marginBottom:0,flex:1}} placeholder="Nuevo código profesional" value={extraCode} onChange={e=>setExtraCode(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addCode()}/>
           <button className="btn-sm btn-teal" onClick={addCode}>Añadir</button>
         </div>
-        <div className="text-sm" style={{marginTop:8}}>Los códigos se guardan localmente en este navegador. Para gestión de códigos en producción, usa una base de datos o hoja de cálculo de Google.</div>
       </div>
+
       <div className="config-section">
         <div className="config-title">📧 Datos de contacto</div>
         {[['contactEmail','Email de contacto','samuel@unimed-consulting.es'],['contactPhone','Teléfono',''],['website','Web','unimed-consulting.es']].map(([k,l,ph])=>(
           <div key={k} style={{marginBottom:'.65rem'}}><label className="field-label">{l}</label><input className="inp" style={{marginBottom:0}} placeholder={ph} value={settings[k]||''} onChange={e=>setSettings(s=>({...s,[k]:e.target.value}))}/></div>
         ))}
-      </div>
-      <div className="config-section" style={{background:'var(--navy)',color:'#fff'}}>
-        <div style={{fontWeight:700,marginBottom:'.5rem'}}>Guía de despliegue</div>
-        <div style={{fontSize:'.82rem',color:'rgba(255,255,255,.65)',lineHeight:1.7}}>
-          1. Sube este archivo HTML a tu hosting (Galirede / GitHub Pages).<br/>
-          2. Crea el Payment Link en Stripe y pega la URL en la sección de arriba.<br/>
-          3. Comparte el archivo con los primeros profesionales usando el código DEMO-2026.<br/>
-          4. Cuando alguien pague, añade su código personalizado aquí y envíaselo por email.<br/>
-          5. Para gestión avanzada (base de datos real), conecta con un backend o usa Zapier + Google Sheets.
-        </div>
       </div>
     </div>
   );
@@ -1288,9 +1355,65 @@ function EntrenamientoView({patient,updatePatient}){
   );
 }
 
+/* ═══ FAMILIA VIEW ══════════════════════════════ */
+function FamiliaView({patient,onLogout}){
+  const [active,setActive]=useState(null);
+  const [sessionStars,setSessionStars]=useState(0);
+  const [soundReady,setSoundReady]=useState(false);
+
+  if(!patient)return(
+    <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#667eea,#764ba2)'}}>
+      <div style={{background:'#fff',borderRadius:24,padding:'2rem',textAlign:'center',maxWidth:340}}>
+        <div style={{fontSize:'3rem',marginBottom:'1rem'}}>😕</div>
+        <div style={{fontFamily:'Nunito,sans-serif',fontWeight:800,fontSize:'1.2rem',marginBottom:'.5rem'}}>Paciente no encontrado</div>
+        <div style={{fontSize:'.85rem',color:'#6B7280',marginBottom:'1rem'}}>Contacta con el profesional UNIMED.</div>
+        <button onClick={onLogout} style={{background:'#667eea',color:'#fff',border:'none',borderRadius:50,padding:'.75rem 2rem',fontFamily:'Nunito,sans-serif',fontWeight:700,cursor:'pointer'}}>Volver</button>
+      </div>
+    </div>
+  );
+
+  const diags=patient.diagnosis||[];
+  let exIds=[];
+  diags.forEach(d=>{const list=DIAG_EXERCISES[d];if(list)list.forEach(e=>{if(!exIds.includes(e))exIds.push(e);});});
+  if(!exIds.length)exIds=DIAG_EXERCISES['default'];
+
+  const onComplete=(stars,type)=>{setSessionStars(s=>s+stars);setActive(null);};
+
+  if(active){
+    return <ExerciseOverlay type={active} patientName={patient.name.split(' ')[0]} onClose={()=>setActive(null)} onComplete={onComplete}/>;
+  }
+
+  return(
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#667eea 0%,#764ba2 100%)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'2rem',fontFamily:'Nunito,sans-serif'}}>
+      <div style={{textAlign:'center',marginBottom:'2rem'}}>
+        <div style={{fontSize:'4rem',marginBottom:'.5rem'}}>🌟</div>
+        <div style={{fontFamily:'Nunito,sans-serif',fontWeight:900,fontSize:'2rem',color:'#fff',marginBottom:'.25rem'}}>¡Hola, {patient.name.split(' ')[0]}!</div>
+        <div style={{color:'rgba(255,255,255,.75)',fontSize:'1rem',fontWeight:600}}>¿Qué ejercicio hacemos hoy?</div>
+        {sessionStars>0&&<div style={{marginTop:'.75rem',background:'rgba(255,255,255,.2)',borderRadius:50,padding:'.4rem 1.2rem',display:'inline-block',color:'#fff',fontWeight:800}}>⭐ {sessionStars} estrellas hoy</div>}
+      </div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'1rem',width:'100%',maxWidth:480,marginBottom:'1.5rem'}}>
+        {exIds.map(id=>{const m=EX_META[id];return(
+          <div key={id} onClick={()=>setActive(id)} style={{background:'#fff',borderRadius:20,padding:'1.25rem',cursor:'pointer',textAlign:'center',transition:'all .2s',boxShadow:'0 4px 20px rgba(0,0,0,.15)'}}>
+            <div style={{fontSize:'2.8rem',marginBottom:'.4rem'}}>{m.icon}</div>
+            <div style={{fontWeight:900,fontSize:'1rem',color:'#1E1B4B',marginBottom:3}}>{m.name}</div>
+            <div style={{fontSize:'.75rem',color:'#6B7280',marginBottom:'.75rem'}}>{m.desc}</div>
+            <div style={{background:'linear-gradient(135deg,#667eea,#764ba2)',color:'#fff',borderRadius:50,padding:'.5rem',fontWeight:800,fontSize:'.85rem'}}>▶ Jugar</div>
+          </div>
+        );})}
+      </div>
+      <div style={{fontSize:'.75rem',color:'rgba(255,255,255,.4)',textAlign:'center'}}>
+        HoloNeuro TND® · ASOC UNIMED<br/>
+        <span style={{cursor:'pointer',textDecoration:'underline'}} onClick={onLogout}>Salir</span>
+      </div>
+    </div>
+  );
+}
+
 /* ═══ APP SHELL ═════════════════════════════════ */
 function App(){
   const [unlocked,setUnlocked]=useState(()=>localStorage.getItem('hn_unlocked')==='1');
+  const [mode,setMode]=useState(()=>localStorage.getItem('hn_mode')||'pro');
+  const [familiaPatientId,setFamiliaPatientId]=useState(()=>localStorage.getItem('hn_familia_pid')||null);
   const [view,setView]=useState('dash');
   const [patients,setPatients]=useState(()=>ls('hn_patients',[]));
   const [activeId,setActiveId]=useState(()=>ls('hn_active_id',null));
@@ -1301,6 +1424,28 @@ function App(){
   const patient=patients.find(p=>p.id===activeId)||null;
   const updatePatient=useCallback(fn=>setPatients(prev=>prev.map(p=>p.id===activeId?fn(p):p)),[activeId]);
   const onNewPatient=()=>{const p=newPatient('Nuevo paciente');setPatients(prev=>[...prev,p]);setActiveId(p.id);setView('patients');};
+
+  const handleUnlock=(m,pid)=>{
+    setMode(m);setUnlocked(true);
+    localStorage.setItem('hn_unlocked','1');
+    localStorage.setItem('hn_mode',m);
+    if(pid){setFamiliaPatientId(pid);localStorage.setItem('hn_familia_pid',pid);}
+  };
+
+  const handleLogout=()=>{
+    localStorage.removeItem('hn_unlocked');
+    localStorage.removeItem('hn_mode');
+    localStorage.removeItem('hn_familia_pid');
+    setUnlocked(false);setMode('pro');setFamiliaPatientId(null);
+  };
+
+  if(!unlocked)return<GatePage onUnlock={handleUnlock} settings={settings}/>;
+
+  if(mode==='familia'){
+    const familiaPatient=patients.find(p=>p.id===familiaPatientId)||null;
+    return<FamiliaView patient={familiaPatient} onLogout={handleLogout}/>;
+  }
+
   const titles={dash:'Dashboard',patients:'Gestión de pacientes',protocol:'Protocolo clínico',sessions:'Seguimiento de sesiones',hnae:'Evaluación HNAE',entrenamiento:'Entrenamiento Personalizado',informes:'Informes PDF',tarifas:'Tarifas y presupuesto',ai:'Asistente Clínico IA',config:'Configuración'};
   const views={
     dash:<Dashboard patient={patient} setView={setView}/>,
@@ -1312,14 +1457,13 @@ function App(){
     informes:<InformesView patient={patient} updatePatient={updatePatient}/>,
     tarifas:<TarifasView/>,
     ai:<AIView patient={patient}/>,
-    config:<ConfigView settings={settings} setSettings={setSettings}/>,
+    config:<ConfigView settings={settings} setSettings={setSettings} patients={patients} setPatients={setPatients}/>,
   };
-  if(!unlocked)return<GatePage onUnlock={()=>setUnlocked(true)} settings={settings}/>;
   return(
     <div className="app">
-      <Sidebar view={view} setView={setView} patients={patients} activeId={activeId} setActiveId={setActiveId} onNewPatient={onNewPatient} onLogout={()=>{localStorage.removeItem('hn_unlocked');setUnlocked(false);}}/>
+      <Sidebar view={view} setView={setView} patients={patients} activeId={activeId} setActiveId={setActiveId} onNewPatient={onNewPatient} onLogout={handleLogout}/>
       <div className="main">
-        <div className="topbar"><span className="topbar-title">{titles[view]}{patient&&['sessions','hnae','informes'].includes(view)?` · ${patient.name}`:''}</span><div className="flex-row"><span style={{fontSize:'.72rem',background:'var(--teal10)',color:'var(--teal)',padding:'3px 10px',borderRadius:20,fontWeight:600}}>HoloNeuro TND® v2.0</span><span className="badge badge-mg">UNIMED</span></div></div>
+        <div className="topbar"><span className="topbar-title">{titles[view]}{patient&&['sessions','hnae','informes'].includes(view)?` · ${patient.name}`:''}</span><div className="flex-row"><span style={{fontSize:'.72rem',background:'var(--teal10)',color:'var(--teal)',padding:'3px 10px',borderRadius:20,fontWeight:600}}>HoloNeuro TND® v5.0</span><span className="badge badge-mg">UNIMED</span></div></div>
         {views[view]}
       </div>
     </div>
