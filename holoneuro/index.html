@@ -262,6 +262,13 @@ const {useState,useEffect,useRef,useCallback,useMemo}=React;
 /* ═══ CONFIG ══════════════════════════════════ */
 const DEFAULT_CODES=['HNAV-2026','UNIMED-PROF-001','DEMO-2026'];
 
+// ── CÓDIGOS DE FAMILIA ──────────────────────────────────────────
+// Añade aquí los códigos para familias ANTES de subir a GitHub.
+// Cada entrada: {code:'CÓDIGO', patientData:{name:'Nombre', diagnosis:['Diagnóstico']}}
+const DEFAULT_FAMILY_CODES=[
+  {code:'VICTORIA-CASA', patientData:{id:'familia-victoria',name:'Victoria Amaia González Bareiro',diagnosis:['Trastorno del Lenguaje'],school:'Maristes Valldèmia'}},
+];
+
 const DIAGNOSES=['TDAH','TEA Nivel 1','TEA Nivel 2','Dislexia','Trastorno del Lenguaje','TPS','TPA','Disgrafía','DCD','Otros TND'];
 
 const PHASES=[
@@ -460,16 +467,19 @@ function generatePresupuestoPDF(patient,items){
 function GatePage({onUnlock,settings}){
   const [code,setCode]=useState('');const [err,setErr]=useState('');const [loading,setLoading]=useState(false);
   const proCodes=[...DEFAULT_CODES,...(settings.extraCodes||[])];
-  const familyCodes=settings.familyCodes||[];
+  const familyCodes=[...DEFAULT_FAMILY_CODES,...(settings.familyCodes||[])];
   const tryCode=()=>{
     setLoading(true);setErr('');
     setTimeout(()=>{
       const c=code.trim();
       const cUp=c.toUpperCase();
-      if(proCodes.includes(c)||proCodes.includes(cUp)){onUnlock('pro',null);}
+      if(proCodes.includes(c)||proCodes.includes(cUp)){onUnlock('pro',null,null);}
       else{
         const fc=familyCodes.find(f=>f.code===c||f.code===cUp);
-        if(fc){onUnlock('familia',fc.patientId);}
+        if(fc){
+          if(fc.patientData){onUnlock('familia',null,fc.patientData);}
+          else{onUnlock('familia',fc.patientId,null);}
+        }
         else setErr('Código no válido. Revisa el código y vuelve a intentarlo.');
       }
       setLoading(false);
@@ -1462,24 +1472,27 @@ function App(){
   const updatePatient=useCallback(fn=>setPatients(prev=>prev.map(p=>p.id===activeId?fn(p):p)),[activeId]);
   const onNewPatient=()=>{const p=newPatient('Nuevo paciente');setPatients(prev=>[...prev,p]);setActiveId(p.id);setView('patients');};
 
-  const handleUnlock=(m,pid)=>{
+  const [embeddedFamiliaPatient,setEmbeddedFamiliaPatient]=useState(null);
+
+  const handleUnlock=(m,pid,embeddedPatient)=>{
     setMode(m);setUnlocked(true);
     localStorage.setItem('hn_unlocked','1');
     localStorage.setItem('hn_mode',m);
-    if(pid){setFamiliaPatientId(pid);localStorage.setItem('hn_familia_pid',pid);}
+    if(embeddedPatient){setEmbeddedFamiliaPatient(embeddedPatient);}
+    else if(pid){setFamiliaPatientId(pid);localStorage.setItem('hn_familia_pid',pid);}
   };
 
   const handleLogout=()=>{
     localStorage.removeItem('hn_unlocked');
     localStorage.removeItem('hn_mode');
     localStorage.removeItem('hn_familia_pid');
-    setUnlocked(false);setMode('pro');setFamiliaPatientId(null);
+    setUnlocked(false);setMode('pro');setFamiliaPatientId(null);setEmbeddedFamiliaPatient(null);
   };
 
   if(!unlocked)return<GatePage onUnlock={handleUnlock} settings={settings}/>;
 
   if(mode==='familia'){
-    const familiaPatient=patients.find(p=>p.id===familiaPatientId)||null;
+    const familiaPatient=embeddedFamiliaPatient||patients.find(p=>p.id===familiaPatientId)||null;
     return<FamiliaView patient={familiaPatient} onLogout={handleLogout}/>;
   }
 
