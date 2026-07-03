@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
@@ -175,6 +175,26 @@ select.inp{cursor:pointer}
 .config-section{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem}
 .config-title{font-weight:700;font-size:.9rem;margin-bottom:.75rem}
 .code-pill{display:inline-flex;align-items:center;gap:6px;background:var(--navy10);border-radius:6px;padding:4px 10px;font-size:.78rem;font-weight:600;margin:.25rem;color:var(--navy)}
+/* ── NIVEL BADGE ────────────────────────── */
+.nivel-badge{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:3px 10px;font-size:.72rem;font-weight:800;margin-top:5px}
+.nivel-1{background:#DCFCE7;color:#16A34A}
+.nivel-2{background:#DBEAFE;color:#2563EB}
+.nivel-3{background:#FEF3C7;color:#D97706}
+.nivel-4{background:#FCE7F3;color:#BE185D}
+/* ── PROGRAMA VERANO ─────────────────────── */
+.verano-hero{background:linear-gradient(135deg,#F97316,#EF4444,#EC4899);border-radius:16px;padding:1.5rem;color:#fff;margin-bottom:1.25rem;position:relative;overflow:hidden}
+.verano-hero::before{content:'☀️';position:absolute;right:-10px;top:-10px;font-size:6rem;opacity:.15}
+.verano-semana{background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-bottom:.75rem;overflow:hidden}
+.verano-semana-head{display:flex;align-items:center;gap:12px;padding:1rem 1.25rem;cursor:pointer;transition:background .15s}
+.verano-semana-head:hover{background:var(--bg)}
+.verano-semana-body{padding:1rem 1.25rem;border-top:1px solid var(--border);background:#fafbfe}
+.verano-dia{border-left:3px solid var(--teal);padding:.6rem .9rem;margin-bottom:.6rem;background:var(--teal10);border-radius:0 8px 8px 0}
+.verano-dia:last-child{margin-bottom:0}
+.verano-dia-title{font-weight:700;font-size:.85rem;color:var(--navy);margin-bottom:3px}
+.verano-dia-acts{font-size:.78rem;color:var(--text2);line-height:1.7}
+.verano-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.22);border-radius:20px;padding:3px 10px;font-size:.72rem;font-weight:700;margin:.2rem}
+/* ── CONFIG PANEL ────────────────────────── */
+.config-ex-item{display:flex;align-items:center;justify-content:space-between;padding:.6rem .9rem;background:var(--bg);border-radius:8px;margin-bottom:.5rem;font-size:.82rem}
 /* ── ENTRENAMIENTO ───────────────────────── */
 .ent-header{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:var(--r);padding:1.25rem 1.5rem;color:#fff;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between}
 .ent-title{font-weight:800;font-size:1.05rem}
@@ -270,6 +290,68 @@ const DEFAULT_FAMILY_CODES=[
 ];
 
 const DIAGNOSES=['TDAH','TEA Nivel 1','TEA Nivel 2','Dislexia','Trastorno del Lenguaje','TPS','TPA','Disgrafía','DCD','Otros TND'];
+
+/* ═══ NIVELES PROGRESIVOS ═════════════════════ */
+const NIVELES=[
+  {nivel:1,nombre:'Explorador',emoji:'🌱',min:0,max:19,color:'#16A34A',bg:'#DCFCE7',desc:'¡Comenzamos la aventura!'},
+  {nivel:2,nombre:'Aventurero',emoji:'🚀',min:20,max:49,color:'#2563EB',bg:'#DBEAFE',desc:'¡Ya conoces el camino!'},
+  {nivel:3,nombre:'Campeón',emoji:'🏆',min:50,max:99,color:'#D97706',bg:'#FEF3C7',desc:'¡Eres increíble!'},
+  {nivel:4,nombre:'Superestrella',emoji:'⭐',min:100,max:9999,color:'#BE185D',bg:'#FCE7F3',desc:'¡Eres una auténtica estrella!'},
+];
+function getNivel(stars){return NIVELES.find(n=>stars>=n.min&&stars<=n.max)||NIVELES[0];}
+function getNextNivel(stars){const cur=getNivel(stars);return NIVELES.find(n=>n.nivel===cur.nivel+1)||null;}
+
+/* ═══ PROGRAMA VERANO VICTORIA ════════════════ */
+const PROGRAMA_VERANO=[
+  {semana:1,mes:'Julio',titulo:'Conciencia fonológica — Nivel 1',objetivo:'Despertar el oído fonológico: rimas y sílabas',color:'#F97316',emoji:'🌟',
+    dias:[
+      {dia:'Lunes',titulo:'Juego de las rimas',actividades:'Plataforma HoloNeuro: ejercicio "Rimas" (10 min). Luego inventad 3 rimas con nombres de la familia: papá-mamá, sol-col…',tiempo:'15 min',material:'Tablet/móvil'},
+      {dia:'Martes',titulo:'Palmadas silábicas',actividades:'Plataforma: "Sílabas" (10 min). Contad sílabas de objetos de casa golpeando la mesa.',tiempo:'15 min',material:'Sin material'},
+      {dia:'Miércoles',titulo:'Descanso activo',actividades:'Juego libre. Cantad canciones con rimas: "Un elefante se balanceaba…"',tiempo:'10 min',material:'Canciones'},
+      {dia:'Jueves',titulo:'¿Con qué letra empieza?',actividades:'Plataforma: "Primer Sonido" (10 min). Buscad 5 objetos en casa que empiecen por M, P, S.',tiempo:'15 min',material:'Casa'},
+      {dia:'Viernes',titulo:'¡Día del repaso!',actividades:'Elige el ejercicio favorito de la semana en la plataforma. Celebrad con un abrazo especial cada estrella. ⭐',tiempo:'10 min',material:'Tablet/móvil'},
+    ]},
+  {semana:2,mes:'Julio',titulo:'Lenguaje expresivo — Describir y narrar',objetivo:'Construir frases completas y ordenar ideas',color:'#8B5CF6',emoji:'🦋',
+    dias:[
+      {dia:'Lunes',titulo:'El cuento inventado',actividades:'Plataforma: "¡Atento!" (10 min). Inventad un cuento: papá/mamá empieza una frase y Victoria la continúa. 5 turnos cada uno.',tiempo:'20 min',material:'Sin material'},
+      {dia:'Martes',titulo:'¿Qué ves?',actividades:'"Rimas" (10 min). Mirad un libro de imágenes y Victoria describe con frases completas: "Veo una niña que…"',tiempo:'20 min',material:'Libro con imágenes'},
+      {dia:'Miércoles',titulo:'Descanso activo',actividades:'Dibujad algo juntos y Victoria explica qué dibujó usando 3 palabras mínimo.',tiempo:'10 min',material:'Papel y colores'},
+      {dia:'Jueves',titulo:'Las secuencias',actividades:'"Sílabas" (10 min). Ordenad 4 imágenes de un cuento y Victoria cuenta: primero, después, al final.',tiempo:'20 min',material:'Papel'},
+      {dia:'Viernes',titulo:'Día de estrellas ⭐',actividades:'Los dos ejercicios favoritos. ¡Si llega a 10 estrellas esta semana hay premio sorpresa!',tiempo:'15 min',material:'Tablet/móvil'},
+    ]},
+  {semana:3,mes:'Julio',titulo:'Atención y memoria visual',objetivo:'Entrenar la atención sostenida y memoria de trabajo',color:'#0EA5E9',emoji:'🔍',
+    dias:[
+      {dia:'Lunes',titulo:'¿Cuál falta?',actividades:'"¡Atento!" (10 min). Luego: 5 objetos en la mesa, Victoria los mira 30 seg, cierra ojos, quitáis uno. ¿Cuál falta?',tiempo:'20 min',material:'5 objetos'},
+      {dia:'Martes',titulo:'Memory de palabras',actividades:'"Primer Sonido" (10 min). Memory casero: dibujad 5 pares de objetos en papeles.',tiempo:'20 min',material:'Papel, colores'},
+      {dia:'Miércoles',titulo:'Descanso activo',actividades:'Paseo y búsqueda: "Encuentra 3 cosas rojas, 2 redondas, 1 que empiece por S"',tiempo:'15 min',material:'Al aire libre'},
+      {dia:'Jueves',titulo:'El detective de sonidos',actividades:'"Rimas" (10 min). Ojos cerrados: escuchad sonidos de casa (grifo, puerta) y Victoria adivina cuál es.',tiempo:'20 min',material:'Casa'},
+      {dia:'Viernes',titulo:'Gran repaso semana 3',actividades:'Todos los ejercicios una vez. Registrad las estrellas totales de julio.',tiempo:'20 min',material:'Tablet/móvil'},
+    ]},
+  {semana:4,mes:'Julio/Agosto',titulo:'Descanso y consolidación',objetivo:'Integración natural en rutinas de verano',color:'#10B981',emoji:'🏖️',
+    dias:[
+      {dia:'Lunes',titulo:'Vacaciones activas',actividades:'Solo un ejercicio de plataforma (10 min). El resto: hablar, jugar, explorar con lenguaje rico.',tiempo:'10 min',material:'Tablet/móvil'},
+      {dia:'Martes',titulo:'Rimas de playa',actividades:'Inventad rimas con lo que véis: ola-bola, sol-caracol, mar-cantar. Sin plataforma.',tiempo:'10 min',material:'Al aire libre'},
+      {dia:'Miércoles',titulo:'Cuento de verano',actividades:'Victoria cuenta qué hizo ayer usando "primero", "después" y "al final".',tiempo:'10 min',material:'Sin material'},
+      {dia:'Jueves',titulo:'Juego libre fonológico',actividades:'"Veo veo" pero con sonido inicial: "Veo veo… una cosa que empieza por S…"',tiempo:'10 min',material:'Sin material'},
+      {dia:'Viernes',titulo:'Balance de julio ⭐',actividades:'Abrid la plataforma y contad todas las estrellas. ¡Celebradlo!',tiempo:'15 min',material:'Tablet/móvil'},
+    ]},
+  {semana:5,mes:'Agosto',titulo:'Conciencia fonológica — Nivel 2',objetivo:'Aislar sonidos, identificar posición inicial y final',color:'#F59E0B',emoji:'🌻',
+    dias:[
+      {dia:'Lunes',titulo:'Sonido inicial y final',actividades:'"Primer Sonido" (10 min). Nuevo reto: ¿por qué letra ACABA esta palabra? GATO acaba en O, PAN en N.',tiempo:'15 min',material:'Tablet/móvil'},
+      {dia:'Martes',titulo:'Rimas nivel 2',actividades:'"Rimas" (10 min). Inventad rimas con 3 palabras: sol, col, ¿cuál más? Turno de papá/mamá también.',tiempo:'15 min',material:'Tablet/móvil'},
+      {dia:'Miércoles',titulo:'Segmentación fonémica',actividades:'"Sílabas" (10 min). Separad sonidos de palabras cortas: G-A-T-O. Cada sonido = un golpe en la mesa.',tiempo:'15 min',material:'Sin material'},
+      {dia:'Jueves',titulo:'El ladrón de sílabas',actividades:'"¡Atento!" (10 min). Juego: "Si a GATO le quitamos GA, queda… TO!" Probad con: LUNA, MESA, CAMA.',tiempo:'20 min',material:'Sin material'},
+      {dia:'Viernes',titulo:'Día de campeona ⭐',actividades:'Todos los ejercicios. ¡Si lleva 50+ estrellas es Nivel Campeón!',tiempo:'15 min',material:'Tablet/móvil'},
+    ]},
+  {semana:6,mes:'Agosto',titulo:'Preparación Primaria — Vocabulario y narración',objetivo:'Ampliar vocabulario y estructurar el discurso oral',color:'#EC4899',emoji:'🎒',
+    dias:[
+      {dia:'Lunes',titulo:'La palabra del día',actividades:'Ejercicio libre 10 min. Cada día: una palabra nueva (difícil). ¿Qué significa? Usadla en una frase.',tiempo:'15 min',material:'Diccionario o móvil'},
+      {dia:'Martes',titulo:'Cuento en cadena',actividades:'"Rimas" (10 min). Cuento colaborativo largo: cada uno añade 2 frases. Victoria usa: "pero", "entonces", "porque".',tiempo:'20 min',material:'Sin material'},
+      {dia:'Miércoles',titulo:'Describir sin ver',actividades:'"¡Atento!" (10 min). Victoria describe un objeto escondido y vosotros adivináis.',tiempo:'20 min',material:'Objetos de casa'},
+      {dia:'Jueves',titulo:'Los porqués',actividades:'"Sílabas" (10 min). Preguntad "¿por qué…?" sobre cualquier cosa. Reto: responder en 2 frases completas.',tiempo:'15 min',material:'Sin material'},
+      {dia:'Viernes',titulo:'¡Lista para Primaria! 🎒',actividades:'Todos los ejercicios. Hablad de la nueva escuela con ilusión. ¡Celebración especial de fin de verano!',tiempo:'25 min',material:'Tablet/móvil'},
+    ]},
+];
 
 const PHASES=[
   {id:0,name:'Screening inicial',time:'30 min',col:'var(--navy)',bg:'var(--navy10)',items:[{k:'Objetivo',v:'Determinar elegibilidad y ajuste al programa'},{k:'Herramienta',v:'Formulario de pre-screening online (PersonómicaOnline®)'},{k:'Entrevista',v:'15–20 min con familia'},{k:'Documentación',v:'Revisión de diagnósticos previos'},{k:'Resultado',v:'Aceptación, derivación o lista de espera'}]},
@@ -968,6 +1050,10 @@ function ConfigView({settings,setSettings,patients,setPatients}){
   const [extraCode,setExtraCode]=useState('');
   const [famCode,setFamCode]=useState('');
   const [famPat,setFamPat]=useState('');
+  const [showExPanel,setShowExPanel]=useState(false);
+  const [newEx,setNewEx]=useState({tipo:'rimas',emoji:'',palabra:'',rima1:'',rima1emoji:'',rima2:'',rima2emoji:'',silabas:2,sonido:''});
+  const customExs=settings.customExercises||[];
+
   const addCode=()=>{const c=extraCode.trim().toUpperCase();if(c&&!settings.extraCodes?.includes(c)){setSettings(s=>({...s,extraCodes:[...(s.extraCodes||[]),c]}));setExtraCode('');}};
   const removeCode=(c)=>setSettings(s=>({...s,extraCodes:(s.extraCodes||[]).filter(x=>x!==c)}));
   const addFamCode=()=>{
@@ -980,6 +1066,14 @@ function ConfigView({settings,setSettings,patients,setPatients}){
     setFamCode('');setFamPat('');
   };
   const removeFamCode=(c)=>setSettings(s=>({...s,familyCodes:(s.familyCodes||[]).filter(x=>x.code!==c)}));
+  const removeCustomEx=(i)=>setSettings(s=>({...s,customExercises:(s.customExercises||[]).filter((_,j)=>j!==i)}));
+  const addCustomEx=()=>{
+    if(!newEx.palabra&&!newEx.sonido)return alert('Rellena al menos la palabra o sonido del ejercicio.');
+    const ex={...newEx,id:'cx_'+uid()};
+    setSettings(s=>({...s,customExercises:[...(s.customExercises||[]),ex]}));
+    setNewEx({tipo:'rimas',emoji:'',palabra:'',rima1:'',rima1emoji:'',rima2:'',rima2emoji:'',silabas:2,sonido:''});
+    alert('✅ Ejercicio añadido. Aparecerá en las próximas sesiones de entrenamiento.');
+  };
   const exportData=()=>{
     const data=JSON.stringify({patients,settings,exported:new Date().toISOString()});
     const a=document.createElement('a');
@@ -995,10 +1089,68 @@ function ConfigView({settings,setSettings,patients,setPatients}){
   };
   return(
     <div className="content">
-      <div style={{marginBottom:'1.25rem'}}><div style={{fontSize:'1.05rem',fontWeight:700}}>Configuración</div><div className="text-sm" style={{marginTop:2}}>Gestiona accesos, pacientes y ajustes de la plataforma.</div></div>
+      <div style={{marginBottom:'1.25rem'}}><div style={{fontSize:'1.05rem',fontWeight:700}}>Configuración</div><div className="text-sm" style={{marginTop:2}}>HoloNeuro TND® v9.1 · Gestiona accesos, ejercicios y ajustes.</div></div>
 
-      <div className="config-section" style={{borderLeft:'4px solid var(--magenta)'}}>
-        <div className="config-title">👨‍👩‍👧 Códigos de acceso para familias</div>
+      {/* PANEL EJERCICIOS PERSONALIZADOS */}
+      <div className="config-section" style={{borderLeft:'4px solid var(--gold)'}}>
+        <div className="flex-between" style={{marginBottom:'.65rem'}}>
+          <div className="config-title" style={{marginBottom:0}}>🎯 Añadir ejercicios personalizados</div>
+          <button className="btn-sm btn-gold" onClick={()=>setShowExPanel(v=>!v)}>{showExPanel?'Cerrar':'+ Nuevo ejercicio'}</button>
+        </div>
+        <div className="text-sm" style={{marginBottom:'.75rem'}}>Añade ejercicios sin tocar el código. Se integran automáticamente en el entrenamiento.</div>
+
+        {showExPanel&&(
+          <div style={{background:'var(--gold10)',border:'1px solid var(--gold)',borderRadius:8,padding:'1rem',marginBottom:'1rem'}}>
+            <div style={{marginBottom:'.75rem'}}>
+              <label className="field-label">Tipo de ejercicio</label>
+              <select className="inp" style={{marginBottom:0}} value={newEx.tipo} onChange={e=>setNewEx(x=>({...x,tipo:e.target.value}))}>
+                <option value="rimas">🎵 Rima — Encuentra qué palabras riman</option>
+                <option value="silabas">👏 Sílabas — Cuenta las partes de la palabra</option>
+                <option value="sonido">🔤 Primer Sonido — ¿Con qué letra empieza?</option>
+              </select>
+            </div>
+            {newEx.tipo==='rimas'&&(
+              <div>
+                <div className="field-grid">
+                  <div><label className="field-label">Emoji objetivo</label><input className="inp" style={{marginBottom:0}} placeholder="🌞" value={newEx.emoji} onChange={e=>setNewEx(x=>({...x,emoji:e.target.value}))}/></div>
+                  <div><label className="field-label">Palabra objetivo (mayúsculas)</label><input className="inp" style={{marginBottom:0}} placeholder="SOL" value={newEx.palabra} onChange={e=>setNewEx(x=>({...x,palabra:e.target.value.toUpperCase()}))}/></div>
+                </div>
+                <div className="field-grid" style={{marginTop:'.5rem'}}>
+                  <div><label className="field-label">Opción 1 emoji</label><input className="inp" style={{marginBottom:4}} placeholder="🥦" value={newEx.rima1emoji} onChange={e=>setNewEx(x=>({...x,rima1emoji:e.target.value}))}/><input className="inp" style={{marginBottom:0}} placeholder="Palabra 1 (RIMA ✓)" value={newEx.rima1} onChange={e=>setNewEx(x=>({...x,rima1:e.target.value.toUpperCase()}))}/></div>
+                  <div><label className="field-label">Opción 2 emoji</label><input className="inp" style={{marginBottom:4}} placeholder="🍞" value={newEx.rima2emoji} onChange={e=>setNewEx(x=>({...x,rima2emoji:e.target.value}))}/><input className="inp" style={{marginBottom:0}} placeholder="Palabra 2 (no rima)" value={newEx.rima2} onChange={e=>setNewEx(x=>({...x,rima2:e.target.value.toUpperCase()}))}/></div>
+                </div>
+                <div className="text-sm" style={{marginTop:'.5rem',color:'var(--text3)'}}>💡 La opción 1 será la respuesta correcta (rima). La opción 2 será el distractor.</div>
+              </div>
+            )}
+            {newEx.tipo==='silabas'&&(
+              <div className="field-grid">
+                <div><label className="field-label">Emoji</label><input className="inp" style={{marginBottom:0}} placeholder="🐱" value={newEx.emoji} onChange={e=>setNewEx(x=>({...x,emoji:e.target.value}))}/></div>
+                <div><label className="field-label">Palabra (mayúsculas)</label><input className="inp" style={{marginBottom:0}} placeholder="GATO" value={newEx.palabra} onChange={e=>setNewEx(x=>({...x,palabra:e.target.value.toUpperCase()}))}/></div>
+                <div><label className="field-label">Número de sílabas</label><input className="inp" style={{marginBottom:0}} type="number" min={1} max={6} value={newEx.silabas} onChange={e=>setNewEx(x=>({...x,silabas:Number(e.target.value)}))}/></div>
+              </div>
+            )}
+            {newEx.tipo==='sonido'&&(
+              <div className="field-grid">
+                <div><label className="field-label">Letra / Sonido</label><input className="inp" style={{marginBottom:0}} placeholder="M" value={newEx.sonido} onChange={e=>setNewEx(x=>({...x,sonido:e.target.value.toUpperCase()}))}/></div>
+                <div><label className="field-label">Emoji + Palabra correcta</label><div style={{display:'flex',gap:6}}><input className="inp" style={{marginBottom:0,width:70}} placeholder="🍈" value={newEx.emoji} onChange={e=>setNewEx(x=>({...x,emoji:e.target.value}))}/><input className="inp" style={{marginBottom:0}} placeholder="MELÓN" value={newEx.palabra} onChange={e=>setNewEx(x=>({...x,palabra:e.target.value.toUpperCase()}))}/></div></div>
+              </div>
+            )}
+            <button className="btn-sm btn-gold" style={{marginTop:'.85rem'}} onClick={addCustomEx}>Añadir ejercicio →</button>
+          </div>
+        )}
+
+        {customExs.length>0&&(
+          <div>
+            <div className="text-sm" style={{fontWeight:600,marginBottom:'.5rem'}}>{customExs.length} ejercicio{customExs.length!==1?'s':''} añadido{customExs.length!==1?'s':''}:</div>
+            {customExs.map((ex,i)=>(
+              <div key={i} className="config-ex-item">
+                <span>{EX_META[ex.tipo]?.icon} <strong>{ex.palabra||ex.sonido}</strong> · {EX_META[ex.tipo]?.name}</span>
+                <button className="btn-sm btn-outline" style={{padding:'2px 8px',fontSize:'.7rem',color:'var(--magenta)'}} onClick={()=>removeCustomEx(i)}>✕ Eliminar</button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
         <div className="text-sm" style={{marginBottom:'.75rem'}}>Crea un código para que los padres de un paciente accedan solo a sus ejercicios de entrenamiento. No verán datos clínicos.</div>
         <div className="field-grid" style={{marginBottom:'.75rem'}}>
           <div>
@@ -1027,9 +1179,30 @@ function ConfigView({settings,setSettings,patients,setPatients}){
         )}
       </div>
 
+      <div className="config-section" style={{borderLeft:'4px solid var(--magenta)'}}>
+        <div className="config-title">👨‍👩‍👧 Códigos de acceso para familias</div>
+        <div className="text-sm" style={{marginBottom:'.75rem'}}>Crea un código para que los padres accedan solo a los ejercicios de su hijo/a. Ven también el Programa de Verano. No verán datos clínicos.</div>
+        <div className="field-grid" style={{marginBottom:'.75rem'}}>
+          <div><label className="field-label">Código familiar</label><input className="inp" style={{marginBottom:0}} placeholder="ej. VICTORIA-CASA" value={famCode} onChange={e=>setFamCode(e.target.value)}/></div>
+          <div><label className="field-label">Paciente vinculado</label><select className="inp" style={{marginBottom:0}} value={famPat} onChange={e=>setFamPat(e.target.value)}><option value="">Seleccionar paciente…</option>{patients.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></div>
+        </div>
+        <button className="btn-sm btn-mg" onClick={addFamCode} disabled={!famCode||!famPat}>Crear código familiar</button>
+        {(settings.familyCodes||[]).length>0&&(
+          <div style={{marginTop:'.75rem'}}>
+            <div className="text-sm" style={{fontWeight:600,marginBottom:6}}>Códigos activos:</div>
+            {(settings.familyCodes||[]).map(fc=>(
+              <div key={fc.code} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'6px 10px',background:'var(--magenta10)',borderRadius:6,marginBottom:4,fontSize:'.82rem'}}>
+                <span><strong>{fc.code}</strong> → {fc.patientName}</span>
+                <button className="btn-sm btn-outline" style={{padding:'2px 8px',fontSize:'.7rem',color:'var(--magenta)'}} onClick={()=>removeFamCode(fc.code)}>✕</button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       <div className="config-section" style={{borderLeft:'4px solid var(--teal)'}}>
-        <div className="config-title">💾 Copia de seguridad de pacientes</div>
-        <div className="text-sm" style={{marginBottom:'.75rem'}}>Si el navegador pierde los datos, usa el backup para restaurarlos. Exporta regularmente.</div>
+        <div className="config-title">💾 Copia de seguridad</div>
+        <div className="text-sm" style={{marginBottom:'.75rem'}}>Exporta regularmente. Si el navegador pierde los datos, restaura desde aquí.</div>
         <div className="flex-row">
           <button className="btn-sm btn-teal" onClick={exportData}>📥 Exportar backup (.json)</button>
           <label className="btn-sm btn-outline" style={{cursor:'pointer'}}>
@@ -1037,7 +1210,7 @@ function ConfigView({settings,setSettings,patients,setPatients}){
             <input type="file" accept=".json" style={{display:'none'}} onChange={importData}/>
           </label>
         </div>
-        <div className="text-sm" style={{marginTop:8}}>Pacientes guardados actualmente: <strong>{patients.length}</strong></div>
+        <div className="text-sm" style={{marginTop:8}}>Pacientes guardados: <strong>{patients.length}</strong></div>
       </div>
 
       <div className="config-section">
@@ -1281,16 +1454,15 @@ function ExAtencion({onFinish}){
   </>);
 }
 
-function ExerciseOverlay({type,patientName,onClose,onComplete}){
-  const [stars,setStars]=useState(0);
+function ExerciseOverlay({type,patientName,onClose,onComplete,totalStars=0}){
   const [finished,setFinished]=useState(false);
   const [finStars,setFinStars]=useState(0);
   const [soundReady,setSoundReady]=useState(false);
   const meta=EX_META[type];
+  const nivel=getNivel(totalStars);
   const total={rimas:EX_RIMAS.length,silabas:EX_SILABAS.length,sonido:EX_SONIDO.length,atencion:EX_ATENCION.length}[type];
 
   const activateSound=()=>{
-    // Must happen on direct user gesture for Chromium browsers
     window.speechSynthesis.cancel();
     const u=new SpeechSynthesisUtterance('Lista');
     u.lang='es-ES';u.rate=0.82;u.pitch=1.1;u.volume=0.01;
@@ -1312,23 +1484,20 @@ function ExerciseOverlay({type,patientName,onClose,onComplete}){
   return(
     <div className="ex-overlay">
       <div className="ex-topbar">
-        <button className="ex-back" onClick={()=>{window.speechSynthesis.cancel();onClose();}}>← Plataforma</button>
+        <button className="ex-back" onClick={()=>{window.speechSynthesis.cancel();onClose();}}>← Volver</button>
         <div className="ex-title">{meta.icon} {meta.name} · {patientName}</div>
-        <div className="ex-stars-count">⭐ {stars}</div>
+        <div className="ex-stars-count">{nivel.emoji} {totalStars} ⭐</div>
       </div>
       {!soundReady?(
         <div className="ex-body">
           <div className="ex-card" style={{textAlign:'center',maxWidth:400}}>
             <div style={{fontSize:'4rem',marginBottom:'1rem'}}>🔊</div>
-            <div style={{fontFamily:'Nunito,sans-serif',fontWeight:900,fontSize:'1.5rem',color:'#1E1B4B',marginBottom:'.5rem'}}>
-              {meta.icon} {meta.name}
+            <div style={{fontFamily:'Nunito,sans-serif',fontWeight:900,fontSize:'1.5rem',color:'#1E1B4B',marginBottom:'.5rem'}}>{meta.icon} {meta.name}</div>
+            <div style={{background:nivel.bg,color:nivel.color,borderRadius:12,padding:'.65rem 1rem',marginBottom:'1rem',fontFamily:'Nunito,sans-serif',fontWeight:800,fontSize:'.85rem'}}>
+              {nivel.emoji} Nivel {nivel.nivel}: {nivel.nombre} · {nivel.desc}
             </div>
-            <div style={{fontFamily:'Nunito,sans-serif',fontSize:'.9rem',color:'#6B7280',marginBottom:'1.5rem',lineHeight:1.6}}>
-              Toca el botón para activar el sonido y comenzar el ejercicio.
-            </div>
-            <button
-              onClick={activateSound}
-              style={{background:'linear-gradient(135deg,#A855F7,#EC4899)',color:'#fff',border:'none',borderRadius:50,padding:'1rem 2.5rem',fontFamily:'Nunito,sans-serif',fontWeight:900,fontSize:'1.1rem',cursor:'pointer',width:'100%'}}>
+            <div style={{fontFamily:'Nunito,sans-serif',fontSize:'.85rem',color:'#6B7280',marginBottom:'1.5rem',lineHeight:1.6}}>Toca el botón para activar el sonido y empezar.</div>
+            <button onClick={activateSound} style={{background:'linear-gradient(135deg,#A855F7,#EC4899)',color:'#fff',border:'none',borderRadius:50,padding:'1rem 2.5rem',fontFamily:'Nunito,sans-serif',fontWeight:900,fontSize:'1.1rem',cursor:'pointer',width:'100%'}}>
               🔊 ¡Activar sonido y empezar!
             </button>
           </div>
@@ -1348,34 +1517,68 @@ function ExerciseOverlay({type,patientName,onClose,onComplete}){
   );
 }
 
-/* ── ENTRENAMIENTO VIEW ───────────────────── */
+/* ── ENTRENAMIENTO VIEW v9.1 — CON NIVELES ── */
 function EntrenamientoView({patient,updatePatient}){
   const [active,setActive]=useState(null);
   const [sessionStars,setSessionStars]=useState(0);
-  if(!patient)return<div className="content"><div style={{textAlign:'center',padding:'3rem',color:'var(--text3)'}}><div style={{fontSize:'2rem',marginBottom:8}}>🎮</div><div style={{fontWeight:700,marginBottom:6}}>Sin paciente activo</div><div className="text-sm">Selecciona un paciente para ver los ejercicios adaptados.</div></div></div>;
+  const totalStars=ls(`hn_stars_${patient?.id}`,0);
+  const [totalState,setTotalState]=useState(totalStars);
+
+  if(!patient)return<div className="content"><div style={{textAlign:'center',padding:'3rem',color:'var(--text3)'}}><div style={{fontSize:'2rem',marginBottom:8}}>🎮</div><div style={{fontWeight:700}}>Sin paciente activo</div></div></div>;
+
   const diags=patient.diagnosis||[];
   let exIds=[];
   diags.forEach(d=>{const list=DIAG_EXERCISES[d];if(list)list.forEach(e=>{if(!exIds.includes(e))exIds.push(e);});});
   if(!exIds.length)exIds=DIAG_EXERCISES['default'];
+
+  const nivel=getNivel(totalState);
+  const nextNivel=getNextNivel(totalState);
+
   const onComplete=(stars,type)=>{
+    const newTotal=totalState+stars;
     setSessionStars(s=>s+stars);
+    setTotalState(newTotal);
+    lsSet(`hn_stars_${patient.id}`,newTotal);
     setActive(null);
-    updatePatient(p=>({...p,sessions:{...p.sessions,A:p.sessions.A.map(s=>{const cur=p.sessions.A.find(x=>!x.done);return s.id===cur?.id?{...s,note:(s.note?s.note+'\n':'')+`Entrenamiento ${EX_META[type].name}: ${stars} estrellas`}:s;})}}));
+    updatePatient(p=>({...p,sessions:{...p.sessions,A:p.sessions.A.map(s=>{const cur=p.sessions.A.find(x=>!x.done);return s.id===cur?.id?{...s,note:(s.note?s.note+'\n':'')+`Entrenamiento ${EX_META[type].name}: ${stars}⭐ (total: ${newTotal}⭐)`}:s;})}}));
   };
+
   return(
     <>
-      {active&&<ExerciseOverlay type={active} patientName={patient.name} onClose={()=>setActive(null)} onComplete={onComplete}/>}
+      {active&&<ExerciseOverlay type={active} patientName={patient.name.split(' ')[0]} totalStars={totalState} onClose={()=>setActive(null)} onComplete={onComplete}/>}
       <div className="content">
         <div className="ent-header">
           <div>
             <div className="ent-title">🎮 Entrenamiento Personalizado</div>
-            <div className="ent-sub">{patient.name} · {patient.diagnosis.join(', ')||'Sin diagnóstico'}</div>
+            <div className="ent-sub">{patient.name} · {patient.diagnosis.join(', ')||'TND'}</div>
           </div>
-          <div className="ent-stars">⭐ {sessionStars} hoy</div>
+          <div style={{textAlign:'right'}}>
+            <div className="ent-stars">⭐ {totalState} total</div>
+            <div style={{fontSize:'.75rem',color:'rgba(255,255,255,.7)',marginTop:3}}>{nivel.emoji} {nivel.nombre}</div>
+          </div>
         </div>
-        <div style={{fontSize:'.82rem',color:'var(--text2)',marginBottom:'1rem',fontWeight:600}}>
-          Ejercicios adaptados al perfil de {patient.name.split(' ')[0]}. Haz clic en "Lanzar" para iniciar en pantalla completa durante la sesión.
+
+        {/* NIVEL ACTUAL */}
+        <div style={{background:nivel.bg,border:`2px solid ${nivel.color}`,borderRadius:12,padding:'1rem 1.25rem',marginBottom:'1.25rem',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+          <div>
+            <div style={{fontWeight:800,color:nivel.color,fontSize:'1rem'}}>{nivel.emoji} Nivel {nivel.nivel}: {nivel.nombre}</div>
+            <div style={{fontSize:'.78rem',color:nivel.color,opacity:.8,marginTop:2}}>{nivel.desc}</div>
+            {nextNivel&&<div style={{fontSize:'.72rem',color:'var(--text3)',marginTop:4}}>Próximo: {nextNivel.emoji} {nextNivel.nombre} en {nextNivel.min-totalState} ⭐ más</div>}
+          </div>
+          {sessionStars>0&&<div style={{background:nivel.color,color:'#fff',borderRadius:50,padding:'.4rem 1rem',fontWeight:800}}>+{sessionStars} hoy</div>}
         </div>
+
+        {nextNivel&&(
+          <div style={{marginBottom:'1.25rem'}}>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:'.72rem',color:'var(--text3)',marginBottom:4}}>
+              <span>{nivel.emoji} {nivel.nombre}</span><span>{nextNivel.emoji} {nextNivel.nombre} ({nextNivel.min} ⭐)</span>
+            </div>
+            <div style={{height:8,background:'var(--border)',borderRadius:4,overflow:'hidden'}}>
+              <div style={{height:'100%',width:`${Math.min(100,((totalState-nivel.min)/(nextNivel.min-nivel.min))*100)}%`,background:`linear-gradient(90deg,${nivel.color},${nextNivel.color})`,borderRadius:4,transition:'width .5s'}}/>
+            </div>
+          </div>
+        )}
+
         <div className="ent-grid">
           {exIds.map(id=>{const m=EX_META[id];return(
             <div key={id} className={`ent-card ${m.col}`}>
@@ -1383,18 +1586,25 @@ function EntrenamientoView({patient,updatePatient}){
               <div className="ent-name">{m.name}</div>
               <div className="ent-desc">{m.desc}</div>
               <div className="ent-count">{m.count} ejercicios</div>
+              <div className={`nivel-badge nivel-${nivel.nivel}`}>{nivel.emoji} Nivel {nivel.nivel}</div>
               <button className="ent-launch" onClick={()=>setActive(id)}>▶ Lanzar en sesión</button>
             </div>
           );})}
         </div>
-        <div className="card" style={{background:'var(--navy)',color:'#fff'}}>
-          <div style={{fontWeight:700,marginBottom:'.5rem',fontSize:'.9rem'}}>¿Cómo usar el entrenamiento?</div>
-          <div style={{fontSize:'.8rem',color:'rgba(255,255,255,.65)',lineHeight:1.7}}>
-            1. Selecciona el ejercicio adecuado para esta sesión.<br/>
-            2. Haz clic en "Lanzar en sesión" — la pantalla se cubre completamente con el ejercicio.<br/>
-            3. El paciente interactúa directamente en pantalla (tablet o monitor).<br/>
-            4. Al terminar, las estrellas se guardan automáticamente en las notas de la sesión activa.<br/>
-            5. Vuelves a la plataforma con un clic.
+
+        <div className="card" style={{background:'var(--navy)',color:'#fff',marginTop:'1rem'}}>
+          <div style={{fontWeight:700,marginBottom:'.75rem',fontSize:'.9rem'}}>🏅 Sistema de niveles</div>
+          <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'.5rem',marginBottom:'.75rem'}}>
+            {NIVELES.map(n=>(
+              <div key={n.nivel} style={{background:totalState>=n.min?n.bg:'rgba(255,255,255,.05)',borderRadius:8,padding:'.6rem',textAlign:'center',border:nivel.nivel===n.nivel?`2px solid ${n.color}`:'2px solid transparent'}}>
+                <div style={{fontSize:'1.4rem'}}>{n.emoji}</div>
+                <div style={{fontSize:'.68rem',fontWeight:800,color:totalState>=n.min?n.color:'rgba(255,255,255,.3)',marginTop:2}}>{n.nombre}</div>
+                <div style={{fontSize:'.6rem',color:'rgba(255,255,255,.4)',marginTop:1}}>{n.min}+ ⭐</div>
+              </div>
+            ))}
+          </div>
+          <div style={{fontSize:'.78rem',color:'rgba(255,255,255,.6)',lineHeight:1.7}}>
+            Cada nivel desbloquea más ejercicios por sesión. Los padres también ven el nivel en su acceso familiar con el código VICTORIA-CASA.
           </div>
         </div>
       </div>
@@ -1402,54 +1612,210 @@ function EntrenamientoView({patient,updatePatient}){
   );
 }
 
-/* ═══ FAMILIA VIEW ══════════════════════════════ */
+/* ═══ PROGRAMA VERANO VIEW (PRO) ══════════════ */
+function VeranoView({patient}){
+  const [semanaOpen,setSemanaOpen]=useState(0);
+  const nombre=patient?.name?.split(' ')[0]||'Victoria';
+  if(!patient)return<div className="content"><div className="text-sm" style={{padding:'2rem',textAlign:'center'}}>Selecciona un paciente para ver el programa de verano.</div></div>;
+  return(
+    <div className="content">
+      <div className="verano-hero">
+        <div style={{fontWeight:900,fontSize:'1.3rem',marginBottom:'.35rem'}}>☀️ Programa de Verano 2026</div>
+        <div style={{fontSize:'.9rem',opacity:.9,marginBottom:'.75rem'}}>{nombre} · Julio y Agosto · Preparación 1º Primaria</div>
+        <div style={{display:'flex',gap:'.4rem',flexWrap:'wrap'}}>
+          <span className="verano-badge">🎯 TDL · Conciencia fonológica</span>
+          <span className="verano-badge">🏫 Transición a Primaria</span>
+          <span className="verano-badge">👨‍👩‍👧 Guiado por padres</span>
+          <span className="verano-badge">⏱️ 15–25 min/día</span>
+        </div>
+      </div>
+      <div className="card" style={{marginBottom:'1.25rem',background:'var(--gold10)',border:'1px solid var(--gold)'}}>
+        <div style={{fontWeight:700,fontSize:'.9rem',marginBottom:'.5rem'}}>📋 Instrucciones para los padres</div>
+        <div style={{fontSize:'.82rem',color:'var(--text2)',lineHeight:1.8}}>
+          • <strong>Frecuencia:</strong> 4–5 días a la semana, máximo 25 min por sesión.<br/>
+          • <strong>Plataforma:</strong> Los padres acceden con VICTORIA-CASA y ven este programa con actividades del día.<br/>
+          • <strong>Actitud:</strong> Ambiente de juego. Si {nombre} no quiere, dejadlo para otro momento.<br/>
+          • <strong>Registrar:</strong> Las estrellas se guardan automáticamente. Samuel las revisará en septiembre.
+        </div>
+      </div>
+      {PROGRAMA_VERANO.map((sem,si)=>(
+        <div key={si} className="verano-semana">
+          <div className="verano-semana-head" onClick={()=>setSemanaOpen(semanaOpen===si?-1:si)}>
+            <div style={{width:40,height:40,borderRadius:10,background:sem.color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.4rem',flexShrink:0}}>{sem.emoji}</div>
+            <div style={{flex:1}}>
+              <div style={{fontWeight:700,fontSize:'.88rem'}}>Semana {sem.semana} — {sem.mes}</div>
+              <div style={{fontSize:'.8rem',fontWeight:600,color:sem.color}}>{sem.titulo}</div>
+              <div style={{fontSize:'.72rem',color:'var(--text3)',marginTop:1}}>{sem.objetivo}</div>
+            </div>
+            <span style={{fontSize:'.72rem',background:sem.color+'18',color:sem.color,padding:'2px 10px',borderRadius:20,fontWeight:700}}>{semanaOpen===si?'▲ Cerrar':'▼ Ver días'}</span>
+          </div>
+          {semanaOpen===si&&(
+            <div className="verano-semana-body">
+              {sem.dias.map((dia,di)=>(
+                <div key={di} className="verano-dia" style={{borderLeftColor:sem.color,background:sem.color+'0D'}}>
+                  <div className="verano-dia-title">{dia.dia} — {dia.titulo} <span style={{fontWeight:400,color:'var(--text3)'}}>· {dia.tiempo}</span></div>
+                  <div className="verano-dia-acts">{dia.actividades}</div>
+                  {dia.material&&<div style={{fontSize:'.72rem',color:'var(--text3)',marginTop:4}}>📦 Material: {dia.material}</div>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+      <div className="card" style={{marginTop:'1rem',background:'var(--navy)',color:'#fff'}}>
+        <div style={{fontWeight:700,marginBottom:'.5rem'}}>🎒 Objetivo de septiembre</div>
+        <div style={{fontSize:'.82rem',color:'rgba(255,255,255,.7)',lineHeight:1.7}}>Al llegar a 1º Primaria, {nombre} habrá trabajado 6 semanas de conciencia fonológica, lenguaje expresivo y atención. Samuel realizará una sesión de reevaluación en septiembre para ajustar el plan.</div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══ FAMILIA VIEW v9.1 ════════════════════════ */
+function FamiliaViewVerano({onBack,nombre}){
+  const [semanaOpen,setSemanaOpen]=useState(0);
+  return(
+    <div style={{minHeight:'100vh',background:'#FFF8E7',fontFamily:'Nunito,sans-serif'}}>
+      <div style={{background:'linear-gradient(135deg,#F97316,#EC4899)',padding:'1rem 1.25rem',display:'flex',alignItems:'center',gap:12}}>
+        <button onClick={onBack} style={{background:'rgba(255,255,255,.25)',border:'none',borderRadius:50,width:36,height:36,fontSize:'1.2rem',cursor:'pointer',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center'}}>←</button>
+        <div style={{fontWeight:900,fontSize:'1rem',color:'#fff'}}>☀️ Programa de Verano · {nombre}</div>
+      </div>
+      <div style={{padding:'1.25rem',maxWidth:560,margin:'0 auto'}}>
+        <div style={{background:'rgba(249,115,22,.1)',border:'1px solid #F97316',borderRadius:12,padding:'1rem',marginBottom:'1.25rem',fontSize:'.82rem',color:'#7C3AED',fontWeight:700,lineHeight:1.7}}>
+          🎯 Plan julio-agosto · 15-25 min al día · 4-5 días a la semana<br/>
+          <span style={{fontWeight:400,color:'#374151'}}>Toca cada semana para ver las actividades del día. ¡Usa los ejercicios de la plataforma como base!</span>
+        </div>
+        {PROGRAMA_VERANO.map((sem,si)=>{
+          const [open,setOpen]=useState(si===0);
+          return(
+            <div key={si} style={{background:'#fff',borderRadius:16,marginBottom:'1rem',overflow:'hidden',boxShadow:'0 2px 12px rgba(0,0,0,.08)'}}>
+              <div onClick={()=>setOpen(v=>!v)} style={{display:'flex',alignItems:'center',gap:12,padding:'1rem',cursor:'pointer',borderLeft:`4px solid ${sem.color}`}}>
+                <span style={{fontSize:'1.8rem'}}>{sem.emoji}</span>
+                <div style={{flex:1}}>
+                  <div style={{fontWeight:900,fontSize:'.88rem',color:'#1E1B4B'}}>Semana {sem.semana} — {sem.mes}</div>
+                  <div style={{fontSize:'.78rem',color:sem.color,fontWeight:800}}>{sem.titulo}</div>
+                  <div style={{fontSize:'.72rem',color:'#6B7280',marginTop:2}}>{sem.objetivo}</div>
+                </div>
+                <span style={{fontSize:'1.2rem',color:'#9BA8C0'}}>{open?'▲':'▼'}</span>
+              </div>
+              {open&&(
+                <div style={{padding:'0 1rem 1rem'}}>
+                  {sem.dias.map((dia,di)=>(
+                    <div key={di} style={{borderLeft:`3px solid ${sem.color}`,paddingLeft:'.75rem',marginBottom:'.65rem',background:sem.color+'12',borderRadius:'0 10px 10px 0',padding:'.7rem .9rem'}}>
+                      <div style={{fontWeight:900,fontSize:'.82rem',color:'#1E1B4B',marginBottom:3}}>{dia.dia} — {dia.titulo} <span style={{fontWeight:400,color:'#9BA8C0'}}>· {dia.tiempo}</span></div>
+                      <div style={{fontSize:'.78rem',color:'#374151',lineHeight:1.75}}>{dia.actividades}</div>
+                      {dia.material&&<div style={{fontSize:'.68rem',color:'#9BA8C0',marginTop:4}}>📦 {dia.material}</div>}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+        <div style={{background:'linear-gradient(135deg,#667eea,#764ba2)',borderRadius:16,padding:'1.25rem',color:'#fff',textAlign:'center',marginBottom:'1rem'}}>
+          <div style={{fontSize:'1.5rem',marginBottom:'.35rem'}}>🎒</div>
+          <div style={{fontWeight:900,marginBottom:'.25rem'}}>¡Objetivo septiembre!</div>
+          <div style={{fontSize:'.82rem',opacity:.85}}>6 semanas de trabajo = {nombre} lista para 1º Primaria</div>
+        </div>
+        <div style={{textAlign:'center'}}><button onClick={onBack} style={{background:'#667eea',color:'#fff',border:'none',borderRadius:50,padding:'.75rem 2rem',fontFamily:'Nunito,sans-serif',fontWeight:800,cursor:'pointer'}}>← Volver a ejercicios</button></div>
+      </div>
+    </div>
+  );
+}
+
 function FamiliaView({patient,onLogout}){
   const [active,setActive]=useState(null);
+  const [vistaVerano,setVistaVerano]=useState(false);
   const [sessionStars,setSessionStars]=useState(0);
-  const [soundReady,setSoundReady]=useState(false);
+  const patId=patient?.id||'v';
+  const [totalStars,setTotalStars]=useState(()=>ls(`hn_stars_fam_${patId}`,0));
 
   if(!patient)return(
     <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#667eea,#764ba2)'}}>
       <div style={{background:'#fff',borderRadius:24,padding:'2rem',textAlign:'center',maxWidth:340}}>
         <div style={{fontSize:'3rem',marginBottom:'1rem'}}>😕</div>
         <div style={{fontFamily:'Nunito,sans-serif',fontWeight:800,fontSize:'1.2rem',marginBottom:'.5rem'}}>Paciente no encontrado</div>
-        <div style={{fontSize:'.85rem',color:'#6B7280',marginBottom:'1rem'}}>Contacta con el profesional UNIMED.</div>
+        <div style={{fontSize:'.85rem',color:'#6B7280',marginBottom:'1rem'}}>Contacta con samuel@unimed-consulting.es</div>
         <button onClick={onLogout} style={{background:'#667eea',color:'#fff',border:'none',borderRadius:50,padding:'.75rem 2rem',fontFamily:'Nunito,sans-serif',fontWeight:700,cursor:'pointer'}}>Volver</button>
       </div>
     </div>
   );
 
+  const nombre=patient.name.split(' ')[0];
   const diags=patient.diagnosis||[];
   let exIds=[];
   diags.forEach(d=>{const list=DIAG_EXERCISES[d];if(list)list.forEach(e=>{if(!exIds.includes(e))exIds.push(e);});});
   if(!exIds.length)exIds=DIAG_EXERCISES['default'];
 
-  const onComplete=(stars,type)=>{setSessionStars(s=>s+stars);setActive(null);};
+  const nivel=getNivel(totalStars);
+  const nextNivel=getNextNivel(totalStars);
 
-  if(active){
-    return <ExerciseOverlay type={active} patientName={patient.name.split(' ')[0]} onClose={()=>setActive(null)} onComplete={onComplete}/>;
-  }
+  const onComplete=(stars,type)=>{
+    const newTotal=totalStars+stars;
+    setSessionStars(s=>s+stars);
+    setTotalStars(newTotal);
+    lsSet(`hn_stars_fam_${patId}`,newTotal);
+    setActive(null);
+  };
+
+  if(active)return<ExerciseOverlay type={active} patientName={nombre} totalStars={totalStars} onClose={()=>setActive(null)} onComplete={onComplete}/>;
+  if(vistaVerano)return<FamiliaViewVerano onBack={()=>setVistaVerano(false)} nombre={nombre}/>;
 
   return(
-    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#667eea 0%,#764ba2 100%)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'2rem',fontFamily:'Nunito,sans-serif'}}>
-      <div style={{textAlign:'center',marginBottom:'2rem'}}>
-        <div style={{fontSize:'4rem',marginBottom:'.5rem'}}>🌟</div>
-        <div style={{fontFamily:'Nunito,sans-serif',fontWeight:900,fontSize:'2rem',color:'#fff',marginBottom:'.25rem'}}>¡Hola, {patient.name.split(' ')[0]}!</div>
-        <div style={{color:'rgba(255,255,255,.75)',fontSize:'1rem',fontWeight:600}}>¿Qué ejercicio hacemos hoy?</div>
-        {sessionStars>0&&<div style={{marginTop:'.75rem',background:'rgba(255,255,255,.2)',borderRadius:50,padding:'.4rem 1.2rem',display:'inline-block',color:'#fff',fontWeight:800}}>⭐ {sessionStars} estrellas hoy</div>}
+    <div style={{minHeight:'100vh',background:'linear-gradient(135deg,#667eea 0%,#764ba2 100%)',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',padding:'1.5rem 2rem',fontFamily:'Nunito,sans-serif'}}>
+      {/* CABECERA */}
+      <div style={{textAlign:'center',marginBottom:'1.25rem'}}>
+        <div style={{fontSize:'3rem',marginBottom:'.35rem'}}>🌟</div>
+        <div style={{fontWeight:900,fontSize:'1.8rem',color:'#fff',marginBottom:'.2rem'}}>¡Hola, {nombre}!</div>
+        <div style={{color:'rgba(255,255,255,.75)',fontSize:'.95rem',fontWeight:600}}>¿Qué hacemos hoy?</div>
       </div>
-      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'1rem',width:'100%',maxWidth:480,marginBottom:'1.5rem'}}>
+
+      {/* NIVEL CARD */}
+      <div style={{background:nivel.bg,borderRadius:16,padding:'.85rem 1.25rem',marginBottom:'1rem',width:'100%',maxWidth:480,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+        <div>
+          <div style={{fontWeight:900,color:nivel.color,fontSize:'.95rem'}}>{nivel.emoji} Nivel {nivel.nivel}: {nivel.nombre}</div>
+          <div style={{fontSize:'.75rem',color:nivel.color,opacity:.8,marginTop:2}}>{nivel.desc}</div>
+          {nextNivel&&<div style={{fontSize:'.68rem',color:'#6B7280',marginTop:3}}>{nextNivel.min-totalStars} ⭐ para {nextNivel.emoji} {nextNivel.nombre}</div>}
+        </div>
+        <div style={{textAlign:'right'}}>
+          <div style={{fontWeight:900,fontSize:'1.4rem',color:nivel.color}}>{totalStars}</div>
+          <div style={{fontSize:'.68rem',color:'#6B7280'}}>⭐ total</div>
+          {sessionStars>0&&<div style={{fontSize:'.72rem',color:nivel.color,fontWeight:800}}>+{sessionStars} hoy</div>}
+        </div>
+      </div>
+
+      {/* BARRA PROGRESO NIVEL */}
+      {nextNivel&&(
+        <div style={{width:'100%',maxWidth:480,marginBottom:'1rem'}}>
+          <div style={{height:8,background:'rgba(255,255,255,.2)',borderRadius:4,overflow:'hidden'}}>
+            <div style={{height:'100%',width:`${Math.min(100,((totalStars-nivel.min)/(nextNivel.min-nivel.min))*100)}%`,background:'#FFD93D',borderRadius:4,transition:'width .5s'}}/>
+          </div>
+        </div>
+      )}
+
+      {/* EJERCICIOS */}
+      <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:'.85rem',width:'100%',maxWidth:480,marginBottom:'1rem'}}>
         {exIds.map(id=>{const m=EX_META[id];return(
-          <div key={id} onClick={()=>setActive(id)} style={{background:'#fff',borderRadius:20,padding:'1.25rem',cursor:'pointer',textAlign:'center',transition:'all .2s',boxShadow:'0 4px 20px rgba(0,0,0,.15)'}}>
-            <div style={{fontSize:'2.8rem',marginBottom:'.4rem'}}>{m.icon}</div>
-            <div style={{fontWeight:900,fontSize:'1rem',color:'#1E1B4B',marginBottom:3}}>{m.name}</div>
-            <div style={{fontSize:'.75rem',color:'#6B7280',marginBottom:'.75rem'}}>{m.desc}</div>
-            <div style={{background:'linear-gradient(135deg,#667eea,#764ba2)',color:'#fff',borderRadius:50,padding:'.5rem',fontWeight:800,fontSize:'.85rem'}}>▶ Jugar</div>
+          <div key={id} onClick={()=>setActive(id)} style={{background:'#fff',borderRadius:20,padding:'1.1rem',cursor:'pointer',textAlign:'center',boxShadow:'0 4px 20px rgba(0,0,0,.15)',transition:'transform .15s'}}
+            onMouseEnter={e=>e.currentTarget.style.transform='translateY(-2px)'}
+            onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
+            <div style={{fontSize:'2.5rem',marginBottom:'.35rem'}}>{m.icon}</div>
+            <div style={{fontWeight:900,fontSize:'.92rem',color:'#1E1B4B',marginBottom:2}}>{m.name}</div>
+            <div style={{fontSize:'.72rem',color:'#6B7280',marginBottom:'.65rem'}}>{m.desc}</div>
+            <div style={{background:'linear-gradient(135deg,#667eea,#764ba2)',color:'#fff',borderRadius:50,padding:'.45rem',fontWeight:800,fontSize:'.82rem'}}>▶ Jugar</div>
           </div>
         );})}
       </div>
-      <div style={{fontSize:'.75rem',color:'rgba(255,255,255,.4)',textAlign:'center'}}>
-        HoloNeuro TND® · ASOC UNIMED<br/>
+
+      {/* BOTÓN PROGRAMA VERANO */}
+      <div onClick={()=>setVistaVerano(true)} style={{background:'rgba(255,255,255,.15)',border:'2px solid rgba(255,255,255,.4)',borderRadius:16,padding:'.9rem 1.5rem',cursor:'pointer',textAlign:'center',width:'100%',maxWidth:480,marginBottom:'1.25rem',backdropFilter:'blur(4px)',transition:'background .2s'}}
+        onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,.22)'}
+        onMouseLeave={e=>e.currentTarget.style.background='rgba(255,255,255,.15)'}>
+        <div style={{fontWeight:900,color:'#fff',fontSize:'.95rem'}}>☀️ Programa de Verano 2026</div>
+        <div style={{fontSize:'.75rem',color:'rgba(255,255,255,.75)',marginTop:3}}>Plan julio-agosto · Actividades por semana y día</div>
+      </div>
+
+      <div style={{fontSize:'.7rem',color:'rgba(255,255,255,.35)',textAlign:'center'}}>
+        HoloNeuro TND® v9.1 · ASOC UNIMED<br/>
         <span style={{cursor:'pointer',textDecoration:'underline'}} onClick={onLogout}>Salir</span>
       </div>
     </div>
@@ -1496,7 +1862,7 @@ function App(){
     return<FamiliaView patient={familiaPatient} onLogout={handleLogout}/>;
   }
 
-  const titles={dash:'Dashboard',patients:'Gestión de pacientes',protocol:'Protocolo clínico',sessions:'Seguimiento de sesiones',hnae:'Evaluación HNAE',entrenamiento:'Entrenamiento Personalizado',informes:'Informes PDF',tarifas:'Tarifas y presupuesto',ai:'Asistente Clínico IA',config:'Configuración'};
+  const titles={dash:'Dashboard',patients:'Gestión de pacientes',protocol:'Protocolo clínico',sessions:'Seguimiento de sesiones',hnae:'Evaluación HNAE',entrenamiento:'Entrenamiento Personalizado',verano:'Programa Verano 2026 ☀️',informes:'Informes PDF',tarifas:'Tarifas y presupuesto',ai:'Asistente Clínico IA',config:'Configuración'};
   const views={
     dash:<Dashboard patient={patient} setView={setView}/>,
     patients:<PacientesView patients={patients} setPatients={setPatients} activeId={activeId} setActiveId={setActiveId}/>,
@@ -1504,16 +1870,53 @@ function App(){
     sessions:<SessionsView patient={patient} updatePatient={updatePatient}/>,
     hnae:<HNAEView patient={patient}/>,
     entrenamiento:<EntrenamientoView patient={patient} updatePatient={updatePatient}/>,
+    verano:<VeranoView patient={patient}/>,
     informes:<InformesView patient={patient} updatePatient={updatePatient}/>,
     tarifas:<TarifasView/>,
     ai:<AIView patient={patient}/>,
     config:<ConfigView settings={settings} setSettings={setSettings} patients={patients} setPatients={setPatients}/>,
   };
+  const navItems=[
+    {id:'dash',i:'◈',l:'Dashboard'},
+    {id:'patients',i:'◉',l:'Pacientes'},
+    {id:'protocol',i:'◎',l:'Protocolo clínico'},
+    {id:'sessions',i:'▤',l:'Sesiones'},
+    {id:'hnae',i:'◐',l:'Evaluación HNAE'},
+    {id:'entrenamiento',i:'🎮',l:'Entrenamiento'},
+    {id:'verano',i:'☀️',l:'Programa Verano',badge:'NEW'},
+    {id:'informes',i:'◆',l:'Informes PDF'},
+    {id:'tarifas',i:'◇',l:'Tarifas'},
+    {id:'ai',i:'✦',l:'Asistente IA'},
+    {id:'config',i:'⚙',l:'Configuración'},
+  ];
   return(
     <div className="app">
-      <Sidebar view={view} setView={setView} patients={patients} activeId={activeId} setActiveId={setActiveId} onNewPatient={onNewPatient} onLogout={handleLogout}/>
+      <div className="sidebar">
+        <div className="sidebar-logo"><div className="sidebar-logo-dot"/><div><div className="sidebar-logo-text">HoloNeuro TND®</div><div style={{fontSize:'.6rem',color:'rgba(255,255,255,.3)'}}>v9.1 · Plataforma UNIMED</div></div></div>
+        {patients.length>0&&(
+          <div className="patient-switcher">
+            <div className="ps-label">Paciente activo</div>
+            <select className="ps-select" value={activeId||''} onChange={e=>setActiveId(e.target.value)}>
+              {!activeId&&<option value="">Seleccionar…</option>}
+              {patients.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
+            </select>
+            <div className="ps-new" onClick={onNewPatient}>+ Nuevo paciente</div>
+          </div>
+        )}
+        <div className="nav-section">Módulos</div>
+        {navItems.map(it=>(
+          <div key={it.id} className={`nav-item${view===it.id?' active':''}`} onClick={()=>setView(it.id)}>
+            <span className="ni">{it.i}</span>
+            {it.l}
+            {it.badge&&<span style={{fontSize:'.58rem',background:'#F97316',color:'#fff',borderRadius:8,padding:'1px 5px',marginLeft:'auto',fontWeight:700}}>{it.badge}</span>}
+          </div>
+        ))}
+        <div className="nav-section" style={{marginTop:'1rem'}}>Cuenta</div>
+        <div className="nav-item" onClick={handleLogout}><span className="ni">↩</span>Cerrar sesión</div>
+        <div className="sidebar-user" style={{marginTop:'1rem'}}><div className="su-name">Samuel Carmona, MSc</div><div className="su-role">Consultor Biomédico · UNIMED</div></div>
+      </div>
       <div className="main">
-        <div className="topbar"><span className="topbar-title">{titles[view]}{patient&&['sessions','hnae','informes'].includes(view)?` · ${patient.name}`:''}</span><div className="flex-row"><span style={{fontSize:'.72rem',background:'var(--teal10)',color:'var(--teal)',padding:'3px 10px',borderRadius:20,fontWeight:600}}>HoloNeuro TND® v5.0</span><span className="badge badge-mg">UNIMED</span></div></div>
+        <div className="topbar"><span className="topbar-title">{titles[view]}{patient&&['sessions','hnae','informes','verano'].includes(view)?` · ${patient.name}`:''}</span><div className="flex-row"><span style={{fontSize:'.72rem',background:'var(--teal10)',color:'var(--teal)',padding:'3px 10px',borderRadius:20,fontWeight:600}}>HoloNeuro TND® v9.1</span><span className="badge badge-mg">UNIMED</span></div></div>
         {views[view]}
       </div>
     </div>
