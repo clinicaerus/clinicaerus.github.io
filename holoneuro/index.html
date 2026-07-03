@@ -1151,33 +1151,6 @@ function ConfigView({settings,setSettings,patients,setPatients}){
           </div>
         )}
       </div>
-        <div className="text-sm" style={{marginBottom:'.75rem'}}>Crea un código para que los padres de un paciente accedan solo a sus ejercicios de entrenamiento. No verán datos clínicos.</div>
-        <div className="field-grid" style={{marginBottom:'.75rem'}}>
-          <div>
-            <label className="field-label">Código para la familia</label>
-            <input className="inp" style={{marginBottom:0}} placeholder="ej. VICTORIA-CASA" value={famCode} onChange={e=>setFamCode(e.target.value)}/>
-          </div>
-          <div>
-            <label className="field-label">Paciente vinculado</label>
-            <select className="inp" style={{marginBottom:0}} value={famPat} onChange={e=>setFamPat(e.target.value)}>
-              <option value="">Seleccionar paciente…</option>
-              {patients.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}
-            </select>
-          </div>
-        </div>
-        <button className="btn-sm btn-mg" onClick={addFamCode} disabled={!famCode||!famPat}>Crear código familiar</button>
-        {(settings.familyCodes||[]).length>0&&(
-          <div style={{marginTop:'.75rem'}}>
-            <div className="text-sm" style={{fontWeight:600,marginBottom:6}}>Códigos activos:</div>
-            {(settings.familyCodes||[]).map(fc=>(
-              <div key={fc.code} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'6px 10px',background:'var(--magenta10)',borderRadius:6,marginBottom:4,fontSize:'.82rem'}}>
-                <span><strong>{fc.code}</strong> → {fc.patientName}</span>
-                <button className="btn-sm btn-outline" style={{padding:'2px 8px',fontSize:'.7rem',color:'var(--magenta)'}} onClick={()=>removeFamCode(fc.code)}>✕</button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
 
       <div className="config-section" style={{borderLeft:'4px solid var(--magenta)'}}>
         <div className="config-title">👨‍👩‍👧 Códigos de acceso para familias</div>
