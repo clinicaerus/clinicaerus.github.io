@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Repositorio Académico de Samuel Carmona Aguirre — UNIMED. Publicaciones, código y documentación científica: Holomedicina, MH-AIAP, CAPS Digital, Sanalogía. DOIs Zenodo/OpenAIRE."/>
+<title>Repositorio Académico — Samuel Carmona Aguirre · UNIMED · Multiversidad AIDIA</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0f1f3d;--navy-mid:#1b3a6b;--blue:#2e6da4;--blue-light:#d6e8f5;
+  --teal:#0d7377;--teal-light:#d0efef;--gold:#b5922a;--gold-light:#f5e9c8;
+  --cream:#f9f7f2;--warm-gray:#e8e4dc;--text-dark:#1a1a2e;--text-mid:#3d4560;
+  --text-soft:#6b7490;--white:#ffffff;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(15,31,61,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(181,146,42,.2);}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 2rem;height:70px;display:flex;align-items:center;justify-content:space-between;}
+.nav-brand{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-mark{width:38px;height:38px;border:2px solid var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold);}
+.nav-title{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:600;color:var(--white);letter-spacing:.04em;}
+.nav-sub{font-size:.6rem;color:rgba(255,255,255,.4);letter-spacing:.12em;text-transform:uppercase;}
+.nav-links{display:flex;align-items:center;gap:1.75rem;}
+.nav-links a{font-size:.75rem;font-weight:500;color:rgba(255,255,255,.6);text-decoration:none;letter-spacing:.07em;text-transform:uppercase;transition:color .2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{padding:7px 18px;border:1.5px solid var(--gold);border-radius:30px;color:var(--gold)!important;transition:all .2s!important;}
+.nav-cta:hover{background:var(--gold)!important;color:var(--navy)!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:22px;height:2px;background:rgba(255,255,255,.7);border-radius:2px;transition:all .3s;}
+.mobile-menu{display:none;flex-direction:column;background:rgba(15,31,61,.98);position:fixed;top:70px;left:0;right:0;padding:1rem 2rem;border-bottom:1px solid rgba(181,146,42,.15);z-index:99;}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:.85rem;color:rgba(255,255,255,.7);text-decoration:none;padding:.75rem 0;border-bottom:1px solid rgba(255,255,255,.06);}
+
+/* HERO */
+.hero{min-height:62vh;background:linear-gradient(160deg,var(--navy) 0%,#162d5a 45%,#1a3a5c 100%);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;padding:9rem 2rem 4rem;}
+.hero-orb1{position:absolute;top:-100px;right:-100px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(13,115,119,.18) 0%,transparent 70%);pointer-events:none;}
+.hero-orb2{position:absolute;bottom:-80px;left:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(181,146,42,.12) 0%,transparent 70%);pointer-events:none;}
+.hero-inner{max-width:1300px;margin:0 auto;width:100%;position:relative;z-index:1;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(181,146,42,.12);border:1px solid rgba(181,146,42,.25);color:var(--gold);font-size:.68rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;padding:6px 16px;border-radius:40px;margin-bottom:2rem;}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);}
+.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.6rem);font-weight:300;color:var(--white);line-height:1.12;margin-bottom:1.25rem;}
+.hero-title em{font-style:italic;color:var(--gold);}
+.hero-title strong{font-weight:600;}
+.hero-desc{font-size:clamp(.9rem,1.4vw,1rem);font-weight:300;color:rgba(255,255,255,.65);max-width:680px;line-height:1.9;margin-bottom:2.25rem;}
+.hero-desc span{color:rgba(255,255,255,.9);font-weight:400;}
+.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;}
+.hmeta-item{display:flex;align-items:center;gap:7px;font-size:.8rem;color:rgba(255,255,255,.6);}
+.hmeta-item a{color:rgba(255,255,255,.85);text-decoration:none;border-bottom:1px solid rgba(181,146,42,.4);transition:color .2s,border-color .2s;}
+.hmeta-item a:hover{color:var(--gold);border-color:var(--gold);}
+
+/* SECTIONS */
+.section-tag{font-size:.68rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(1.8rem,3.6vw,2.7rem);font-weight:300;color:var(--navy);line-height:1.2;margin-bottom:1rem;}
+.section-title em{font-style:italic;color:var(--teal);}
+.section-desc{font-size:.9rem;color:var(--text-soft);line-height:1.8;max-width:620px;margin-bottom:2.75rem;}
+section{padding:4.5rem 2rem;}
+
+/* GITHUB REPOS */
+.repos{background:var(--white);}
+.repos-inner,.pubs-inner,.lines-inner,.ip-inner,.links-inner{max-width:1300px;margin:0 auto;}
+.repos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.25rem;}
+.repo-card{background:var(--white);border:1px solid var(--warm-gray);border-radius:16px;padding:1.75rem;transition:all .22s;}
+.repo-card:hover{transform:translateY(-3px);box-shadow:0 12px 35px rgba(15,31,61,.1);}
+.repo-top{display:flex;align-items:flex-start;justify-content:space-between;gap:.75rem;margin-bottom:.9rem;}
+.repo-icon{font-size:1.4rem;}
+.repo-status{font-size:.6rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.repo-status.public{background:var(--teal-light);color:var(--teal);}
+.repo-status.open{background:var(--gold-light);color:#7a5e0a;}
+.repo-name{font-family:'DM Mono',monospace;font-size:.82rem;color:var(--navy-mid);word-break:break-all;margin-bottom:.6rem;text-decoration:none;display:block;}
+.repo-name:hover{color:var(--blue);}
+.repo-desc{font-size:.82rem;color:var(--text-soft);line-height:1.65;}
+
+/* PUBLICATIONS */
+.pubs{background:var(--cream);}
+.pub-year{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--gold);margin:2.25rem 0 1rem;}
+.pub-year:first-of-type{margin-top:0;}
+.pub-item{background:var(--white);border:1px solid var(--warm-gray);border-radius:14px;padding:1.5rem 1.75rem;margin-bottom:.9rem;display:flex;align-items:flex-start;justify-content:space-between;gap:1.5rem;flex-wrap:wrap;transition:all .2s;}
+.pub-item:hover{border-color:rgba(181,146,42,.35);box-shadow:0 8px 24px rgba(15,31,61,.06);}
+.pub-main{flex:1;min-width:260px;}
+.pub-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--navy);line-height:1.35;margin-bottom:.4rem;}
+.pub-cite{font-size:.78rem;color:var(--text-soft);line-height:1.6;}
+.pub-doi{display:inline-flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:.72rem;color:var(--teal);background:var(--teal-light);padding:6px 14px;border-radius:20px;text-decoration:none;white-space:nowrap;transition:all .2s;}
+.pub-doi:hover{background:var(--teal);color:var(--white);}
+
+/* LINEAS */
+.lines{background:var(--navy);position:relative;overflow:hidden;}
+.lines-orb{position:absolute;top:-80px;right:-80px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(181,146,42,.1) 0%,transparent 70%);pointer-events:none;}
+.lines-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;position:relative;z-index:1;}
+.line-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-top:3px solid var(--gold);border-radius:16px;padding:1.75rem;}
+.line-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--gold);margin-bottom:.6rem;}
+.line-desc{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.75;}
+.line-desc strong{color:rgba(255,255,255,.85);}
+
+/* IP TIMELINE */
+.ip{background:var(--white);}
+.ip-timeline{display:flex;flex-direction:column;}
+.ip-item{display:grid;grid-template-columns:100px 1fr;gap:1.5rem;padding:1.4rem 0;border-bottom:1px solid var(--warm-gray);}
+.ip-item:first-child{border-top:1px solid var(--warm-gray);}
+.ip-year{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--gold);}
+.ip-desc{font-size:.85rem;color:var(--text-mid);line-height:1.75;align-self:center;}
+
+/* LINKS */
+.links{background:var(--cream);}
+.links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.1rem;}
+.link-card{background:var(--white);border:1px solid var(--warm-gray);border-radius:14px;padding:1.5rem;text-decoration:none;display:flex;align-items:center;gap:.9rem;transition:all .2s;}
+.link-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(15,31,61,.08);border-color:rgba(181,146,42,.3);}
+.link-icon{font-size:1.3rem;}
+.link-label{font-size:.68rem;color:var(--text-soft);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.15rem;}
+.link-value{font-size:.85rem;color:var(--navy);font-weight:500;word-break:break-all;}
+
+/* QUOTE */
+.quote-block{padding:4.5rem 2rem;background:linear-gradient(135deg,var(--navy) 0%,#1b3a6b 100%);text-align:center;}
+.quote-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(1.2rem,2.6vw,1.75rem);font-weight:300;color:rgba(255,255,255,.9);line-height:1.6;max-width:760px;margin:0 auto 1.25rem;}
+.quote-attr{font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);}
+
+/* FOOTER */
+footer{background:#080f1e;padding:3.5rem 2rem 2rem;border-top:1px solid rgba(181,146,42,.15);}
+.footer-inner{max-width:1300px;margin:0 auto;}
+.footer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:0;flex-wrap:wrap;gap:1rem;}
+.footer-legal{font-size:.68rem;color:rgba(255,255,255,.25);}
+.footer-legal a{color:rgba(255,255,255,.4);text-decoration:none;}
+.footer-legal a:hover{color:var(--gold);}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:640px){.nav-links{display:none;}.hamburger{display:flex;}.hero{padding:7rem 1.25rem 3rem;}section{padding:3rem 1.25rem!important;}.ip-item{grid-template-columns:1fr;gap:.4rem;}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-inner">
+    <a class="nav-brand" href="index.html">
+      <div class="nav-mark">U</div>
+      <div>
+        <div class="nav-title">UNIMED · Multiversidad AIDIA</div>
+        <div class="nav-sub">Ciencias de la Complejidad · Barcelona</div>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html#aidia">AIDIA</a>
+      <a href="index.html#cursos">Cursos</a>
+      <a href="index.html#conocimiento">Conocimiento</a>
+      <a href="index.html#equipo">Equipo</a>
+      <a href="repositorio.html" style="color:var(--gold);">Repositorio</a>
+      <a href="index.html#acceso" class="nav-cta">Acceder</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html#aidia" onclick="toggleMenu()">AIDIA</a>
+  <a href="index.html#cursos" onclick="toggleMenu()">Cursos</a>
+  <a href="index.html#conocimiento" onclick="toggleMenu()">Conocimiento</a>
+  <a href="index.html#equipo" onclick="toggleMenu()">Equipo</a>
+  <a href="repositorio.html" onclick="toggleMenu()">Repositorio</a>
+  <a href="index.html#acceso" onclick="toggleMenu()">Acceder</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">📚 Repositorio oficial · Publicaciones, código y documentación científica</div>
+    <h1 class="hero-title">Repositorio Académico —<br><em>Samuel Carmona Aguirre</em> · UNIMED</h1>
+    <p class="hero-desc"><span>Científico Biomédico Clínico</span> · Profesor colaborador del Diplomado en Ciencia Médica y Ciencia de la Complejidad (UNAM) · Fundador de UNIMED Consulting · Creador del paradigma <span>Holomedicina®</span>.</p>
+    <div class="hero-meta">
+      <div class="hmeta-item">📧 <a href="mailto:samuel@unimed-consulting.es">samuel@unimed-consulting.es</a></div>
+      <div class="hmeta-item">🌐 <a href="https://unimed-consulting.es" target="_blank">unimed-consulting.es</a></div>
+      <div class="hmeta-item">🔬 <a href="https://orcid.org/0009-0000-2344-4155" target="_blank">ORCID 0009-0000-2344-4155</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- GITHUB REPOS -->
+<section class="repos" id="github">
+  <div class="repos-inner">
+    <div class="section-tag reveal">Código abierto</div>
+    <h2 class="section-title reveal">📂 Repositorios <em>GitHub</em></h2>
+    <p class="section-desc reveal">Plataformas, herramientas y contribuciones de código abiertas al ecosistema de conocimiento de UNIMED.</p>
+    <div class="repos-grid">
+
+      <div class="repo-card reveal">
+        <div class="repo-top"><span class="repo-icon">🌐</span><span class="repo-status public">✅ Público</span></div>
+        <a class="repo-name" href="https://github.com/clinicaerus/unimed-web" target="_blank">github.com/clinicaerus/unimed-web</a>
+        <p class="repo-desc">Web institucional UNIMED Consulting — desplegada en GitHub Pages.</p>
+      </div>
+
+      <div class="repo-card reveal">
+        <div class="repo-top"><span class="repo-icon">🧠</span><span class="repo-status public">✅ Público</span></div>
+        <a class="repo-name" href="https://github.com/clinicaerus/caps-digital" target="_blank">github.com/clinicaerus/caps-digital</a>
+        <p class="repo-desc">CAPS Digital — Facilitador de Salud Digital. Plataforma holónica de medicina personalizada.</p>
+      </div>
+
+      <div class="repo-card reveal">
+        <div class="repo-top"><span class="repo-icon">🧬</span><span class="repo-status open">✅ Open-source</span></div>
+        <a class="repo-name" href="https://github.com/ClawBio/ClawBio" target="_blank">github.com/ClawBio/ClawBio</a>
+        <p class="repo-desc">Contribución UNIMED — PR #133: skill de ciclo de metilación holónico integrado en el pipeline ClawBio (587 ⭐, DOI verificado).</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PUBLICACIONES -->
+<section class="pubs" id="publicaciones">
+  <div class="pubs-inner">
+    <div class="section-tag reveal">Zenodo · OpenAIRE · DataCite</div>
+    <h2 class="section-title reveal">📄 Publicaciones <em>Académicas</em></h2>
+    <p class="section-desc reveal">Todas las publicaciones cuentan con DOI permanente, están indexadas en OpenAIRE/DataCite y publicadas bajo licencia Creative Commons CC BY 4.0.</p>
+
+    <div class="pub-year reveal">2026</div>
+
+    <div class="pub-item reveal">
+      <div class="pub-main">
+        <div class="pub-title">CAPS Digital UNIMED — Un modelo de Atención Primaria de Salud Digital Transdisciplinar basado en la Persona como Sujeto Holónico Unitivo</div>
+        <div class="pub-cite">Carmona Aguirre, S. (2026). UNIMED — Centro de Desarrollo e Innovación Médica.</div>
+      </div>
+      <a class="pub-doi" href="https://doi.org/10.5281/zenodo.19332340" target="_blank">📄 10.5281/zenodo.19332340</a>
+    </div>
+
+    <div class="pub-item reveal">
+      <div class="pub-main">
+        <div class="pub-title">PersonómicaOnline® — Plataforma Semántica@Health</div>
+        <div class="pub-cite">Carmona Aguirre, S. (2026, trabajo original 2021). UNIMED — Centro de Desarrollo e Innovación Médica.</div>
+      </div>
+      <a class="pub-doi" href="https://doi.org/10.5281/zenodo.19298937" target="_blank">📄 10.5281/zenodo.19298937</a>
+    </div>
+
+    <div class="pub-item reveal">
+      <div class="pub-main">
+        <div class="pub-title">Holomedicina — Medicina Unificada (registro formal del paradigma)</div>
+        <div class="pub-cite">Carmona Aguirre, S. (2026, trabajo original 2014). UNIMED — Centro de Desarrollo e Innovación Médica.</div>
+      </div>
+      <a class="pub-doi" href="https://doi.org/10.5281/zenodo.19311627" target="_blank">📄 10.5281/zenodo.19311627</a>
+    </div>
+
+    <div class="pub-item reveal">
+      <div class="pub-main">
+        <div class="pub-title">Sistema de Salud Pública Cooperativista — SSPC (documento fundacional del Facilitador de Salud)</div>
+        <div class="pub-cite">Carmona Aguirre, S. (2026, trabajo original 2013). UNIMED — Centro de Desarrollo e Innovación Médica.</div>
+      </div>
+      <a class="pub-doi" href="https://doi.org/10.5281/zenodo.19312569" target="_blank">📄 10.5281/zenodo.19312569</a>
+    </div>
+
+    <div class="pub-item reveal">
+      <div class="pub-main">
+        <div class="pub-title">Formación de Facilitadores de Salud — Programa FGIS · SSPC</div>
+        <div class="pub-cite">Carmona Aguirre, S. (2026, trabajo original 2013). UNIMED Consulting.</div>
+      </div>
+      <a class="pub-doi" href="https://doi.org/10.5281/zenodo.19329389" target="_blank">📄 10.5281/zenodo.19329389</a>
+    </div>
+
+    <div class="pub-year reveal">2021</div>
+
+    <div class="pub-item reveal">
+      <div class="pub-main">
+        <div class="pub-title">Web Semántica en contexto de las Ciencias de la Complejidad — Diplomado UNAM, Ciencias Médicas y Ciencias de la Complejidad</div>
+        <div class="pub-cite">Carmona Aguirre, S. (2021). Universidad Nacional Autónoma de México (UNAM). Diploma DI16321.</div>
+      </div>
+      <a class="pub-doi" href="https://doi.org/10.5281/zenodo.19331981" target="_blank">📄 10.5281/zenodo.19331981</a>
+    </div>
+
+    <div class="pub-year reveal">2017</div>
+
+    <div class="pub-item reveal">
+      <div class="pub-main">
+        <div class="pub-title">Ciencias cognitivas — complejidad y bioética. Epistemología y Metodología transdisciplinaria (Tesis de Máster)</div>
+        <div class="pub-cite">Carmona Aguirre, S. (2017). Universidad de Málaga (UMA). Calificación: 9/10.</div>
+      </div>
+      <a class="pub-doi" href="https://doi.org/10.5281/zenodo.19331061" target="_blank">📄 10.5281/zenodo.19331061</a>
+    </div>
+
+    <div class="pub-year reveal">2016</div>
+
+    <div class="pub-item reveal">
+      <div class="pub-main">
+        <div class="pub-title">Medicina y Salud Basada en la Complejidad — Presentado en el VII Congreso Iberoamericano de Investigación Cualitativa en Salud</div>
+        <div class="pub-cite">Carmona Aguirre, S. (2016). Universitat de Barcelona · UAB AFIN.</div>
+      </div>
+      <a class="pub-doi" href="https://doi.org/10.5281/zenodo.19330636" target="_blank">📄 10.5281/zenodo.19330636</a>
+    </div>
+
+    <div class="pub-item reveal">
+      <div class="pub-main">
+        <div class="pub-title">MH-AIAP · Método Holónico de Auto-Investigación Acción Participativa — Contribución al Congreso Mundial de la Pensée Complexe (UNESCO · CNRS · Edgar Morin)</div>
+        <div class="pub-cite">Carmona Aguirre, S. (2016). París.</div>
+      </div>
+      <a class="pub-doi" href="https://doi.org/10.5281/zenodo.19312195" target="_blank">📄 10.5281/zenodo.19312195</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- LINEAS DE INVESTIGACION -->
+<section class="lines" id="investigacion">
+  <div class="lines-orb"></div>
+  <div class="lines-inner">
+    <div class="section-tag reveal">🔬 Trabajo en curso</div>
+    <h2 class="section-title reveal" style="color:var(--white);">Líneas de <em>Investigación Activas</em></h2>
+    <p class="section-desc reveal" style="color:rgba(255,255,255,.55);">Cinco frentes de trabajo que articulan el paradigma UNIMED, desde el marco epistemológico hasta su implementación clínica y tecnológica.</p>
+    <div class="lines-grid">
+      <div class="line-card reveal">
+        <div class="line-title">HoloMedicina®</div>
+        <p class="line-desc">Paradigma científico que integra biomedicina, ciencias del comportamiento y ciencias sociales en un modelo de complejidad adaptativa (8 dimensiones: biológica, psicológica, social, cultural, económica, política, ética y espiritual). <strong>Registro PI Generalitat de Catalunya: 02/2014/2384-2386.</strong></p>
+      </div>
+      <div class="line-card reveal">
+        <div class="line-title">MH-AIAP</div>
+        <p class="line-desc">Método Holónico de Auto-Investigación Acción Participativa. El sujeto como investigador de su propia existencia.</p>
+      </div>
+      <div class="line-card reveal">
+        <div class="line-title">CAPS Digital</div>
+        <p class="line-desc">Primer Facilitador de Salud Digital basado en arquitectura holónica y gemelo digital holosemiótico (GDH).</p>
+      </div>
+      <div class="line-card reveal">
+        <div class="line-title">Farmacogenómica Clínica de Precisión</div>
+        <p class="line-desc">Integración de datos genómicos (SNP array, WES) con razonamiento clínico holónico. Caso ASES 2307-002.</p>
+      </div>
+      <div class="line-card reveal">
+        <div class="line-title">Web Semántica y Ontologías Biomédicas</div>
+        <p class="line-desc">Ontologías OWL 2.0 / RDF / SPARQL para representación de conocimiento clínico (SNOMED CT, LOINC, ICD-11, HPO, FHIR R4).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRO PI -->
+<section class="ip" id="propiedad-intelectual">
+  <div class="ip-inner">
+    <div class="section-tag reveal">Trayectoria documentada</div>
+    <h2 class="section-title reveal">📜 Registro de <em>Propiedad Intelectual</em></h2>
+    <div class="ip-timeline">
+      <div class="ip-item reveal">
+        <div class="ip-year">2007</div>
+        <div class="ip-desc">Primeros manuscritos de desarrollo conceptual de Holomedicina y MH-AIAP.</div>
+      </div>
+      <div class="ip-item reveal">
+        <div class="ip-year">2014</div>
+        <div class="ip-desc">Registro oficial ante el Registre de la Propietat Intel·lectual de Catalunya (Generalitat de Catalunya): asientos 02/2014/2384, 02/2014/2385, 02/2014/2386.</div>
+      </div>
+      <div class="ip-item reveal">
+        <div class="ip-year">2016</div>
+        <div class="ip-desc">Presentación ante Edgar Morin / UNESCO / CNRS, París.</div>
+      </div>
+      <div class="ip-item reveal">
+        <div class="ip-year">2021</div>
+        <div class="ip-desc">Anteproyecto PERSONÓMICA®ONLINE, Diplomado UNAM DI16321.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENLACES -->
+<section class="links" id="enlaces">
+  <div class="links-inner">
+    <div class="section-tag reveal">Contacto y perfiles</div>
+    <h2 class="section-title reveal">🔗 Enlaces de <em>Interés</em></h2>
+    <div class="links-grid">
+      <a class="link-card reveal" href="https://unimed-consulting.es" target="_blank">
+        <span class="link-icon">🌐</span>
+        <div><div class="link-label">Web institucional</div><div class="link-value">unimed-consulting.es</div></div>
+      </a>
+      <a class="link-card reveal" href="https://orcid.org/0009-0000-2344-4155" target="_blank">
+        <span class="link-icon">🧬</span>
+        <div><div class="link-label">ORCID</div><div class="link-value">0009-0000-2344-4155</div></div>
+      </a>
+      <a class="link-card reveal" href="https://github.com/clinicaerus" target="_blank">
+        <span class="link-icon">🐙</span>
+        <div><div class="link-label">GitHub</div><div class="link-value">github.com/clinicaerus</div></div>
+      </a>
+      <a class="link-card reveal" href="https://zenodo.org" target="_blank">
+        <span class="link-icon">📂</span>
+        <div><div class="link-label">Zenodo</div><div class="link-value">zenodo.org</div></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-block">
+  <p class="quote-text">"Cuando los 6 ejes neurocognitivos convergen, actúas. Cuando divergen, investigas. Eso es ciencia clínica en tiempo real."</p>
+  <p class="quote-attr">— S. Carmona Aguirre, Diplomado UNAM 2021</p>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-bottom">
+      <span class="footer-legal">© 2026 Asociación UNIMED-Centro de desarrollo e innovación médica · Ley 4/2018 Cataluña · Sin ánimo de lucro</span>
+      <span class="footer-legal"><a href="index.html">← Volver a Multiversidad AIDIA</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>30);
+});
+function toggleMenu(){
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
