@@ -347,7 +347,7 @@ const BRAND={name:'HoloMente',tagline:'e-Salud neuropsicoeducativa',org:'ASOC UN
 const SB_URL='https://qsblcozageloafwnyscl.supabase.co';
 const SB_KEY='sb_publishable_ibaF1p0nlIaOi_y8Ia_kGw_KTu3NMGa';
 const sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:'holomente-auth'}}):null;
-const PLAN_KEYS=['name','age','goals','tasks','nextSession','mentorMsg','theme'];
+const PLAN_KEYS=['name','age','goals','tasks','nextSession','mentorMsg','theme','legacyId'];
 const toProgress=(p,at)=>p?{v:3,id:p.id,n:p.name,a:p.age,at:String(at||new Date().toISOString()).slice(0,10),s:p.stars||0,g:p.goals||[],
  l:p.log||[],c:p.checkins||[],w:p.wheel||[],h:p.habits||{},d:(p.diary||[]).filter(x=>x.shared),no:p.notes||[],pr:p.projects||[]}:null;
 const applyPlan=(base,plan)=>{if(!plan)return base;const age=Number(plan.age!=null&&plan.age!==''?plan.age:base.age)||base.age||18;
@@ -365,7 +365,7 @@ const cloud={
   if(!session){const {error}=await sb.auth.signInAnonymously();if(error)throw new Error('No se pudo iniciar la sesión en este dispositivo. Avisa a tu mentor.');}
   const {error}=await sb.rpc('canjear_invitacion',{p_token:token});
   if(error)throw new Error('Este código QR ya se ha usado o ha caducado. Pide uno nuevo a tu mentor.');},
- async hydrate(pid,local){
+ async hydrate(pid,local,all){
   const [pl,es,di]=await Promise.all([
    sb.from('planes').select('data').eq('participante_id',pid).maybeSingle(),
    sb.from('estado_persona').select('data').eq('participante_id',pid).maybeSingle(),
@@ -402,7 +402,7 @@ const cloud={
   const E=Object.fromEntries((es.data||[]).map(x=>[x.participante_id,x]));
   const C=Object.fromEntries((fc.data||[]).map(x=>[x.participante_id,x]));
   return{mentees:ps.data.map(p=>{const base=F[p.id]||{...newMentee(),name:(C[p.id]&&C[p.id].nombre)||'',dx:(C[p.id]&&C[p.id].diagnostico)||''};
-   return{...base,id:p.id,alias:p.alias,linked:!!p.user_id,progress:E[p.id]?toProgress(E[p.id].data,E[p.id].actualizado_en):null};})};},
+   return{...base,id:p.id,alias:p.alias,linked:!!p.user_id,progress:E[p.id]?toProgress(E[p.id].data,E[p.id].actualizado_en):(base.legacyProgress||null)};})};},
  async saveMentee(m){const {progress,linked,alias,...data}=m;const now=new Date().toISOString();
   const plan=Object.fromEntries(PLAN_KEYS.map(k=>[k,m[k]===undefined?null:m[k]]));
   const [a,b]=await Promise.all([
@@ -1984,6 +1984,13 @@ function MentorApp({onLogout}){
  const del=async id=>{const e=await cloud.deleteMentee(id);if(e){setErr('No se pudo eliminar: '+e);return;}setDb(d=>({...d,mentees:d.mentees.filter(x=>x.id!==id)}));};
  const cur=db.mentees.find(m=>m.id===sel);
  const openF=id=>{setSel(id);setView('ficha');reload();};
+ const legacy=(ls('hm_mentor',{mentees:[]}).mentees||[]).filter(o=>!db.mentees.some(x=>x.legacyId===o.id));
+ const [migr,setMigr]=useState('');
+ const migrate=async()=>{setMigr('Pasando fichas…');let n=0;
+  for(const o of legacy){try{const nm=await cloud.createMentee();const {progress,...rest}=o;
+    await cloud.saveMentee({...newMentee(),...rest,id:nm.id,alias:nm.alias,legacyId:o.id,legacyProgress:progress||null});n++;}
+   catch(e){setErr('No se pudo pasar la ficha de '+(o.name||'sin nombre')+': '+e.message);}}
+  setMigr(n+' ficha(s) pasadas a HoloMente 3.0. Ahora genera un QR nuevo para cada persona.');reload();};
  const NAV=[['list','group','Personas'],['lib','handyman','Biblioteca'],['backup','backup','Copia de seguridad']];
  return(<div className="mshell">
   <div className="mob-top"><div className="brand">holomente <small>mentor</small></div><button className="chip" style={{border:'none'}} onClick={onLogout}>Salir</button></div>
@@ -1994,6 +2001,10 @@ function MentorApp({onLogout}){
   </aside>
   <main className="main">
    {err&&<div className="card" style={{background:'var(--magenta10)',boxShadow:'none',marginBottom:'1rem'}}>{err} <button className="btn btn-ghost btn-sm" onClick={reload}>Reintentar</button></div>}
+   {!loading&&(legacy.length>0||migr)&&<div className="card" style={{background:'var(--gold10)',boxShadow:'none',marginBottom:'1rem'}}>
+    {legacy.length>0?<><b>Hay {legacy.length} ficha(s) de la versión anterior en este navegador</b><p className="small" style={{margin:'.35rem 0 .6rem'}}>{legacy.map(o=>o.name||'Sin nombre').join(', ')}. Pásalas a HoloMente 3.0 para conservar su plan, notas y último progreso. Al escanear su QR nuevo, cada persona recuperará también todo lo que tenía en su móvil.</p>
+    <button className="btn btn-mg btn-sm" disabled={!!migr&&migr.startsWith('Pasando')} onClick={migrate}>Pasar a HoloMente 3.0</button></>:null}
+    {migr&&<div className="ok" style={{marginTop:'.4rem'}}>{migr}</div>}</div>}
    {loading?<p className="muted">Cargando fichas…</p>:<>
    {view==='list'&&<MentorList db={db} onOpen={openF} onNew={async()=>{try{const m=await cloud.createMentee();setDb(d=>({...d,mentees:[...d.mentees,m]}));setSel(m.id);setView('ficha');}catch(e){setErr('No se pudo crear la ficha: '+e.message);}}}/>}
    {view==='ficha'&&cur&&<Ficha m={cur} save={save} del={()=>{del(cur.id);setView('list');}} back={()=>{setView('list');reload();}}/>}
@@ -2202,7 +2213,7 @@ function App(){
    if(token)await cloud.redeem(token);
    const me=await cloud.me();
    if(me&&me.role==='mentor')setSession({role:'mentor',cloud:true});
-   else if(me&&me.role==='persona'){const p=await cloud.hydrate(me.id,latest.current.personas[me.id]);
+   else if(me&&me.role==='persona'){const p=await cloud.hydrate(me.id,latest.current.personas[me.id],latest.current.personas);
     setPersonas(ps=>({...ps,[me.id]:p}));setSession({role:'persona',id:me.id,cloud:true});}
    else if(!me){const s=latest.current.session;if(s&&s.cloud)setSession(null);}
    /* me.error = sin conexión: se mantiene la sesión local y se sincroniza al volver la red */
