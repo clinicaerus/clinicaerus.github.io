@@ -2002,7 +2002,7 @@ function MentorApp({onLogout}){
   <main className="main">
    {err&&<div className="card" style={{background:'var(--magenta10)',boxShadow:'none',marginBottom:'1rem'}}>{err} <button className="btn btn-ghost btn-sm" onClick={reload}>Reintentar</button></div>}
    {!loading&&(legacy.length>0||migr)&&<div className="card" style={{background:'var(--gold10)',boxShadow:'none',marginBottom:'1rem'}}>
-    {legacy.length>0?<><b>Hay {legacy.length} ficha(s) de la versión anterior en este navegador</b><p className="small" style={{margin:'.35rem 0 .6rem'}}>{legacy.map(o=>o.name||'Sin nombre').join(', ')}. Pásalas a HoloMente 3.0 para conservar su plan, notas y último progreso. Al escanear su QR nuevo, cada persona recuperará también todo lo que tenía en su móvil.</p>
+    {legacy.length>0?<><b>Hay {legacy.length} ficha(s) de la versión anterior en este navegador</b><p className="small" style={{margin:'.35rem 0 .6rem'}}>{legacy.map(o=>o.name||'Sin nombre').join(', ')}. Pásalas a HoloMente 3.0 para conservar su plan, notas y último progreso. Después, genera un QR nuevo para cada persona.</p>
     <button className="btn btn-mg btn-sm" disabled={!!migr&&migr.startsWith('Pasando')} onClick={migrate}>Pasar a HoloMente 3.0</button></>:null}
     {migr&&<div className="ok" style={{marginTop:'.4rem'}}>{migr}</div>}</div>}
    {loading?<p className="muted">Cargando fichas…</p>:<>
