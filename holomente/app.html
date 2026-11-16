@@ -223,17 +223,19 @@ async function panelMentor(){
   <div class="card"><h2>Personas en acompañamiento</h2><div id="tabla"><p class="mut">Cargando…</p></div></div>`;
   document.getElementById('bSalir').onclick = async () => { await sb.auth.signOut(); portada(); };
   document.getElementById('bNueva').onclick = nuevaPersona;
-  const [{ data: ps, error }, { data: regs }] = await Promise.all([
+  const [{ data: ps, error }, { data: regs }, { data: fcs }] = await Promise.all([
     sb.from('participantes').select('id,alias,grupo_edad,user_id,activo,consentimiento_firmado_en,creado_en').order('alias'),
-    sb.from('registros').select('participante_id,creado_en').order('creado_en', { ascending:false }).limit(2000)
+    sb.from('registros').select('participante_id,creado_en').order('creado_en', { ascending:false }).limit(2000),
+    sb.from('ficha_clinica').select('participante_id,nombre')
   ]);
+  const nom = Object.fromEntries((fcs||[]).map(f => [f.participante_id, f.nombre]));
   if (error) { document.getElementById('tabla').innerHTML = `<p class="err">${esc(error.message)}</p>`; return; }
   const ult = {}, cnt = {};
   (regs||[]).forEach(r => { cnt[r.participante_id] = (cnt[r.participante_id]||0)+1; if(!ult[r.participante_id]) ult[r.participante_id] = r.creado_en; });
   document.getElementById('tabla').innerHTML = !ps.length ? '<p class="mut">Todavía no hay personas. Pulsa «Nueva persona».</p>' : `
   <table><thead><tr><th>Alias</th><th>Grupo</th><th>Dispositivo</th><th>Consentimiento</th><th>Registros</th><th>Último</th><th></th></tr></thead><tbody>
   ${ps.map(p => `<tr class="clic" data-id="${p.id}">
-    <td><b>${esc(p.alias)}</b>${p.activo?'':' <span class="mut">(inactiva)</span>'}</td><td>${GRUPOS[p.grupo_edad]||esc(p.grupo_edad)}</td>
+    <td><b>${esc(p.alias)}</b>${nom[p.id]?`<div class="mut" style="font-size:12px">${esc(nom[p.id])}</div>`:''}${p.activo?'':' <span class="mut">(inactiva)</span>'}</td><td>${GRUPOS[p.grupo_edad]||esc(p.grupo_edad)}</td>
     <td>${p.user_id?'<span class="pill on">vinculado</span>':'<span class="pill off">pendiente</span>'}</td>
     <td>${p.consentimiento_firmado_en?esc(p.consentimiento_firmado_en):'<span class="pill off">falta</span>'}</td>
     <td>${cnt[p.id]||0}</td><td class="mut">${ult[p.id]?fecha(ult[p.id]):'—'}</td>
@@ -284,17 +286,30 @@ async function generarQR(pid, alias){
 }
 
 async function fichaPersona(pid){
-  const [{ data: p }, { data: regs }, { data: notas }] = await Promise.all([
+  const [{ data: p }, { data: regs }, { data: notas }, { data: fc }] = await Promise.all([
     sb.from('participantes').select('*').eq('id', pid).single(),
     sb.from('registros').select('*').eq('participante_id', pid).order('creado_en', { ascending:true }).limit(1000),
-    sb.from('notas_mentor').select('*').eq('participante_id', pid).order('fecha_sesion', { ascending:false })
+    sb.from('notas_mentor').select('*').eq('participante_id', pid).order('fecha_sesion', { ascending:false }),
+    sb.from('ficha_clinica').select('*').eq('participante_id', pid).maybeSingle()
   ]);
+  const edad = fn => { if(!fn) return ''; const n=new Date(fn), h=new Date(); let e=h.getFullYear()-n.getFullYear(); if(h<new Date(h.getFullYear(),n.getMonth(),n.getDate())) e--; return e+' años'; };
   const ch = (regs||[]).filter(r => r.tipo==='checkin');
   const media = k => { const v = ch.slice(-7).map(r=>r.datos[k]).filter(n=>typeof n==='number'); return v.length ? (v.reduce((a,b)=>a+b,0)/v.length).toFixed(1) : '—'; };
   $app.innerHTML = cab(`<button class="sm" id="vol">← Volver</button><button class="sm" id="qr">Nuevo QR</button>`) + `
   <div class="card" style="margin-bottom:14px">
     <div class="row"><h2 style="margin:0">${esc(p.alias)}</h2><span class="pill">${GRUPOS[p.grupo_edad]}</span>${p.user_id?'<span class="pill on">vinculado</span>':'<span class="pill off">sin dispositivo</span>'}
     <span class="sp"></span>${p.consentimiento_firmado_en?`<span class="mut" style="font-size:13px">Consentimiento: ${esc(p.consentimiento_firmado_en)}</span>`:'<button class="sm" id="cons">Marcar consentimiento firmado</button>'}</div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="row"><h2 style="margin:0">Datos clínicos</h2><span class="pill">🔒 solo mentor</span><span class="sp"></span>
+      ${fc?.nombre?`<b>${esc(fc.nombre)}</b>`:''}${fc?.fecha_nacimiento?`<span class="mut">· ${edad(fc.fecha_nacimiento)}</span>`:''}</div>
+    <form id="ffc" class="grid g2" style="margin-top:6px">
+      <div><label>Nombre y apellidos</label><input name="nombre" value="${esc(fc?.nombre)}" autocomplete="off"></div>
+      <div><label>Fecha de nacimiento</label><input type="date" name="fn" value="${esc(fc?.fecha_nacimiento)}"></div>
+      <div style="grid-column:1/-1"><label>Diagnóstico</label><input name="dx" value="${esc(fc?.diagnostico)}" placeholder="p. ej. TDAH presentación combinada (DSM-5)"></div>
+      <div style="grid-column:1/-1"><label>Observaciones clínicas</label><textarea name="obs">${esc(fc?.observaciones)}</textarea></div>
+      <div class="row" style="grid-column:1/-1"><button class="pri" type="submit">Guardar datos clínicos</button><span id="mfc" class="mut"></span></div>
+    </form>
   </div>
   <div class="card" style="margin-bottom:14px">
     <h3>Media de los últimos 7 registros</h3>
@@ -317,6 +332,11 @@ async function fichaPersona(pid){
   document.getElementById('vol').onclick = panelMentor;
   document.getElementById('qr').onclick = () => generarQR(pid, p.alias);
   const bc = document.getElementById('cons'); if (bc) bc.onclick = async () => { await sb.from('participantes').update({ consentimiento_firmado_en: new Date().toISOString().slice(0,10) }).eq('id', pid); fichaPersona(pid); };
+  document.getElementById('ffc').onsubmit = async ev => { ev.preventDefault(); const f = ev.target, m = document.getElementById('mfc');
+    const { error } = await sb.from('ficha_clinica').upsert({ participante_id:pid, nombre:f.nombre.value.trim()||null, fecha_nacimiento:f.fn.value||null,
+      diagnostico:f.dx.value.trim()||null, observaciones:f.obs.value.trim()||null, actualizado_en:new Date().toISOString() });
+    if (error) { m.className='err'; m.textContent='No se pudo guardar: '+error.message; return; }
+    fichaPersona(pid); };
   document.getElementById('fn').onsubmit = async ev => { ev.preventDefault(); const f = ev.target;
     const { error } = await sb.from('notas_mentor').insert({ participante_id:pid, fecha_sesion:f.d.value, nota:f.n.value.trim() });
     if (error) return alert(error.message); fichaPersona(pid); };
