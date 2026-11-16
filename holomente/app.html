@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#060a18">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HoloMente">
+<title>HoloMente · UNIMED</title>
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22HoloMente%22%2C%22short_name%22%3A%22HoloMente%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23060a18%22%2C%22theme_color%22%3A%22%23060a18%22%2C%22start_url%22%3A%22.%2F%22%7D">
+<style>
+  :root{
+    --bg:#060a18; --bg2:#0b1230; --panel:rgba(14,22,52,.72); --line:rgba(120,170,255,.16);
+    --txt:#e6ecff; --mut:#93a0c8; --cyan:#4fd1ff; --vio:#a78bfa; --ok:#5eead4; --warn:#fbbf24; --err:#fb7185;
+    --r:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;min-height:100%;background:radial-gradient(1200px 800px at 70% -10%,#16205a 0%,var(--bg) 55%) fixed;color:var(--txt);
+    font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+  #red{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.85}
+  main{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:max(20px,env(safe-area-inset-top)) 18px 60px}
+  header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+  .marca{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.02em;font-size:20px}
+  .marca .dot{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,var(--cyan) 40%,var(--vio));box-shadow:0 0 18px var(--cyan)}
+  .marca small{font-weight:500;color:var(--mut);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:20px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .hero{text-align:center;padding:56px 22px}
+  .hero h1{font-size:clamp(30px,6vw,48px);margin:0 0 10px;line-height:1.1;background:linear-gradient(90deg,var(--cyan),var(--vio));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{color:var(--mut);max-width:520px;margin:0 auto 26px;line-height:1.55}
+  h2{font-size:18px;margin:0 0 14px} h3{font-size:15px;margin:0 0 10px;color:var(--mut);font-weight:600}
+  .grid{display:grid;gap:14px} .g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+  label{display:block;font-size:13px;color:var(--mut);margin:12px 0 6px}
+  input,select,textarea{width:100%;background:rgba(6,10,24,.7);border:1px solid var(--line);border-radius:12px;color:var(--txt);padding:12px 14px;font:inherit;font-size:16px;outline:none}
+  input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(79,209,255,.15)}
+  textarea{min-height:90px;resize:vertical}
+  button{font:inherit;cursor:pointer;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--txt);padding:11px 16px;font-weight:600}
+  button:hover{border-color:rgba(79,209,255,.5)}
+  button.pri{background:linear-gradient(90deg,#2aa7e0,#7c5cf0);border:0;color:#fff;box-shadow:0 6px 24px rgba(79,120,255,.35)}
+  button.sm{padding:7px 11px;font-size:13px;border-radius:10px}
+  button:disabled{opacity:.5;cursor:default}
+  .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .sp{flex:1}
+  .mut{color:var(--mut)} .err{color:var(--err)} .ok{color:var(--ok)}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{color:var(--mut);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  tr.clic{cursor:pointer} tr.clic:hover td{background:rgba(79,209,255,.05)}
+  .pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12px;border:1px solid var(--line)}
+  .pill.on{color:var(--ok);border-color:rgba(94,234,212,.4)} .pill.off{color:var(--warn);border-color:rgba(251,191,36,.4)}
+  .modal{position:fixed;inset:0;background:rgba(3,6,16,.75);display:flex;align-items:center;justify-content:center;z-index:10;padding:18px}
+  .modal .card{max-width:420px;width:100%;text-align:center}
+  .qr{background:#fff;border-radius:14px;padding:14px;display:inline-block;margin:10px 0}
+  .qr img{display:block;width:260px;height:260px}
+  .link{word-break:break-all;font-size:12px;color:var(--mut);background:rgba(6,10,24,.6);padding:8px;border-radius:8px}
+  .slider{display:flex;align-items:center;gap:12px} .slider input{padding:0;height:6px;accent-color:var(--cyan)} .slider b{min-width:28px;text-align:right;font-size:18px;color:var(--cyan)}
+  .lista{list-style:none;margin:0;padding:0} .lista li{padding:10px 0;border-bottom:1px solid var(--line)}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+  .kpi{background:rgba(6,10,24,.5);border:1px solid var(--line);border-radius:12px;padding:12px}
+  .kpi b{display:block;font-size:22px;color:var(--cyan)} .kpi span{font-size:12px;color:var(--mut)}
+  canvas.graf{width:100%;height:180px;display:block}
+  .leyenda{display:flex;gap:14px;font-size:12px;color:var(--mut);margin-top:6px;flex-wrap:wrap}
+  .leyenda i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:5px;vertical-align:middle}
+  .aviso{font-size:13px;color:var(--mut);border-left:3px solid var(--vio);padding:8px 12px;background:rgba(167,139,250,.07);border-radius:0 10px 10px 0}
+  .oculto{display:none!important}
+  footer{position:relative;z-index:1;text-align:center;color:var(--mut);font-size:12px;padding:0 18px 30px}
+</style>
+</head>
+<body>
+<canvas id="red" aria-hidden="true"></canvas>
+<main id="app"><div class="hero"><p class="mut">Cargando…</p></div></main>
+<footer>HoloMente · UNIMED — Centro de Desarrollo e Innovación Médica</footer>
+
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import QRCode from 'https://esm.sh/qrcode@1.5.4';
+
+const SUPABASE_URL = 'https://qsblcozageloafwnyscl.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ibaF1p0nlIaOi_y8Ia_kGw_KTu3NMGa';
+const sb = createClient(SUPABASE_URL, SUPABASE_KEY, { auth: { persistSession: true, autoRefreshToken: true, storageKey: 'holomente-auth' } });
+
+const $app = document.getElementById('app');
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fecha = d => new Date(d).toLocaleString('es-ES', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' });
+const GRUPOS = { peques:'Peques', jovenes:'Jóvenes', adultos:'Adultos', mayores:'Mayores' };
+const baseURL = () => location.origin + location.pathname;
+const cab = (extra='') => `<header class="top"><div class="marca"><span class="dot"></span><div>HoloMente<br><small>UNIMED · neuropsicoeducación</small></div></div><div class="row">${extra}</div></header>`;
+
+/* ---------------- Fondo «1b Sinapsis»: red neuronal animada ---------------- */
+(() => {
+  const c = document.getElementById('red'), x = c.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W, H, N = [], dpr = Math.min(devicePixelRatio || 1, 2);
+  const size = () => { W = c.clientWidth; H = c.clientHeight; c.width = W*dpr; c.height = H*dpr; x.setTransform(dpr,0,0,dpr,0,0);
+    const n = Math.round(Math.min(90, W*H/16000)); N = Array.from({length:n}, () => ({ x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25, r:1+Math.random()*1.8, p:Math.random()*6.28 })); };
+  const pulses = [];
+  const draw = t => {
+    x.clearRect(0,0,W,H);
+    const D = 150;
+    for (let i=0;i<N.length;i++){ const a=N[i];
+      if(!reduce){ a.x+=a.vx; a.y+=a.vy; if(a.x<0||a.x>W)a.vx*=-1; if(a.y<0||a.y>H)a.vy*=-1; }
+      for (let j=i+1;j<N.length;j++){ const b=N[j], dx=a.x-b.x, dy=a.y-b.y, d=Math.hypot(dx,dy);
+        if(d<D){ x.strokeStyle=`rgba(110,160,255,${(1-d/D)*.28})`; x.lineWidth=.7; x.beginPath(); x.moveTo(a.x,a.y); x.lineTo(b.x,b.y); x.stroke();
+          if(!reduce && Math.random()<.0006 && pulses.length<14) pulses.push({a,b,k:0}); } } }
+    for (const a of N){ const g = .55+.45*Math.sin(t/900+a.p); x.fillStyle=`rgba(140,200,255,${.35+.4*g})`; x.beginPath(); x.arc(a.x,a.y,a.r,0,6.283); x.fill(); }
+    for (let i=pulses.length-1;i>=0;i--){ const p=pulses[i]; p.k+=.02; if(p.k>=1){pulses.splice(i,1);continue;}
+      const px=p.a.x+(p.b.x-p.a.x)*p.k, py=p.a.y+(p.b.y-p.a.y)*p.k; const gr=x.createRadialGradient(px,py,0,px,py,8);
+      gr.addColorStop(0,'rgba(167,139,250,.95)'); gr.addColorStop(1,'rgba(167,139,250,0)'); x.fillStyle=gr; x.beginPath(); x.arc(px,py,8,0,6.283); x.fill(); }
+    if(!reduce) requestAnimationFrame(draw);
+  };
+  addEventListener('resize', size); size(); requestAnimationFrame(draw);
+})();
+
+/* ---------------- Enrutado ---------------- */
+async function arrancar(){
+  const token = new URLSearchParams(location.hash.slice(1)).get('t');
+  if (token) return canjear(token);
+  const { data:{ session } } = await sb.auth.getSession();
+  if (!session) return portada();
+  const { data: esM } = await sb.rpc('es_mentor');
+  if (esM) return panelMentor();
+  const { data: pid } = await sb.rpc('mi_participante_id');
+  if (pid) return inicioPersona(pid);
+  return portada('Este dispositivo no está vinculado a ninguna persona. Pide a tu mentor un código QR nuevo.');
+}
+
+/* ---------------- Portada ---------------- */
+function portada(msg=''){
+  $app.innerHTML = cab() + `
+  <section class="hero">
+    <h1>Tu mente, en red</h1>
+    <p>HoloMente acompaña tu proceso de neuropsicoeducación entre sesión y sesión, siempre junto a tu mentor.</p>
+    ${msg ? `<p class="aviso" style="max-width:520px;margin:0 auto 22px;text-align:left">${esc(msg)}</p>` : ''}
+    <div class="card" style="max-width:440px;margin:0 auto;text-align:left">
+      <h2>¿Primera vez?</h2>
+      <p class="mut" style="margin:0;line-height:1.5">Escanea con la cámara del móvil el código QR que te dará tu mentor. No necesitas contraseña.</p>
+    </div>
+    <p style="margin-top:28px"><button class="sm" id="bMentor">Acceso mentor</button></p>
+  </section>`;
+  document.getElementById('bMentor').onclick = loginMentor;
+}
+
+function loginMentor(){
+  $app.innerHTML = cab() + `
+  <div class="card" style="max-width:420px;margin:40px auto">
+    <h2>Acceso mentor</h2>
+    <form id="f">
+      <label>Correo</label><input type="email" name="e" autocomplete="username" required>
+      <label>Contraseña</label><input type="password" name="p" autocomplete="current-password" required>
+      <p id="m" class="err"></p>
+      <div class="row"><button class="pri" type="submit">Entrar</button><span class="sp"></span><button type="button" class="sm" id="vol">Volver</button></div>
+    </form>
+  </div>`;
+  document.getElementById('vol').onclick = () => portada();
+  document.getElementById('f').onsubmit = async ev => {
+    ev.preventDefault(); const f = ev.target, m = document.getElementById('m'); m.textContent = '';
+    await sb.auth.signOut();
+    const { error } = await sb.auth.signInWithPassword({ email:f.e.value.trim(), password:f.p.value });
+    if (error) { m.textContent = 'No se pudo entrar: ' + error.message; return; }
+    const { data: esM } = await sb.rpc('es_mentor');
+    if (!esM) { m.textContent = 'Esta cuenta no tiene perfil de mentor.'; await sb.auth.signOut(); return; }
+    panelMentor();
+  };
+}
+
+/* ---------------- Canje del QR (persona) ---------------- */
+async function canjear(token){
+  $app.innerHTML = cab() + `<div class="card hero" style="max-width:460px;margin:40px auto"><h2>Conectando tu dispositivo…</h2><p class="mut" id="m">Un momento.</p></div>`;
+  const m = document.getElementById('m');
+  history.replaceState(null, '', location.pathname);
+  let { data:{ session } } = await sb.auth.getSession();
+  if (session && !session.user.is_anonymous) { await sb.auth.signOut(); session = null; }
+  if (!session) {
+    const { error } = await sb.auth.signInAnonymously();
+    if (error) { m.innerHTML = `<span class="err">No se pudo iniciar la sesión (${esc(error.message)}). Avisa a tu mentor.</span>`; return; }
+  }
+  const { data, error } = await sb.rpc('canjear_invitacion', { p_token: token });
+  if (error) { m.innerHTML = `<span class="err">Este código ya se usó o ha caducado. Pide uno nuevo a tu mentor.</span>`; return; }
+  const { data: pid } = await sb.rpc('mi_participante_id');
+  inicioPersona(pid, true);
+}
+
+/* ---------------- Inicio persona ---------------- */
+async function inicioPersona(pid, recien=false){
+  const { data: yo } = await sb.from('participantes').select('alias,grupo_edad').eq('id', pid).single();
+  const esIOS = /iphone|ipad|ipod/i.test(navigator.userAgent), instalada = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  $app.innerHTML = cab(`<span class="pill on">${esc(yo?.alias || '')}</span>`) + `
+  ${recien ? `<p class="aviso" style="margin-bottom:14px">✓ Dispositivo vinculado. A partir de ahora entrarás directamente.</p>` : ''}
+  ${!instalada ? `<p class="aviso" style="margin-bottom:14px"><b>Consejo:</b> añade HoloMente a tu pantalla de inicio para no perder el acceso. ${esIOS ? 'En Safari: botón Compartir → «Añadir a pantalla de inicio».' : 'En el menú del navegador: «Instalar app» o «Añadir a pantalla de inicio».'}</p>` : ''}
+  <div class="grid g2">
+    <div class="card">
+      <h2>¿Cómo estás hoy?</h2>
+      <form id="f">
+        ${['animo:Estado de ánimo','energia:Energía','concentracion:Concentración','calma:Calma'].map(s => { const [k,t]=s.split(':'); return `
+        <label>${t}</label><div class="slider"><input type="range" min="1" max="10" value="5" name="${k}" oninput="this.nextElementSibling.textContent=this.value"><b>5</b></div>`; }).join('')}
+        <label>Horas de sueño anoche</label><input type="number" name="sueno" min="0" max="16" step="0.5" inputmode="decimal" placeholder="p. ej. 7">
+        <label>¿Algo que quieras contar a tu mentor?</label><textarea name="nota" placeholder="Opcional"></textarea>
+        <p id="m"></p>
+        <button class="pri" type="submit" style="width:100%">Guardar</button>
+      </form>
+    </div>
+    <div class="card"><h2>Tus últimos registros</h2><ul class="lista" id="hist"><li class="mut">Cargando…</li></ul></div>
+  </div>`;
+  const cargar = async () => {
+    const { data } = await sb.from('registros').select('creado_en,datos').eq('participante_id', pid).order('creado_en', { ascending:false }).limit(10);
+    document.getElementById('hist').innerHTML = (data && data.length) ? data.map(r => `<li><div class="mut" style="font-size:12px">${fecha(r.creado_en)}</div>Ánimo ${esc(r.datos.animo)} · Energía ${esc(r.datos.energia)} · Concentración ${esc(r.datos.concentracion)} · Calma ${esc(r.datos.calma)}${r.datos.sueno!=null?` · Sueño ${esc(r.datos.sueno)} h`:''}</li>`).join('') : '<li class="mut">Aún no hay registros.</li>';
+  };
+  cargar();
+  document.getElementById('f').onsubmit = async ev => {
+    ev.preventDefault(); const f = ev.target, m = document.getElementById('m'), b = f.querySelector('button[type=submit]'); b.disabled = true;
+    const datos = { animo:+f.animo.value, energia:+f.energia.value, concentracion:+f.concentracion.value, calma:+f.calma.value,
+      sueno: f.sueno.value === '' ? null : +f.sueno.value, nota: f.nota.value.trim() || null };
+    const { error } = await sb.from('registros').insert({ participante_id: pid, modulo:'diario', tipo:'checkin', datos });
+    b.disabled = false;
+    if (error) { m.className='err'; m.textContent = 'No se pudo guardar. Revisa tu conexión e inténtalo de nuevo.'; return; }
+    m.className='ok'; m.textContent = '✓ Guardado. ¡Gracias!'; f.nota.value=''; f.sueno.value=''; cargar();
+  };
+}
+
+/* ---------------- Panel mentor ---------------- */
+async function panelMentor(){
+  $app.innerHTML = cab(`<button class="sm pri" id="bNueva">+ Nueva persona</button><button class="sm" id="bSalir">Salir</button>`) + `
+  <div class="card"><h2>Personas en acompañamiento</h2><div id="tabla"><p class="mut">Cargando…</p></div></div>`;
+  document.getElementById('bSalir').onclick = async () => { await sb.auth.signOut(); portada(); };
+  document.getElementById('bNueva').onclick = nuevaPersona;
+  const [{ data: ps, error }, { data: regs }] = await Promise.all([
+    sb.from('participantes').select('id,alias,grupo_edad,user_id,activo,consentimiento_firmado_en,creado_en').order('alias'),
+    sb.from('registros').select('participante_id,creado_en').order('creado_en', { ascending:false }).limit(2000)
+  ]);
+  if (error) { document.getElementById('tabla').innerHTML = `<p class="err">${esc(error.message)}</p>`; return; }
+  const ult = {}, cnt = {};
+  (regs||[]).forEach(r => { cnt[r.participante_id] = (cnt[r.participante_id]||0)+1; if(!ult[r.participante_id]) ult[r.participante_id] = r.creado_en; });
+  document.getElementById('tabla').innerHTML = !ps.length ? '<p class="mut">Todavía no hay personas. Pulsa «Nueva persona».</p>' : `
+  <table><thead><tr><th>Alias</th><th>Grupo</th><th>Dispositivo</th><th>Consentimiento</th><th>Registros</th><th>Último</th><th></th></tr></thead><tbody>
+  ${ps.map(p => `<tr class="clic" data-id="${p.id}">
+    <td><b>${esc(p.alias)}</b>${p.activo?'':' <span class="mut">(inactiva)</span>'}</td><td>${GRUPOS[p.grupo_edad]||esc(p.grupo_edad)}</td>
+    <td>${p.user_id?'<span class="pill on">vinculado</span>':'<span class="pill off">pendiente</span>'}</td>
+    <td>${p.consentimiento_firmado_en?esc(p.consentimiento_firmado_en):'<span class="pill off">falta</span>'}</td>
+    <td>${cnt[p.id]||0}</td><td class="mut">${ult[p.id]?fecha(ult[p.id]):'—'}</td>
+    <td><button class="sm" data-qr="${p.id}" data-alias="${esc(p.alias)}">QR</button></td></tr>`).join('')}
+  </tbody></table>`;
+  document.querySelectorAll('[data-qr]').forEach(b => b.onclick = ev => { ev.stopPropagation(); generarQR(b.dataset.qr, b.dataset.alias); });
+  document.querySelectorAll('tr.clic').forEach(tr => tr.onclick = () => fichaPersona(tr.dataset.id));
+}
+
+function nuevaPersona(){
+  const d = document.createElement('div'); d.className='modal';
+  d.innerHTML = `<div class="card" style="text-align:left"><h2>Nueva persona</h2>
+    <p class="aviso">Usa solo un alias (p. ej. HM-002). El nombre real queda en tu documentación clínica, no aquí.</p>
+    <form id="f"><label>Alias</label><input name="alias" required maxlength="20" placeholder="HM-002">
+    <label>Grupo de edad</label><select name="g">${Object.entries(GRUPOS).map(([k,v])=>`<option value="${k}" ${k==='adultos'?'selected':''}>${v}</option>`).join('')}</select>
+    <label><input type="checkbox" name="c" style="width:auto;margin-right:8px">Consentimiento informado firmado hoy</label>
+    <p id="m" class="err"></p>
+    <div class="row"><button class="pri" type="submit">Crear y generar QR</button><span class="sp"></span><button type="button" id="x">Cancelar</button></div></form></div>`;
+  document.body.appendChild(d);
+  d.querySelector('#x').onclick = () => d.remove();
+  d.querySelector('#f').onsubmit = async ev => {
+    ev.preventDefault(); const f = ev.target;
+    const { data:{ user } } = await sb.auth.getUser();
+    const { data, error } = await sb.from('participantes').insert({ alias:f.alias.value.trim().toUpperCase(), grupo_edad:f.g.value, mentor_id:user.id,
+      consentimiento_firmado_en: f.c.checked ? new Date().toISOString().slice(0,10) : null }).select('id,alias').single();
+    if (error) { d.querySelector('#m').textContent = error.code==='23505' ? 'Ese alias ya existe.' : error.message; return; }
+    d.remove(); await panelMentor(); generarQR(data.id, data.alias);
+  };
+}
+
+async function generarQR(pid, alias){
+  const { data: token, error } = await sb.rpc('crear_invitacion', { p_participante: pid });
+  if (error) { alert('No se pudo crear la invitación: ' + error.message); return; }
+  const url = baseURL() + '#t=' + token;
+  const img = await QRCode.toDataURL(url, { width: 520, margin: 1, color: { dark:'#0b1230', light:'#ffffff' } });
+  const d = document.createElement('div'); d.className='modal';
+  d.innerHTML = `<div class="card"><h2>QR para ${esc(alias)}</h2>
+    <p class="mut" style="margin:0">Que lo escanee con la cámara del móvil. Válido 7 días y un solo uso.</p>
+    <div class="qr"><img src="${img}" alt="Código QR de acceso"></div>
+    <div class="link">${esc(url)}</div>
+    <div class="row" style="justify-content:center;margin-top:14px"><button class="sm" id="cp">Copiar enlace</button>
+    ${navigator.share?'<button class="sm" id="sh">Enviar…</button>':''}<button class="sm pri" id="x">Cerrar</button></div>
+    <p class="mut" style="font-size:12px">Generar un QR nuevo invalida los anteriores. Si la persona ya tenía un móvil vinculado, el nuevo lo sustituye.</p></div>`;
+  document.body.appendChild(d);
+  d.querySelector('#x').onclick = () => { d.remove(); panelMentor(); };
+  d.querySelector('#cp').onclick = async ev => { try { await navigator.clipboard.writeText(url); ev.target.textContent='✓ Copiado'; } catch { ev.target.textContent='Cópialo a mano'; } };
+  const sh = d.querySelector('#sh'); if (sh) sh.onclick = () => navigator.share({ title:'HoloMente', text:'Tu acceso a HoloMente (ábrelo en tu móvil):', url }).catch(()=>{});
+}
+
+async function fichaPersona(pid){
+  const [{ data: p }, { data: regs }, { data: notas }] = await Promise.all([
+    sb.from('participantes').select('*').eq('id', pid).single(),
+    sb.from('registros').select('*').eq('participante_id', pid).order('creado_en', { ascending:true }).limit(1000),
+    sb.from('notas_mentor').select('*').eq('participante_id', pid).order('fecha_sesion', { ascending:false })
+  ]);
+  const ch = (regs||[]).filter(r => r.tipo==='checkin');
+  const media = k => { const v = ch.slice(-7).map(r=>r.datos[k]).filter(n=>typeof n==='number'); return v.length ? (v.reduce((a,b)=>a+b,0)/v.length).toFixed(1) : '—'; };
+  $app.innerHTML = cab(`<button class="sm" id="vol">← Volver</button><button class="sm" id="qr">Nuevo QR</button>`) + `
+  <div class="card" style="margin-bottom:14px">
+    <div class="row"><h2 style="margin:0">${esc(p.alias)}</h2><span class="pill">${GRUPOS[p.grupo_edad]}</span>${p.user_id?'<span class="pill on">vinculado</span>':'<span class="pill off">sin dispositivo</span>'}
+    <span class="sp"></span>${p.consentimiento_firmado_en?`<span class="mut" style="font-size:13px">Consentimiento: ${esc(p.consentimiento_firmado_en)}</span>`:'<button class="sm" id="cons">Marcar consentimiento firmado</button>'}</div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <h3>Media de los últimos 7 registros</h3>
+    <div class="kpis"><div class="kpi"><b>${media('animo')}</b><span>Ánimo</span></div><div class="kpi"><b>${media('energia')}</b><span>Energía</span></div>
+    <div class="kpi"><b>${media('concentracion')}</b><span>Concentración</span></div><div class="kpi"><b>${media('calma')}</b><span>Calma</span></div>
+    <div class="kpi"><b>${media('sueno')}</b><span>Sueño (h)</span></div><div class="kpi"><b>${ch.length}</b><span>Registros totales</span></div></div>
+    <h3>Evolución</h3>${ch.length>1?'<canvas class="graf" id="g"></canvas><div class="leyenda" id="ley"></div>':'<p class="mut">Hacen falta al menos dos registros para ver la evolución.</p>'}
+  </div>
+  <div class="grid g2">
+    <div class="card"><h2>Registros</h2><ul class="lista">${ch.length? ch.slice().reverse().slice(0,30).map(r=>`<li><div class="mut" style="font-size:12px">${fecha(r.creado_en)}</div>
+      Ánimo ${esc(r.datos.animo)} · Energía ${esc(r.datos.energia)} · Conc. ${esc(r.datos.concentracion)} · Calma ${esc(r.datos.calma)}${r.datos.sueno!=null?` · Sueño ${esc(r.datos.sueno)} h`:''}
+      ${r.datos.nota?`<div style="margin-top:6px;font-style:italic">«${esc(r.datos.nota)}»</div>`:''}</li>`).join('') : '<li class="mut">Sin registros todavía.</li>'}</ul></div>
+    <div class="card"><h2>Notas de sesión</h2>
+      <form id="fn"><label>Fecha de la sesión</label><input type="date" name="d" value="${new Date().toISOString().slice(0,10)}">
+      <label>Nota</label><textarea name="n" required placeholder="Observaciones, objetivos, tareas acordadas…"></textarea>
+      <button class="pri" type="submit" style="margin-top:10px">Guardar nota</button></form>
+      <ul class="lista" style="margin-top:14px">${(notas||[]).map(n=>`<li><div class="mut" style="font-size:12px">${esc(n.fecha_sesion)}</div>${esc(n.nota).replace(/\n/g,'<br>')}</li>`).join('') || '<li class="mut">Sin notas.</li>'}</ul>
+    </div>
+  </div>`;
+  document.getElementById('vol').onclick = panelMentor;
+  document.getElementById('qr').onclick = () => generarQR(pid, p.alias);
+  const bc = document.getElementById('cons'); if (bc) bc.onclick = async () => { await sb.from('participantes').update({ consentimiento_firmado_en: new Date().toISOString().slice(0,10) }).eq('id', pid); fichaPersona(pid); };
+  document.getElementById('fn').onsubmit = async ev => { ev.preventDefault(); const f = ev.target;
+    const { error } = await sb.from('notas_mentor').insert({ participante_id:pid, fecha_sesion:f.d.value, nota:f.n.value.trim() });
+    if (error) return alert(error.message); fichaPersona(pid); };
+  if (ch.length>1) grafica(ch);
+}
+
+function grafica(ch){
+  const c = document.getElementById('g'), x = c.getContext('2d'), dpr = Math.min(devicePixelRatio||1,2);
+  const W = c.clientWidth, H = c.clientHeight; c.width=W*dpr; c.height=H*dpr; x.setTransform(dpr,0,0,dpr,0,0);
+  const S = [['animo','Ánimo','#4fd1ff'],['energia','Energía','#a78bfa'],['concentracion','Concentración','#5eead4'],['calma','Calma','#fbbf24']];
+  const pl=28, pr=8, pt=8, pb=22, w=W-pl-pr, h=H-pt-pb, n=ch.length;
+  x.font='11px system-ui'; x.fillStyle='#93a0c8'; x.strokeStyle='rgba(120,170,255,.14)';
+  [1,5,10].forEach(v=>{ const y=pt+h-(v-1)/9*h; x.beginPath(); x.moveTo(pl,y); x.lineTo(W-pr,y); x.stroke(); x.fillText(v,6,y+4); });
+  const X = i => pl + (n===1?w/2:i/(n-1)*w), Y = v => pt+h-(v-1)/9*h;
+  x.fillText(new Date(ch[0].creado_en).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'}), pl, H-5);
+  const fin = new Date(ch[n-1].creado_en).toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit'}); x.fillText(fin, W-pr-x.measureText(fin).width, H-5);
+  S.forEach(([k,,col])=>{ x.strokeStyle=col; x.lineWidth=2; x.beginPath(); let first=true;
+    ch.forEach((r,i)=>{ const v=r.datos[k]; if(typeof v!=='number')return; first?x.moveTo(X(i),Y(v)):x.lineTo(X(i),Y(v)); first=false; }); x.stroke(); });
+  document.getElementById('ley').innerHTML = S.map(([,t,col])=>`<span><i style="background:${col}"></i>${t}</span>`).join('');
+}
+
+arrancar();
+</script>
+</body>
+</html>
