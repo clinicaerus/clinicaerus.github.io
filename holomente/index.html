@@ -1092,10 +1092,10 @@ function LoginModal({onClose,onLogin,onMentorLogin,mentor}){
    <div className="card" style={{background:'var(--teal10)',boxShadow:'none',borderColor:'transparent',marginBottom:'1rem'}}>
     <b>📱 ¿Te ha dado tu mentor un código QR?</b>
     <p className="small" style={{marginTop:'.35rem'}}>Escanéalo con la cámara de tu móvil. Entrarás directamente en tu espacio, sin contraseña. Después, añade HoloMente a tu pantalla de inicio.</p></div>
-   <p className="tiny" style={{marginBottom:'.4rem'}}>¿Quieres probar una demo ficticia? Escribe su código:</p>
-   <input className="inp" style={{fontFamily:'monospace'}} placeholder="DEMO-JOVEN" value={code} onChange={e=>{setCode(e.target.value);setErr('');}} onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();go();}}}/>
+   <p className="tiny" style={{marginBottom:'.4rem'}}>¿Te han enviado un <b>enlace de invitación</b>? Pégalo aquí (mantén pulsado el recuadro → Pegar). También sirve para probar una demo (DEMO-JOVEN):</p>
+   <input className="inp" style={{fontFamily:'monospace'}} placeholder="Pega aquí tu enlace" value={code} onChange={e=>{setCode(e.target.value);setErr('');}} onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();go();}}}/>
    {err&&<div className="err">{err}</div>}
-   <button className="btn btn-mg" style={{width:'100%',marginTop:'1rem'}} disabled={!code.trim()||busy} onClick={go}>Entrar en la demo</button>
+   <button className="btn btn-mg" style={{width:'100%',marginTop:'1rem'}} disabled={!code.trim()||busy} onClick={go}>{busy?'Entrando…':'Entrar'}</button>
    <p className="tiny" style={{textAlign:'center',marginTop:'1rem'}}>Demos: DEMO-PEQUES · DEMO-JOVEN · DEMO-ADULTO</p>
   </>}
  </div></div>);
@@ -2211,12 +2211,12 @@ function PuertaGuardar({onSkip}){return<div className="themed th-sinapsis" style
  <p className="small">Así la tendrás siempre a mano, como una app, y no tendrás que volver a escanear el código.</p>
  <PasosGuardar ios={true}/>
  <p className="tiny" style={{marginTop:'.4rem'}}>Si has abierto este enlace desde WhatsApp u otra app, pulsa ⋯ o el icono de brújula y elige <b>«Abrir en Safari»</b> antes de seguir los pasos.</p>
- <button className="btn btn-ghost btn-sm" style={{marginTop:'.8rem'}} onClick={onSkip}>Prefiero entrar sin guardarla</button></div></div>;}
+ <p className="tiny" style={{marginTop:'.4rem'}}>Si al abrir el icono te pide un código, pega el enlace de invitación en «Tengo un código QR».</p><button className="btn btn-ghost btn-sm" style={{marginTop:'.8rem'}} onClick={onSkip}>Prefiero entrar sin guardarla</button></div></div>;}
 function AvisoGuardar(){const [ver,setVer]=useState(()=>{try{return !esApp()&&localStorage.getItem('hm_aviso_guardar')!=='no';}catch(e){return !esApp();}});
  if(!ver)return null;const cerrar=()=>{try{localStorage.setItem('hm_aviso_guardar','no');}catch(e){}setVer(false);};
  return<div style={{position:'fixed',left:'.6rem',right:'.6rem',bottom:'.6rem',zIndex:60}}><div className="card" style={{boxShadow:'0 8px 30px rgba(0,0,0,.35)'}}>
   <b>📲 Guarda HoloMente en tu pantalla de inicio</b><PasosGuardar ios={esIOS()}/>
-  {esIOS()&&<p className="tiny">En iPhone, al abrirla desde el icono te pedirá entrar de nuevo: pide a tu mentor un QR nuevo y escanéalo con el icono ya abierto. No pierdes nada de lo guardado.</p>}
+  {esIOS()&&<p className="tiny">En iPhone, al abrirla desde el icono te pedirá entrar de nuevo: pide a tu mentor un enlace nuevo y pégalo en «Tengo un código QR» dentro del icono. No pierdes nada de lo guardado.</p>}
   <button className="btn btn-ghost btn-sm" onClick={cerrar}>Entendido</button></div></div>;}
 function App(){
  const [session,setSession]=useState(()=>ls('hm_session',null));
@@ -2253,10 +2253,14 @@ function App(){
  useEffect(()=>{const on=()=>{if(pending.current)persist();};const vis=()=>{if(document.visibilityState==='hidden'&&pending.current)persist();};
   addEventListener('online',on);document.addEventListener('visibilitychange',vis);return()=>{removeEventListener('online',on);document.removeEventListener('visibilitychange',vis);};},[]);
  const login=async(raw)=>{
-  const up=String(raw||'').trim().toUpperCase();
+  const txt=String(raw||'').trim();
+  /* Enlace de invitación pegado (útil en iPhone, dentro del icono de la pantalla de inicio) */
+  const mt=txt.match(/[#&?]t=([A-Za-z0-9_\-]{8,})/)||txt.match(/^([A-Za-z0-9_\-]{20,})$/);
+  if(mt){try{await cloud.redeem(mt[1]);location.reload();return null;}catch(e){return e.message||'No se pudo usar este enlace.';}}
+  const up=txt.toUpperCase();
   if(up.startsWith('DEMO-')){const p=seedDemo(up);if(!p)return'Código de demo no reconocido.';setPersonas(ps=>({...ps,[p.id]:ps[p.id]||{...p,onboarded:true}}));setSession({role:'persona',id:p.id});return null;}
   if(up.startsWith('HM-')||up.startsWith('HMP-'))return'Los códigos cifrados ya no se usan. Pide a tu mentor un código QR y escanéalo con la cámara del móvil.';
-  return'Para entrar, escanea con la cámara del móvil el código QR que te ha dado tu mentor.';
+  return'Para entrar, escanea con la cámara del móvil el código QR que te ha dado tu mentor, o pega aquí el enlace de invitación que te ha enviado.';
  };
  const mentorLogin=async(email,pass)=>{const e=await cloud.mentorLogin(email,pass);if(e)return e;setSession({role:'mentor',cloud:true});return null;};
  const logout=async()=>{try{speechSynthesis.cancel();}catch(e){}
