@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-title" content="HoloMente"/>
 <title>HoloMente · e-Salud neuropsicoeducativa · UNIMED</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230A0F24'/%3E%3Cg stroke='%235EE6D0' stroke-width='4' stroke-opacity='.5' stroke-linecap='round'%3E%3Cpath d='M18 12v40M46 12v40'/%3E%3C/g%3E%3Cpath d='M18 32h28' stroke='%2387D6E8' stroke-width='4.4' stroke-linecap='round'/%3E%3Cg fill='%235EE6D0'%3E%3Ccircle cx='18' cy='12' r='5.4'/%3E%3Ccircle cx='18' cy='52' r='5.4'/%3E%3Ccircle cx='18' cy='32' r='4.8'/%3E%3C/g%3E%3Cg fill='%239B8CFF'%3E%3Ccircle cx='46' cy='12' r='5.4'/%3E%3Ccircle cx='46' cy='52' r='5.4'/%3E%3Ccircle cx='46' cy='32' r='4.8'/%3E%3C/g%3E%3Ccircle cx='32' cy='32' r='7' fill='%23A9B8F5'/%3E%3C/svg%3E"/>
 <meta name="description" content="Plataforma e-Salud de neuropsicoeducación para personas neurodivergentes de todas las edades y sus familias, con acompañamiento de mentor. Metodología holomédica · ASOC UNIMED."/>
@@ -2196,11 +2199,30 @@ function Backup({db,setDb}){
   </div>
  </div>);
 }
+/* Guardar en la pantalla de inicio. En iPhone, el icono de la pantalla de inicio tiene su propio almacenamiento,
+   separado de Safari: por eso el QR se canjea dentro del icono, no en Safari. */
+const esIOS=()=>/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const esApp=()=>window.navigator.standalone===true||(window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches);
+function PasosGuardar({ios}){return ios
+ ?<ol className="small" style={{textAlign:'left',margin:'.6rem 0',paddingLeft:'1.2rem',lineHeight:1.7}}><li>Abajo en Safari, pulsa el botón <b>Compartir</b> (un cuadrado con una flecha hacia arriba ⬆️).</li><li>Baja y elige <b>«Añadir a pantalla de inicio»</b>.</li><li>Pulsa <b>«Añadir»</b>, arriba a la derecha.</li><li>Cierra Safari y abre <b>HoloMente</b> desde el icono nuevo de tu pantalla.</li></ol>
+ :<ol className="small" style={{textAlign:'left',margin:'.6rem 0',paddingLeft:'1.2rem',lineHeight:1.7}}><li>En Chrome, pulsa el menú <b>⋮</b> (tres puntos, arriba a la derecha).</li><li>Elige <b>«Añadir a pantalla de inicio»</b> o <b>«Instalar aplicación»</b>.</li><li>Confirma con <b>«Añadir»</b> o <b>«Instalar»</b>.</li><li>A partir de ahora, abre <b>HoloMente</b> desde ese icono.</li></ol>;}
+function PuertaGuardar({onSkip}){return<div className="themed th-sinapsis" style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',padding:'1.2rem'}}>
+ <div className="card" style={{maxWidth:440,textAlign:'center'}}><h2 className="disp" style={{fontSize:'1.6rem',marginBottom:'.4rem'}}>Primero, guarda HoloMente en tu móvil</h2>
+ <p className="small">Así la tendrás siempre a mano, como una app, y no tendrás que volver a escanear el código.</p>
+ <PasosGuardar ios={true}/>
+ <p className="tiny" style={{marginTop:'.4rem'}}>Si has abierto este enlace desde WhatsApp u otra app, pulsa ⋯ o el icono de brújula y elige <b>«Abrir en Safari»</b> antes de seguir los pasos.</p>
+ <button className="btn btn-ghost btn-sm" style={{marginTop:'.8rem'}} onClick={onSkip}>Prefiero entrar sin guardarla</button></div></div>;}
+function AvisoGuardar(){const [ver,setVer]=useState(()=>{try{return !esApp()&&localStorage.getItem('hm_aviso_guardar')!=='no';}catch(e){return !esApp();}});
+ if(!ver)return null;const cerrar=()=>{try{localStorage.setItem('hm_aviso_guardar','no');}catch(e){}setVer(false);};
+ return<div style={{position:'fixed',left:'.6rem',right:'.6rem',bottom:'.6rem',zIndex:60}}><div className="card" style={{boxShadow:'0 8px 30px rgba(0,0,0,.35)'}}>
+  <b>📲 Guarda HoloMente en tu pantalla de inicio</b><PasosGuardar ios={esIOS()}/>
+  {esIOS()&&<p className="tiny">En iPhone, al abrirla desde el icono te pedirá entrar de nuevo: pide a tu mentor un QR nuevo y escanéalo con el icono ya abierto. No pierdes nada de lo guardado.</p>}
+  <button className="btn btn-ghost btn-sm" onClick={cerrar}>Entendido</button></div></div>;}
 function App(){
  const [session,setSession]=useState(()=>ls('hm_session',null));
  const [personas,setPersonas]=useState(()=>ls('hm_personas',{}));
  const [familyMode,setFamilyMode]=useState(false);
- const [boot,setBoot]=useState(true);const [notice,setNotice]=useState('');const [resume,setResume]=useState(null);
+ const [boot,setBoot]=useState(true);const [gate,setGate]=useState(false);const [notice,setNotice]=useState('');const [resume,setResume]=useState(null);
  const pending=useRef(false);const latest=useRef({session,personas});latest.current={session,personas};
  useEffect(()=>lsSet('hm_session',session),[session]);
  useEffect(()=>lsSet('hm_personas',personas),[personas]);
@@ -2208,6 +2230,8 @@ function App(){
  /* Arranque: canje del QR (#t=…) o reanudación de la sesión guardada */
  useEffect(()=>{(async()=>{
   const token=new URLSearchParams(location.hash.slice(1)).get('t');
+  let saltar=false;try{saltar=sessionStorage.getItem('hm_saltar_guardar')==='1';}catch(e){}
+  if(token&&esIOS()&&!esApp()&&!saltar){setGate(true);setBoot(false);return;}
   if(token)history.replaceState(null,'',location.pathname+location.search);
   try{
    if(token)await cloud.redeem(token);
@@ -2241,13 +2265,14 @@ function App(){
   if(s&&s.role==='persona'&&s.cloud){await persist();const p=personas[s.id];setResume({go:()=>{setSession(s);setResume(null);},name:p&&p.name});}
   setSession(null);setFamilyMode(false);};
  if(boot)return<div className="themed th-sinapsis" style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',flexDirection:'column',gap:'1rem'}}><span className="pulse" style={{width:64,height:64,borderRadius:'50%',background:'radial-gradient(circle,#B8FFF3 0,#5EE6D0 35%,rgba(94,230,208,.15) 70%,transparent 72%)',display:'block'}}/><p className="muted small">Conectando…</p></div>;
+ if(gate)return<PuertaGuardar onSkip={()=>{try{sessionStorage.setItem('hm_saltar_guardar','1');}catch(e){}location.reload();}}/>;
  const land=<Landing onLogin={login} onMentorLogin={mentorLogin} resume={resume} notice={notice?{text:notice,close:()=>setNotice('')}:null}/>;
  if(!session)return land;
  if(session.role==='mentor')return<ThemeCtx.Provider value="sinapsis"><div className="themed th-sinapsis"><MentorApp onLogout={logout}/></div></ThemeCtx.Provider>;
  const persona=personas[session.id];
  if(!persona)return land;
  const update=fn=>setPersonas(ps=>({...ps,[session.id]:{...fn(ps[session.id]),_ts:Date.now()}}));
- return<PersonaApp persona={persona} update={update} onLogout={logout} familyMode={familyMode} setFamilyMode={setFamilyMode}/>;
+ return<><PersonaApp persona={persona} update={update} onLogout={logout} familyMode={familyMode} setFamilyMode={setFamilyMode}/><AvisoGuardar/></>;
 }
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
